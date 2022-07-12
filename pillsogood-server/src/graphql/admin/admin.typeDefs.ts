@@ -20,6 +20,6 @@ export default gql`
 
     type Mutation {
         joinAdmin(email:String!, name:String!, password:String):Int!
-        loginAmin(email:String!, password:String!):Token!
+        loginAdmin(email:String!, password:String!):Token!
     }
 `;

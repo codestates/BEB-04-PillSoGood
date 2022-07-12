@@ -20,6 +20,7 @@ export default gql`
     type Query {
         hi:String
         getUserInfo(jwt:String!):User
+        getUsers(jwt:String!, nickname:String, email:String):[User]
     }
 
     type Mutation {

@@ -30,10 +30,23 @@ export default {
 
             createLog("getUserInfo", userInfo._id)
 
-            const user = User.findOne({
+            const user = await User.findOne({
                 _id:userInfo._id
             })
             return user
+        },
+        async getUsers(_:any, args:{jwt:string, nickname:string, email:string}) {
+            const userInfo = getUserInfoByToken(args.jwt)
+            if(!userInfo) return status.TOKEN_EXPIRED
+
+            if(args.nickname) {
+               return await User.find({nickname:new RegExp(args.nickname, 'i')})
+            }
+            if(args.email) {
+                return await User.find({email:new RegExp(args.email, 'i')})
+            }
+
+            return await User.find()
         }
     },
     Mutation: {

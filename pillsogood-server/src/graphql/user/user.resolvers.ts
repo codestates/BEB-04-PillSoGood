@@ -102,6 +102,34 @@ export default {
 
             return {"jwt": accessToken}
 
+        },
+        async updateUserInfo(_:any, args:{jwt:string, nickname:string, password:string, phoneNumber:string, email:string}) {
+            const userInfo = getUserInfoByToken(args.jwt)
+            if(!userInfo) return status.TOKEN_EXPIRED
+
+            var newData = {}
+
+            if(args.password !== null && args.password !== undefined) {
+                const crypto = require('crypto');
+                const encryptedPassword = crypto.createHmac('sha256', process.env.PASSWORD_SECRET).update(args.password).digest('hex');
+                newData = {nickname:args.nickname, password:encryptedPassword, phoneNumber:args.phoneNumber, email:args.email}
+            } else {
+                newData = {nickname:args.nickname, phoneNumber:args.phoneNumber, email:args.email}
+            }
+
+            const res = await User.updateOne({_id:userInfo._id}, newData)
+            if(!res) return status.SERVER_ERROR
+            return status.SUCCESS
+        },
+        async updateUserPassword(_:any, args:{jwt:string, _id:string, password:string}) {
+            const userInfo = getUserInfoByToken(args.jwt)
+            if(!userInfo) return status.TOKEN_EXPIRED
+
+            const crypto = require('crypto');
+            const encryptedPassword = crypto.createHmac('sha256', process.env.PASSWORD_SECRET).update(args.password).digest('hex');
+            const res = await User.updateOne({_id:args._id}, {password:encryptedPassword})
+            if(!res) return status.SERVER_ERROR
+            return status.SUCCESS
         }
     }
 }

@@ -12,7 +12,7 @@ type user = {
     dateOfBirth: string
     pointBalance: number
     createdAt: string
-    PhoneNumber: String
+    phoneNumber: string
 }
 
 type token = {
@@ -24,20 +24,39 @@ export default {
         hi():string {
             return "hello 👋"
         },
-        async getUserInfo(_:any, args:{jwt:string}) {
+        async getUserInfo(_:any, args:{jwt:string, _id:string}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
 
+            if(args._id !== null) {
+                let user = await User.findOne({
+                    _id:args._id
+                })
+                return user
+            }
             createLog("getUserInfo", userInfo._id)
 
-            const user = User.findOne({
+            let user = await User.findOne({
                 _id:userInfo._id
             })
             return user
+        },
+        async getUsers(_:any, args:{jwt:string, nickname:string, email:string}) {
+            const userInfo = getUserInfoByToken(args.jwt)
+            if(!userInfo) return status.TOKEN_EXPIRED
+
+            if(args.nickname) {
+               return await User.find({nickname:new RegExp(args.nickname, 'i')})
+            }
+            if(args.email) {
+                return await User.find({email:new RegExp(args.email, 'i')})
+            }
+
+            return await User.find()
         }
     },
     Mutation: {
-        async join(_:any, args: {nickname:string, email:string, dateOfBirth:string, password:string,  PhoneNumber:String}) {
+        async join(_:any, args: {nickname:string, email:string, dateOfBirth:string, password:string,  phoneNumber:string, disease:string}) {
             const crypto = require('crypto');
             const encryptedPassword = crypto.createHmac('sha256', process.env.PASSWORD_SECRET).update(args.password).digest('hex');
             const savedUser = await User.findOne({
@@ -52,7 +71,8 @@ export default {
             newUser.password = encryptedPassword
             newUser.pointBalance = 0
             newUser.createdAt = moment().format("YYYY-MM-DD HH:mm:ss")
-            newUser.PhoneNumber = args.PhoneNumber
+            newUser.phoneNumber = args.phoneNumber
+            newUser.disease = args.disease
             const res = await newUser.save() // 저장 
             if(!res) return status.SERVER_ERROR
             return status.SUCCESS

@@ -1,10 +1,11 @@
 const CaverExtKAS = require('caver-js-ext-kas')
+
 const accessKeyId = process.env.KAS_ACCESSKEY_ID;
 const secretAccessKey = process.env.KAS_SECRET_ACCESS_KEY;
 const chainId = 1001
 
 
-  // KIP17 관련 SmartContract 배포
+// KIP17 관련 SmartContract 배포
   export async function KIP17Deploy2() {  // 인자 타입 선언 필요 
 
       const CaverExtKAS = require('caver-js-ext-kas')
@@ -19,7 +20,7 @@ const chainId = 1001
         const symbol = "drag";
         const alias = "monster";
         const KIP17FeePayerOptions = ""; // optional : 가스비 지불하는 Account Adress 필요
-        const callback = () => {}  // optional
+        const callback = () => {}        // optional
 
         const result = await caver.kas.kip17.deploy(name, symbol, alias, KIP17FeePayerOptions,callback);
         console.log(result);
@@ -27,6 +28,7 @@ const chainId = 1001
       catch (e) { console.error(e) }}
      
       deploycontract();
+      
       // transactionHash: '0x6c0d4467007bf5e6fb5d4e926901365408aa3f5b73b8eef812deb7508c4497e3'
       // contract Adress : 0xf393fc2cfa52b1a32418392ea870f234b8852e4e
   }
@@ -43,10 +45,10 @@ const chainId = 1001
 
     async function Mint () {
         try {
-          const alias = "monster";  // or contract Adress
-          const receiverAddress = "0x8353609f4805efa7067304e8B9Bd0a982703b8E6";
-          const tokenId = "0x12";
-          const tokenURI = "ipfs://QmXsFrPKeDJr1bWcRQx1r6968tXEg4c1ekQAkj3bAsk1S7";
+          const alias = "monster";   // or contract Adress
+          const receiverAddress = "";
+          const tokenId = "";
+          const tokenURI = "";
           const callback = () => {}  // optional
 
           const result = await caver.kas.kip17.mint(alias, receiverAddress, tokenId, tokenURI, callback)
@@ -55,9 +57,6 @@ const chainId = 1001
         catch (e) { console.error(e) }}
        
         Mint();
-
-         //transactionHash: '0xfecaf1f49d8b8c247144a4d7afc5ba4e68c2ab08beeda8d907972fe8b4ec2736'
-      // Contract address : '0xf393fc2cfa52b1a32418392ea870f234b8852e4e'
   }
 
 
@@ -72,8 +71,8 @@ const chainId = 1001
 
    async function getTokenListsss () {
       try {                        
-        const alias = "monster";  // or Contract address
-        const queryOptions = "";    // optional --- 필터링용
+        const alias = "monster";   // or Contract address
+        const queryOptions = "";   // optional --- 필터링용
         const callback = () => {}  // optional
 
         const result = await caver.kas.kip17.getTokenList(alias, queryOptions, callback)
@@ -86,6 +85,7 @@ const chainId = 1001
 
 
 
+// KIP17토큰 전송
 export async function transferKIP17Token () { // 인자 타입 선언 필요 
 
   const CaverExtKAS = require('caver-js-ext-kas')
@@ -96,12 +96,12 @@ export async function transferKIP17Token () { // 인자 타입 선언 필요
 
  async function transferToken () {
     try {
-      const alias = "monster";  // or Contract address
-      const senderAddress = "0x8353609f4805efa7067304e8B9Bd0a982703b8E6";    // 보낸 사람이 토큰의 소유자이거나 토큰이 전송되도록 소유자의 승인을 받아야 합니다
-      const ownerAddress = "0x8353609f4805efa7067304e8B9Bd0a982703b8E6";    
-      const receiverAddress = "0xfbBE99EEeb44053C7138372c784168CCbA397b7A";    
-      const tokenId = '0x12';    
-      const callback = () => {}  // optional
+      const alias = "monster";     // or Contract address
+      const senderAddress = "";    // 보낸 사람이 토큰의 소유자이거나 토큰이 전송되도록 소유자의 승인을 받아야 합니다
+      const ownerAddress = "";    
+      const receiverAddress = "";    
+      const tokenId = '';    
+      const callback = () => {}    // optional
 
       const result = await caver.kas.kip17.transfer(alias, senderAddress, ownerAddress, receiverAddress, tokenId, callback)
       console.log(result);
@@ -109,7 +109,6 @@ export async function transferKIP17Token () { // 인자 타입 선언 필요
     catch (e) { console.error(e) }}
    
     transferToken();
-
 }
  
 
@@ -142,6 +141,6 @@ export async function transferKIP17Token () { // 인자 타입 선언 필요
 
  - mutation, query 받을 때 담아올 인자 및 토큰 id 부여하는 알고리즘
 
- - metadata.json 의 tokenURI
+ - metadata.json의 tokenURI
  
  - 사용자 Kaikas 연결 및 Account Address ( Klip은 메인넷만 지원됨 ) */

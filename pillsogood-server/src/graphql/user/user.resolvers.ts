@@ -24,13 +24,19 @@ export default {
         hi():string {
             return "hello 👋"
         },
-        async getUserInfo(_:any, args:{jwt:string}) {
+        async getUserInfo(_:any, args:{jwt:string, _id:string}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
 
+            if(args._id !== null) {
+                let user = await User.findOne({
+                    _id:args._id
+                })
+                return user
+            }
             createLog("getUserInfo", userInfo._id)
 
-            const user = await User.findOne({
+            let user = await User.findOne({
                 _id:userInfo._id
             })
             return user

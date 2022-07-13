@@ -10,10 +10,9 @@ dotenv.config();
 
 declare let process : {env : {MONGODB_URL : string;}} 
 
-
 const PILL_SO_GOOD_SERVER_PORT = 4000;
 const app = express();
-const MongoDB_URL = process.env.MONGODB_URL;
+const MONGO_DB_URL = process.env.MONGODB_URL;
 const httpServer = http.createServer(app);
 
 const apolloServer = new ApolloServer({
@@ -24,10 +23,9 @@ const apolloServer = new ApolloServer({
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-
 function Alarm() { // Agenda 이용한 반복 알람 
   const agenda = new Agenda({ 
-    db: { address: MongoDB_URL},
+    db: { address: MONGO_DB_URL},
     name: "vote deadline queue"
 });
 
@@ -41,10 +39,9 @@ agenda.on('ready', () => {
   agenda.start();
 });}
 
-
 async function initApolloServer() {
   
-  await mongoose.connect(MongoDB_URL) // MongoDB와 서버 연결
+  await mongoose.connect(MONGO_DB_URL) // MongoDB와 서버 연결
   .then(() => {
     console.log("MongoDB Connection succeeded");
   })

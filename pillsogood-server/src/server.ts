@@ -6,12 +6,14 @@ import { resolvers, typeDefs } from "./graphql/schema";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import Agenda from "agenda"; // 주기적 알람 위한 Agenda 
-
 dotenv.config();
+
+declare let process : {env : {MONGODB_URL : string;}} 
+
 
 const PILL_SO_GOOD_SERVER_PORT = 4000;
 const app = express();
-const MongoDB_URL = "mongodb+srv://Myteraphy:1234@cluster0.9a8ix.mongodb.net/?retryWrites=true&w=majority"; 
+const MongoDB_URL = process.env.MONGODB_URL;
 const httpServer = http.createServer(app);
 
 const apolloServer = new ApolloServer({
@@ -38,7 +40,6 @@ agenda.on('ready', () => {
   agenda.every("3 seconds", "push", { by: "chris" });
   agenda.start();
 });}
-
 
 
 async function initApolloServer() {

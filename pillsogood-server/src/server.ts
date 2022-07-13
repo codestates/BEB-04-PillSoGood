@@ -8,7 +8,10 @@ import mongoose from "mongoose";
 import Agenda from "agenda"; // 주기적 알람 위한 Agenda 
 dotenv.config();
 
-declare let process : {env : {MONGODB_URL : string;}} 
+declare let process : {
+  env : {
+    MONGODB_URL : string;
+  }} 
 
 
 const PILL_SO_GOOD_SERVER_PORT = 4000;
@@ -44,14 +47,14 @@ agenda.on('ready', () => {
 
 async function initApolloServer() {
   
-  await mongoose.connect(MongoDB_URL) // MongoDB와 서버 연결
+ /*  await mongoose.connect(MongoDB_URL) // MongoDB와 서버 연결
   .then(() => {
     console.log("MongoDB Connection succeeded");
   })
   .catch((e: Error) => {            
     console.log("seq ERROR: ", e);
   });
-
+ */
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });  // apollo server에 express 연동
   await new Promise<void>((resolve) =>
@@ -60,7 +63,6 @@ async function initApolloServer() {
   console.log(
     `🚀 Server ready at http://localhost:${PILL_SO_GOOD_SERVER_PORT}${apolloServer.graphqlPath}`
   );
-
 }
 
 void initApolloServer();

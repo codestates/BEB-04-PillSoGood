@@ -27,7 +27,7 @@ export default {
         }
     },
     Mutation: {
-        async createCharacter(_:any, args:{jwt:string, name:string}) {
+        async createCharacter(_:any, args:{jwt:string, name:string, baseId:string}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
 
@@ -35,8 +35,9 @@ export default {
 
             const newCharacter = new Character()
             newCharacter.name = args.name
-            newCharacter.level = 0
+            newCharacter.level = 1
             newCharacter.userId = userInfo._id
+            newCharacter.baseId = args.baseId
             newCharacter.createdAt = moment().format("YYYY-MM-DD HH:mm:ss")
 
             const res = await newCharacter.save()

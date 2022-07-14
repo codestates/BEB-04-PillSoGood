@@ -4,6 +4,7 @@ const character = new Schema({
     userId: String,
     name: String,
     level: Number,
+    baseId: String,
     createdAt: String
 })
 

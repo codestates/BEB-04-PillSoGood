@@ -9,7 +9,7 @@ export const LOGIN = gql`
 `;
 
 export const SIGN_UP = gql`
-  mutation Join(
+  mutation Mutation(
     $nickname: String!
     $email: String!
     $dateOfBirth: String!

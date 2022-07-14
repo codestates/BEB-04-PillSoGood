@@ -13,6 +13,7 @@ type user = {
     pointBalance: number
     createdAt: string
     phoneNumber: string
+    disease: string
 }
 
 type token = {
@@ -30,7 +31,7 @@ export default {
 
             if(args._id !== null) {
                 let user = await User.findOne({
-                    _id:args._id
+                    _id:userInfo._id
                 })
                 return user
             }

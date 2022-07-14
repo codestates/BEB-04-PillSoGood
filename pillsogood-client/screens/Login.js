@@ -1,10 +1,11 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../colors";
-import { useMutation } from "@apollo/client";
+import { useMutation, gql, useQuery } from "@apollo/client";
 import { LOGIN } from "../src/query/MutationQuery";
 import { useDispatch, useSelector } from "react-redux";
 import { Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Container = styled.View`
   background-color: ${BASE_COLOR};
   flex: 1;
@@ -66,10 +67,19 @@ const Login = ({ navigation: { navigate } }) => {
   const passwordInput = useRef();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const getToken = AsyncStorage.getItem("token");
   const [login, { data, loading, error }] = useMutation(LOGIN);
+  const handleHi = () => {
+    const hi = gql`
+      query Query {
+        hi
+      }
+    `;
+    console.log(hi);
+  };
 
   const handleClick = () => {
-    login({
+    const loginVariables = login({
       variables: {
         email: email,
         password: password,
@@ -80,6 +90,17 @@ const Login = ({ navigation: { navigate } }) => {
     }
     if (loading) return "로그인중...";
     if (error) return `로그인 에러발생! ${error.message}`;
+    loginVariables.then((appdata) => {
+      if (!appdata.data.login.jwt) {
+        Alert.alert("아이디 혹은 비밀번호가 맞지 않습니다.");
+      } else {
+        Alert.alert("로그인완료");
+        setEmail("");
+        setPassword("");
+        AsyncStorage.getItem("token", appdata.data.login.jwt);
+        navigate(Home);
+      }
+    });
   };
 
   const onSubmitEmailEditing = () => {
@@ -118,6 +139,10 @@ const Login = ({ navigation: { navigate } }) => {
       </Wrapper>
       <LoginBtn>
         <BtnText onPress={() => handleClick()}>로그인!</BtnText>
+      </LoginBtn>
+
+      <LoginBtn>
+        <BtnText onPress={() => handleHi()}>하이</BtnText>
       </LoginBtn>
     </Container>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { BASE_COLOR } from "./../../colors";
@@ -59,10 +59,9 @@ Number.prototype.zf = function (len) {
   return this.toString().zf(len);
 };
 
-export default function DateTime({ value, setValue }) {
+export default function DateTime({ text, onChangeText }) {
   const placeholder = "생년월일을 입력해주세요";
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [text, onChangeText] = useState("");
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);

@@ -5,13 +5,13 @@ import { useSelector } from "react-redux";
 import { diseaseActions } from "../store/diseaseSlice";
 import { View } from "react-native";
 function Multiselect({ value, setValue }: any) {
+  const [FAT_BLOOD_RATE, HIGH_BLOOD_PRESSURE, SUGAR_BLOOD_RATE] = [0, 1, 2];
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
-    { label: "고지혈증", value: "고지혈증" },
-    { label: "고혈압", value: "고혈압" },
-    { label: "당뇨", value: "당뇨" },
+    { label: "고지혈증", value: FAT_BLOOD_RATE },
+    { label: "고혈압", value: HIGH_BLOOD_PRESSURE },
+    { label: "당뇨", value: SUGAR_BLOOD_RATE },
   ]);
-
   return (
     <View>
       <DropDownPicker

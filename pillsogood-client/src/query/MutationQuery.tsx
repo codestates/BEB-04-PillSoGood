@@ -15,13 +15,15 @@ export const SIGN_UP = gql`
     $dateOfBirth: String!
     $password: String
     $phoneNumber: String
+    $disease: [Int]
   ) {
     join(
       nickname: $nickname
       email: $email
       dateOfBirth: $dateOfBirth
       password: $password
-      PhoneNumber: $phoneNumber
+      phoneNumber: $phoneNumber
+      disease: $disease
     )
   }
 `;

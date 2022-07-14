@@ -48,7 +48,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
-  const [birth, setBirth] = useState({});
+  const [birth, setBirth] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [value, setValue] = useState([]);
   const [Signup, { data, loading, error }] = useMutation(SIGN_UP);
@@ -61,14 +61,23 @@ const Register = () => {
   const onSubmitPasswordCheckEditing: any = () => {
     passwordCheckInput.current.focus();
   };
+
   const onSubmit = async () => {
-    if (email === "" || password === "" || name === "" || birth === "") {
-      return Alert.alert("Fill in the form.");
-    }
     if (loading) {
       return;
     }
     try {
+      console.log(
+        name,
+        value,
+        typeof name,
+        email,
+        password,
+        phoneNumber,
+
+        "검증"
+      );
+      console.log(birth, "생일");
       Signup({
         variables: {
           nickname: name,
@@ -76,20 +85,11 @@ const Register = () => {
           dateOfBirth: birth,
           password: password,
           phoneNumber: phoneNumber,
-          value: value,
+          disease: value,
         },
       });
-    } catch (e) {
-      switch (e.code) {
-        case password.length < 4: {
-          Alert.alert("Write a stronger password!");
-        }
-      }
-      switch (e.code) {
-        case password !== passwordCheck: {
-          Alert.alert("비밀번호가 다릅니다!");
-        }
-      }
+    } catch (err) {
+      console.log(err);
     }
   };
   return (
@@ -140,14 +140,14 @@ const Register = () => {
         placeholder="PhoneNumber"
         autoCapitalize="none"
         autoCorrect={false}
-        keyboardType="default"
+        keyboardType="number-pad"
         value={phoneNumber}
         returnKeyType="done"
         onChangeText={(text) => setPhoneNumber(text)}
         placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
       />
 
-      <DateTime value={birth} setValue={setBirth} />
+      <DateTime text={birth} onChangeText={setBirth} />
       <Multiselect value={value} setValue={setValue} />
       <Btn onPress={onSubmit}>
         {loading ? (

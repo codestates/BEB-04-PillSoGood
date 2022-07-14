@@ -13,7 +13,7 @@ type user = {
     pointBalance: number
     createdAt: string
     phoneNumber: string
-    disease: string
+    disease: [number]
 }
 
 type token = {
@@ -57,7 +57,7 @@ export default {
         }
     },
     Mutation: {
-        async join(_:any, args: {nickname:string, email:string, dateOfBirth:string, password:string,  phoneNumber:string, disease:string}) {
+        async join(_:any, args: {nickname:string, email:string, dateOfBirth:string, password:string,  phoneNumber:string, disease:[number]}) {
             const crypto = require('crypto');
             const encryptedPassword = crypto.createHmac('sha256', process.env.PASSWORD_SECRET).update(args.password).digest('hex');
             const savedUser = await User.findOne({
@@ -104,7 +104,7 @@ export default {
             return {"jwt": accessToken}
 
         },
-        async updateUserInfo(_:any, args:{jwt:string, nickname:string, password:string, phoneNumber:string, email:string}) {
+        async updateUserInfo(_:any, args:{jwt:string, nickname:string, password:string, phoneNumber:string, email:string, disease:[number]}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
 
@@ -113,9 +113,9 @@ export default {
             if(args.password !== null && args.password !== undefined) {
                 const crypto = require('crypto');
                 const encryptedPassword = crypto.createHmac('sha256', process.env.PASSWORD_SECRET).update(args.password).digest('hex');
-                newData = {nickname:args.nickname, password:encryptedPassword, phoneNumber:args.phoneNumber, email:args.email}
+                newData = {nickname:args.nickname, password:encryptedPassword, phoneNumber:args.phoneNumber, email:args.email, disease:args.disease}
             } else {
-                newData = {nickname:args.nickname, phoneNumber:args.phoneNumber, email:args.email}
+                newData = {nickname:args.nickname, phoneNumber:args.phoneNumber, email:args.email, disease:args.disease}
             }
 
             const res = await User.updateOne({_id:userInfo._id}, newData)

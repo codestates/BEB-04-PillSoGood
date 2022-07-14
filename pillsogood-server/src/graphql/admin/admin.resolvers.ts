@@ -51,7 +51,7 @@ export default {
             return status.SUCCESS
 
         }, 
-        async loginAmin(_:any, args: {email:string, password:string}) {
+        async loginAdmin(_:any, args: {email:string, password:string}) {
             const crypto = require('crypto');
             const encryptedPassword = crypto.createHmac('sha256', process.env.PASSWORD_SECRET).update(args.password).digest('hex');
             

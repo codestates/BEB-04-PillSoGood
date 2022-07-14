@@ -5,7 +5,8 @@ export default gql`
         _id:String,
         userId:String,
         name:String,
-        level:Int
+        level:Int,
+        baseId:String 
     }
 
     type Query {
@@ -13,7 +14,7 @@ export default gql`
     }
 
     type Mutation {
-        createCharacter(jwt:String!, name:String!):Int!
+        createCharacter(jwt:String!, name:String!, baseId:String!):Int!
         updateCharacter(jwt:String!, _id:String!, name:String!, level:Int!):Int!
         deleteCharacter(jwt:String!, _id:String!):Int!
     }

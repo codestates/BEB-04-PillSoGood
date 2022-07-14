@@ -74,7 +74,6 @@ const Register = () => {
         email,
         password,
         phoneNumber,
-
         "검증"
       );
       console.log(birth, "생일");

@@ -1,18 +1,22 @@
 import { applyMiddleware } from 'redux'
 import { configureStore, createSlice } from '@reduxjs/toolkit'
-
 // let user =createSlice({
 //     name:'state이름',
 //     initialState:'값'
 // })
 
+
+
+
 interface IUser {
   email: string
   password: string
+  token: any
 }
 const initialState: IUser = {
   email: '',
   password: '',
+  token: null
 }
 export const loginSlice = createSlice({
   name: 'login',
@@ -24,6 +28,9 @@ export const loginSlice = createSlice({
     setPassword: (state, action) => {
       state.password = action.payload
     },
+    setToken: (state, action) => {
+      state.token = action.payload
+    }
   },
 })
 

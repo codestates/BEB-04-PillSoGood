@@ -6,6 +6,8 @@ import { LOGIN } from "../src/query/MutationQuery";
 import { useDispatch, useSelector } from "react-redux";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { loginActions } from "../src/store/loginSlice";
+
 const Container = styled.View`
   background-color: ${BASE_COLOR};
   flex: 1;
@@ -60,6 +62,7 @@ const BtnTxt = styled.Text`
 
 const Login = ({ navigation: { navigate } }) => {
   let state = useSelector((state) => state.login); //redux store의 state꺼내는법
+  const dispatch = useDispatch();
   //참고사항 state= store안에 있는 모든 state
   console.log(state.user); //obj자료형에서 꺼내는방법
   // let dispatch = useDispatch(); //store.js로 요청 보내주는 함수
@@ -67,7 +70,6 @@ const Login = ({ navigation: { navigate } }) => {
   const passwordInput = useRef();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const getToken = AsyncStorage.getItem("token");
   const [login, { data, loading, error }] = useMutation(LOGIN);
   const handleHi = () => {
     const hi = gql`
@@ -78,7 +80,8 @@ const Login = ({ navigation: { navigate } }) => {
     console.log(hi);
   };
 
-  const handleClick = () => {
+  const handleClick = ({ navigation }) => {
+    let Token;
     const loginVariables = login({
       variables: {
         email: email,
@@ -97,8 +100,9 @@ const Login = ({ navigation: { navigate } }) => {
         Alert.alert("로그인완료");
         setEmail("");
         setPassword("");
-        AsyncStorage.getItem("token", appdata.data.login.jwt);
-        navigate(Home);
+        Token = AsyncStorage.getItem("token", appdata.data.login.jwt); //로컬에 jwt 토큰 저장
+        dispatch(loginActions(setToken(Token))); //전역 state에 jwt저장
+        navigation.navigate("Home"); //로그인완료 후 Home으로 이동
       }
     });
   };

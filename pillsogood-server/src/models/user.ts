@@ -6,7 +6,7 @@ const user = new Schema({
     dateOfBirth: String,
     password: String,
     pointBalance: Number,
-    disease: String,
+    disease: [Number],
     createdAt: String,
     phoneNumber: String
 })

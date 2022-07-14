@@ -26,5 +26,7 @@ export default gql`
     type Mutation {
         join(nickname:String!, email:String!, dateOfBirth:String!, password:String,  phoneNumber:String, disease:String):Int!
         login(email:String!, password:String!):Token!
+        updateUserInfo(jwt:String!, nickname:String, password:String, phoneNumber:String, email:String):Int!
+        updateUserPassword(jwt:String!, _id:String!, password:String):Int!
     }
 `;

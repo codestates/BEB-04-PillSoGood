@@ -44,7 +44,7 @@ agenda.on('ready', () => {
 
 async function initApolloServer() {
   
-   await mongoose.connect(MongoDB_URL) // MongoDB와 서버 연결
+   await mongoose.connect(MONGO_DB_URL) // MongoDB와 서버 연결
   .then(() => {
     console.log("MongoDB Connection succeeded");
   })

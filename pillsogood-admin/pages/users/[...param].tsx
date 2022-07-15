@@ -20,9 +20,9 @@ const GET_USER_INFO = gql`
 `
 
 const UPDATE_USER_PASSWORD = gql`
-mutation UpdateUserPassword($jwt: String!, $id: String!, $password: String) {
-  updateUserPassword(jwt: $jwt, _id: $id, password: $password)
-}
+    mutation UpdateUserPassword($jwt: String!, $id: String!, $password: String) {
+        updateUserPassword(jwt: $jwt, _id: $id, password: $password)
+    }
 `;
 
 export async function getServerSideProps(context:any) {
@@ -30,7 +30,7 @@ export async function getServerSideProps(context:any) {
     return {
       props: {userId: userId}
     };
-  }
+}
   
 
 const UserDetail = (props:any)=> {

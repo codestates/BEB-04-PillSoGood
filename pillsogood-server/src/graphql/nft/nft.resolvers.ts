@@ -8,6 +8,7 @@ type nft = {
     _id: string
     nftHash: string
     imagePath: string
+    tokenId: string
 }
 
 export default {
@@ -25,7 +26,7 @@ export default {
         }
     },
     Mutation: {
-        async createNft(_:any, args:{jwt:string, nftHash:string, imagePath:string}) {
+        async createNft(_:any, args:{jwt:string, nftHash:string, imagePath:string, tokenId:string}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
 
@@ -35,6 +36,7 @@ export default {
             newNft.nftHash = args.nftHash
             newNft.imagePath = args.imagePath
             newNft.userId = userInfo._id
+            newNft.tokenId = args.tokenId
 
             const res = await newNft.save()
             if(!res) return status.SERVER_ERROR

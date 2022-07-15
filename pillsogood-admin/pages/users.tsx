@@ -1,7 +1,6 @@
 import type { NextPage } from 'next'
 import { gql, useQuery } from "@apollo/client";
 import SessionStorage from "../utils/sessionStorage"
-import { useRouter } from "next/router";
 import Link from "next/link";
 
 const GET_USERS = gql`
@@ -20,13 +19,6 @@ const GET_USERS = gql`
 `
 
 const Users: NextPage = () => {
-    const router = useRouter()
-    const moveToDetail = (data:any) => {
-        router.push({
-            pathname: `/detail/${data._id}`,
-            query: {data:JSON.stringify(data)}
-        }, `/detail/${data._id}`);
-    }
     const { loading, data } = useQuery(
         GET_USERS,
         { variables: { jwt: SessionStorage.getItem("jwt") } }
@@ -54,7 +46,7 @@ const Users: NextPage = () => {
                         {
                             data.getUsers.map((data:any) => {
                                 return (
-                                    <Link key={data._id} href={`/detail/${data._id}`}>
+                                    <Link key={data._id} href={`/users/${data._id}`}>
                                         <tr>
                                             <td>{data.nickname}</td>
                                             <td>{data.email}</td>

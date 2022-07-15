@@ -28,10 +28,10 @@ export default {
         async getUserInfo(_:any, args:{jwt:string, _id:string}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
-
-            if(args._id !== null) {
+            
+            if(args._id !== null && args._id !== undefined) {
                 let user = await User.findOne({
-                    _id:userInfo._id
+                    _id:args._id
                 })
                 return user
             }

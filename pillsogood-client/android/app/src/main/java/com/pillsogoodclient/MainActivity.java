@@ -2,6 +2,7 @@ package com.pillsogoodclient;
 
 import android.os.Build;
 import android.os.Bundle;
+import org.devio.rn.splashscreen.SplashScreen; //추가
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -15,8 +16,9 @@ public class MainActivity extends ReactActivity {
     // Set the theme to AppTheme BEFORE onCreate to support 
     // coloring the background, status bar, and navigation bar.
     // This is required for expo-splash-screen.
+    SplashScreen.show(this, R.style.SplashScreenTheme); // 추가
     setTheme(R.style.AppTheme);
-    super.onCreate(null);
+    super.onCreate(savedInstanceState);
   }
 
   /**

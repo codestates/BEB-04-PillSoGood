@@ -41,9 +41,9 @@ const BtnText = styled.Text`
 `;
 const Register = () => {
   // const user = useSelector((state) => state.user.value)
-  const passwordInput: any = useRef();
-  const emailInput: any = useRef();
-  const passwordCheckInput: any = useRef();
+  const passwordInput = useRef();
+  const emailInput = useRef();
+  const passwordCheckInput = useRef();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,21 +53,30 @@ const Register = () => {
   const [value, setValue] = useState([]);
   const [Signup, { data, loading, error }] = useMutation(SIGN_UP);
   const [complete, setComplete] = useState(false);
-  const onSubmitEmailEditing: any = () => {
+  const onSubmitEmailEditing = () => {
     emailInput.current.focus(); //유저가 입력이 끝나면 다음칸으로가게함
   };
-  const onSubmitPasswordEditing: any = () => {
+  const onSubmitPasswordEditing = () => {
     passwordInput.current.focus();
   };
-  const onSubmitPasswordCheckEditing: any = () => {
+  const onSubmitPasswordCheckEditing = () => {
     passwordCheckInput.current.focus();
   };
-
+  const onComplete = ({ navigation }) => {
+    if (!complete) {
+      navigation.navigate("Home");
+      Alert.alert("Account created! Log in now");
+    }
+    if (complete) {
+      console.error(error);
+    }
+  };
   const onSubmit = async () => {
     if (loading) {
       return;
     }
     try {
+      setComplete(true);
       console.log(
         name,
         value,
@@ -88,6 +97,7 @@ const Register = () => {
           disease: value,
         },
       });
+      onComplete();
     } catch (err) {
       console.log(err);
     }

@@ -4,7 +4,7 @@
   "private": true,
   "description": "",
   "scripts": {
-    "dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts"
+    "dev": "nodemon src/server.ts"
   },
   "dependencies": {
     "@graphql-tools/load-files": "^6.5.4",

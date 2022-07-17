@@ -52,6 +52,7 @@ const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [value, setValue] = useState([]);
   const [Signup, { data, loading, error }] = useMutation(SIGN_UP);
+  const [complete, setComplete] = useState(false);
   const onSubmitEmailEditing: any = () => {
     emailInput.current.focus(); //유저가 입력이 끝나면 다음칸으로가게함
   };
@@ -76,7 +77,7 @@ const Register = () => {
         phoneNumber,
         "검증"
       );
-      console.log(birth, "생일");
+      console.log(birth, typeof birth, "생일");
       Signup({
         variables: {
           nickname: name,

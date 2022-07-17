@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { ApolloProvider } from "@apollo/client";
+import { AppRegistry } from "react-native";
 import client from "./apolloClient";
+
 import auth from "@react-native-firebase/auth";
+
 import OutNav from "./navigators/OutNav";
 import InNav from "./navigators/InNav";
 import { Provider } from "react-redux";

@@ -1,25 +1,13 @@
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import getAPIHost from './src/utils/GetApiHost'
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4000/graphql',
-})
-
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = AsyncStorage.getItem('token')
-  // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : '',
-    },
-  }
+  uri: `${getAPIHost()}/graphql`,
 })
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: httpLink,
   cache: new InMemoryCache(),
 })
 export default client

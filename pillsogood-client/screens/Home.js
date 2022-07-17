@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { StyleSheet, Text, ScrollView, View, Animated, Dimensions } from 'react-native';
 import InteractiveCard, { Content, Header } from 'react-native-interactive-card'
@@ -208,4 +209,17 @@ export default Home;
 // 		fontWeight: 'bold',
 // 	}
 // });
+
+=======
+import React from "react";
+import styled from "styled-components/native";
+
+const Container = styled.View``;
+const Text = styled.Text``;
+const Home = () => (
+  <Container>
+    <Text>Home</Text>
+  </Container>
+);
+export default Home;
 

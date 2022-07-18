@@ -1,4 +1,5 @@
 #import "AppDelegate.h"
+#import "RNSplashScreen.h" // 추가
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
@@ -51,6 +52,7 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  [RNSplashScreen show]; // 추가
 
   [super application:application didFinishLaunchingWithOptions:launchOptions];
 

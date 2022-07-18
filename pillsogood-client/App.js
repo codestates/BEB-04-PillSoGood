@@ -6,12 +6,17 @@ import client from "./apolloClient";
 
 import { Provider } from "react-redux";
 import { store } from "./src/store";
+
 import {
   requestUserPermission,
   NotificationListener,
   GetFCMToken,
 } from "./src/utils/Pushnotification";
 
+import InNav from "./navigators/InNav";
+import OutNav from "./navigators/OutNav";
+
+const Nav = createNativeStackNavigator();
 const [isLoggedIn, setIsLoggedIn] = useState(false);
 useEffect(() => {
   auth().onAuthStateChanged((user) => {

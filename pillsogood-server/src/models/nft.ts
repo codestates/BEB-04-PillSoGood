@@ -4,7 +4,9 @@ const nft = new Schema({
     userId: String,
     nftHash: String,
     imagePath: String,
-    tokenId: String
+    tokenId: String,
+    tokenURI: String,
+    createdAt: String
 })
 
 module.exports = model('Nft', nft); 

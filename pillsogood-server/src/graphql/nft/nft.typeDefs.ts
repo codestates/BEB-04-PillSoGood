@@ -4,7 +4,7 @@ export default gql`
     type Nft {
         _id:String,
         nftHash:String,
-        imagePath:String
+        imagePath:String,
         tokenId: String,
         tokenURI: String,
         createdAt: String

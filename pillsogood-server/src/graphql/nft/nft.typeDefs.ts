@@ -5,6 +5,9 @@ export default gql`
         _id:String,
         nftHash:String,
         imagePath:String
+        tokenId: String,
+        tokenURI: String,
+        createdAt: String
     }
 
     type Query {
@@ -12,6 +15,7 @@ export default gql`
     }
 
     type Mutation {
-        createNft(jwt:String!, nftHash:String!, imagePath:String!):Int!
+        createNft(jwt:String!, tokenURI:String!, imagePath:String!):Int!
+        bringMyNft(jwt:String!, _id:String!, tokenId:String!, receiveraddress:String!):Int!
     }
 `

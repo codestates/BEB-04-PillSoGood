@@ -11,6 +11,8 @@ dotenv.config();
 declare let process : {
   env : {
     MONGODB_URL : string;
+    KAS_ACCESSKEY_ID : string;
+    KAS_SECRET_ACCESS_KEY : string;
   }} 
 
 
@@ -47,14 +49,14 @@ agenda.on('ready', () => {
 
 async function initApolloServer() {
   
- /*  await mongoose.connect(MongoDB_URL) // MongoDB와 서버 연결
+  await mongoose.connect(MongoDB_URL) // MongoDB와 서버 연결
   .then(() => {
     console.log("MongoDB Connection succeeded");
   })
   .catch((e: Error) => {            
     console.log("seq ERROR: ", e);
   });
- */
+ 
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });  // apollo server에 express 연동
   await new Promise<void>((resolve) =>

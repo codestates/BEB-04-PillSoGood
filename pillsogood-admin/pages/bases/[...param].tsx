@@ -100,7 +100,6 @@ const BaseDetail = (props:any) => {
             url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
             data: formData,
             headers: {
-            // "Authorization":"Bearer " + process.env.PINATA_JWT,
               "pinata_api_key": `${process.env.PINATA_API_KEY}`,
               "pinata_secret_api_key": `${process.env.PINATA_API_SECRET_KEY}`,
               "Content-Type": "multipart/form-data"

@@ -13,7 +13,7 @@ const Tabs = () => {
         screenOptions={{
             tabBarStyle: { backgroundColor: "#D8FF98" },
         }}
-    >
+    >1
         <Tab.Screen name="Charactor" component={Charactor} />
         <Tab.Screen name="Home" component={Home} />
         <Tab.Screen name="Health" component={Health} />

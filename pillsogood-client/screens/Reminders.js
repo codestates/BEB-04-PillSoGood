@@ -13,6 +13,7 @@ const days = [
   { title: 'F', active: false },
   { title: 'S', active: true },
 ];
+1
 const Reminders = () => {
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState('time');

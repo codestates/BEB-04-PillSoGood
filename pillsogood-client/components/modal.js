@@ -5,13 +5,13 @@ import Modal from "react-native-modal";
 
 
 function WrapperComponent() {
-    return (
-      <View>
-        <Modal>
-          <View style={{ flex: 1 }}>
-            <Text>I am the modal content!</Text>
-          </View>
-        </Modal>
-      </View>
-    );
-  }
+  return (
+    <View>
+      <Modal>
+        <View style={{ flex: 1 }}>
+          <Text>Modal입니다</Text>
+        </View>
+      </Modal>
+    </View>
+  );
+}

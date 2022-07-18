@@ -30,6 +30,7 @@ export default {
             return nfts
         }
     },
+
     Mutation: { // jwt, tokenuri, imagepath 받아야 함
         async createNft(_:any, args:{jwt:string, tokenURI:string, imagePath:string}) {
             const userInfo = getUserInfoByToken(args.jwt)
@@ -42,7 +43,6 @@ export default {
                                                               // 즉, mintNFT = [ hash, tokenId ]  --- mintNFT[0] = hash, 
                                                               //                                      mintNFT[1] = tokenId  
             if(mintNFT !==  undefined){
-
                 const newNft = new Nft()                   
                 newNft.tokenURI = args.tokenURI         
                 newNft.imagePath = args.imagePath

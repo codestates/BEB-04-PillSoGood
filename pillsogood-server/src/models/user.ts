@@ -6,8 +6,9 @@ const user = new Schema({
     dateOfBirth: String,
     password: String,
     pointBalance: Number,
+    disease: [Number],
     createdAt: String,
-    PhoneNumber: String
+    phoneNumber: String
 })
 
 module.exports = model('User', user); // user스키마를 User라는 이름으로 export

@@ -5,24 +5,24 @@ import SessionStorage from "../../utils/sessionStorage"
 import { useState } from "react"
 import axios from "axios"
 
-const CREATE_BASE = gql`
-    mutation CreateBase($jwt: String!, $name: String, $imagePath: String, $level: Int) {
-        createBase(jwt: $jwt, name: $name, imagePath: $imagePath, level: $level)
+const CREATE_ITEM = gql`
+    mutation CreateItem($jwt: String!, $type: Int!, $name: String!, $imagePath: String!) {
+        createItem(jwt: $jwt, type: $type, name: $name, imagePath: $imagePath)
     }
 `
 
-const NewBase: NextPage = () => {
+const NewItem: NextPage = () => {
     const router = useRouter()
     const [name, setName] = useState('')
-    const [level, setLevel] = useState(0)
+    const [type, setType] = useState(0)
     const [imagePath, setImagePath] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
-    var [createBase, { data, loading, error }] = useMutation(CREATE_BASE, {
+    var [createItem, { data, loading, error }] = useMutation(CREATE_ITEM, {
         onCompleted: (data) => {
-            if(data.createBase === 200) {
+            if(data.createItem === 200) {
                 alert("등록되었습니다.")
-                window.location.href = "/bases"
+                window.location.href = "/items"
             }
         },
         onError:(error) => {
@@ -56,25 +56,25 @@ const NewBase: NextPage = () => {
     const onSubmit = (e: any) => {
         if(!confirm("등록하시겠습니까?")) return
         e.preventDefault();
-        createBase({
+        createItem({
             variables: {
                 jwt: SessionStorage.getItem("jwt"),
                 name:name,
                 imagePath:imagePath,
-                level:level
+                type:type
             }
         })
     };
     return (
         <div>
-                <h1>새 기본 캐릭터 등록</h1>
+                <h1>새 아이템 등록</h1>
                 <div>
                     <label>이름</label>
                     <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
                 </div>
                 <div>
-                    <label>레벨</label>
-                    <input type="number" value={level} onChange={(e) => setLevel(parseInt(e.target.value))}/>
+                    <label>타입</label>
+                    <input type="number" value={type} onChange={(e) => setType(parseInt(e.target.value))}/>
                 </div>
                 <div>
                     <input type="file" onChange={(e) => {
@@ -100,4 +100,4 @@ const NewBase: NextPage = () => {
     )
 }
 
-export default NewBase
+export default NewItem

@@ -54,7 +54,9 @@ const Bases: NextPage = () => {
             </div>
         )
     }
-    return (<></>)
+    return (
+        <>데이터가 없습니다.</>
+    )
 }
 
 export default Bases

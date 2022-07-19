@@ -1,21 +1,16 @@
 import React from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../colors";
-import {
-  StatusBar,
-  Text,
-  View,
-  FlatList,
-} from 'react-native';
+
 
 const DATA = ['고지혈증', '고혈압', '당뇨'];
 
-const Container = styled.View`
-  background-color: ${BASE_COLOR};
-  flex: 1;
-  marginTop: StatusBar.currentHeight || 0,
-`;
-const View = styled.View`
+// const Container1 = styled.Container`
+//   background-color: ${BASE_COLOR};
+//   flex: 1;
+//   marginTop: StatusBar.currentHeight || 0,
+// `;
+const View1 = styled.View`
   width: 100%;
   margin-top: 10px;
   padding: 10px 20px;
@@ -25,13 +20,13 @@ const View = styled.View`
   color: black;
   background-color: '#DDECCA';
 `;
-const FlatList = styled.Text`
+const FlatList1 = styled.FlatList`
   font-size: 16px;
   text-align: center;
   color: black;
   border-radius: 20px;
 `;
-const Text = styled.View`
+const Text1 = styled.Text`
   textAlign: 'center'
   backgroundColor: '#DDECCA',
   padding: 20,
@@ -39,18 +34,17 @@ const Text = styled.View`
   `;
 
 const Home = () => (
-  <Container>
-    <View>
-      <Text> 메인
-      </Text>
-      <FlatList
+    <View1>
+      <Text1> 메인
+      </Text1>
+      <FlatList1
         data={DATA}
         renderItem={({ item }) =>
-          <Text>
+          <Text1>
             {item}
-          </Text>}
+          </Text1>}
       />
-      <View
+      <View1
         style={{
           height: 25,
           backgroundColor: Colors.pink,
@@ -61,10 +55,10 @@ const Home = () => (
           justifyContent: 'center',
           borderRadius: 50,
         }}>
-        <Text> X
-        </Text>
-      </View>
-    </View>
-  </Container>
+        <Text1> 
+        </Text1>
+      </View1>
+    </View1>
+
 );
 export default Home;

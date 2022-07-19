@@ -4,6 +4,7 @@ import { createLog } from "../../utils/log"
 import { ERC721Mint, ERC721transfer } from "../../contracts/ERC721"
 
 const Nft = require("../../models/nft")
+const User = require("../../models/user")
 const moment = require("moment")
 
 type nft = {
@@ -12,12 +13,38 @@ type nft = {
     imagePath: string
     nftHash: string
     tokenId: string
-    createdAt: String
+    user: user
+}
+
+type user = {
+    _id: string
+    email: string
+    nickname: string
+    dateOfBirth: string
+    pointBalance: number
+    createdAt: string
+    phoneNumber: string
+    disease: [number]
 }
 
   
 export default {
+    Nft: {
+        async user(root:any) {
+            const userInfo = await User.findOne({
+                _id:root.userId
+            })
+            return userInfo
+        }
+    },
     Query: {
+        async getAllNfts(_:any, args:{jwt:string}) {
+            const userInfo = getUserInfoByToken(args.jwt)
+            if(!userInfo) return status.TOKEN_EXPIRED
+
+            const nfts = Nft.find()
+            return nfts
+        },
         async getNfts(_:any, args:{jwt:string}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED

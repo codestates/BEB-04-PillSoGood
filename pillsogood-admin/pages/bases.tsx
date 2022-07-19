@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import { gql, useQuery } from "@apollo/client";
 import SessionStorage from "../utils/sessionStorage"
 import Link from "next/link";
+import { useRouter } from 'next/router';
 
 const GET_BASES = gql`
     query GetBases($jwt: String!) {
@@ -15,6 +16,7 @@ const GET_BASES = gql`
 `
 
 const Bases: NextPage = () => {
+    const router = useRouter()
     const { loading, data } = useQuery(
         GET_BASES,
         { variables: { jwt: SessionStorage.getItem("jwt") } }
@@ -26,6 +28,7 @@ const Bases: NextPage = () => {
         return (
             <div>
                 <h1>기본 캐릭터 목록</h1>
+                <button type="button" onClick={() => router.push("/bases/new")}>등록</button>
                 <table>
                     <thead>
                         <tr>
@@ -51,7 +54,9 @@ const Bases: NextPage = () => {
             </div>
         )
     }
-    return (<></>)
+    return (
+        <>데이터가 없습니다.</>
+    )
 }
 
 export default Bases

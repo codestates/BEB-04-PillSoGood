@@ -15,8 +15,15 @@ export default {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
 
-            const items = Item.find()
+            const items = await Item.find()
             return items
+        },
+        async getItem(_:any, args:{jwt:string, _id:string}) {
+            const userInfo = getUserInfoByToken(args.jwt)
+            if(!userInfo) return status.TOKEN_EXPIRED
+
+            const item = await Item.findOne({_id:args._id})
+            return item
         }
     },
     Mutation: {

@@ -4,48 +4,48 @@ import SessionStorage from "../../utils/sessionStorage"
 import { useRouter } from "next/router"
 import axios from "axios"
 
-const GET_BASE = gql`
-    query GetBase($jwt: String!, $id: String!) {
-        getBase(jwt: $jwt, _id: $id) {
+const GET_ITEM = gql`
+    query GetItem($jwt: String, $id: String) {
+        getItem(jwt: $jwt, _id: $id) {
             _id
             name
-            level
+            type
             imagePath
-        }
     }
+}
 `
-const UPDATE_BASE = gql`
-    mutation UpdateBase($jwt: String!, $id: String, $name: String, $level: Int, $imagePath: String) {
-        updateBase(jwt: $jwt, _id: $id, name: $name, level: $level, imagePath: $imagePath)
+const UPDATE_ITEM = gql`
+    mutation UpdateItem($jwt: String!, $id: String!, $type: Int!, $name: String!, $imagePath: String!) {
+        updateItem(jwt: $jwt, _id: $id, type: $type, name: $name, imagePath: $imagePath)
     }
 `;
 
-const DELETE_BASE = gql`
-    mutation DeleteBase($jwt: String!, $id: String) {
-        deleteBase(jwt: $jwt, _id: $id)
+const DELETE_ITEM = gql`
+    mutation DeleteItem($jwt: String!, $id: String!) {
+        deleteItem(jwt: $jwt, _id: $id)
     }
 `
 
 export async function getServerSideProps(context:any) {
-    const baseId = context.query.param[0]
+    const itemId = context.query.param[0]
     return {
-      props: {baseId: baseId}
+      props: {itemId: itemId}
     };
 }
 
 const BaseDetail = (props:any) => {
     const router = useRouter()
     const [name, setName] = useState('')
-    const [level, setLevel] = useState(0)
+    const [type, setType] = useState(0)
     const [imagePath, setImagePath] = useState('')
     const [id, setId] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     
-    var [updateBase, { data, loading, error }] = useMutation(UPDATE_BASE, {
+    var [updateItem, { data, loading, error }] = useMutation(UPDATE_ITEM, {
         onCompleted: (data) => {
-            if(data.updateBase === 200) {
+            if(data.updateItem === 200) {
                 alert("수정되었습니다.")
-                window.location.href = "/bases"
+                window.location.href = "/items"
             }
         },
         onError:(error) => {
@@ -53,11 +53,11 @@ const BaseDetail = (props:any) => {
         }
     })
 
-    var [deleteBase, { data, loading, error }] = useMutation(DELETE_BASE, {
+    var [deleteItem, { data, loading, error }] = useMutation(DELETE_ITEM, {
         onCompleted: (data) => {
-            if(data.deleteBase === 200) {
+            if(data.deleteItem === 200) {
                 alert("삭제되었습니다.")
-                window.location.href = "/bases"
+                window.location.href = "/items"
             }
         },
         onError:(error) => {
@@ -68,13 +68,13 @@ const BaseDetail = (props:any) => {
     const onUpdateSubmit = (e: any) => {
         if(!confirm("수정하시겠습니까?")) return
         e.preventDefault();
-        updateBase({
+        updateItem({
             variables: {
                 jwt: SessionStorage.getItem("jwt"),
                 id:id,
                 name:name,
                 imagePath:imagePath,
-                level:level
+                type:type
             }
         })
     };
@@ -82,7 +82,7 @@ const BaseDetail = (props:any) => {
     const onDeleteSubmit = (e: any) => {
         if(!confirm("삭제하시겠습니까?")) return
         e.preventDefault();
-        deleteBase({
+        deleteItem({
             variables: {
                 jwt: SessionStorage.getItem("jwt"),
                 id:id
@@ -116,16 +116,16 @@ const BaseDetail = (props:any) => {
       };
 
     var { loading, data } = useQuery(
-        GET_BASE,
-        { variables: { jwt: SessionStorage.getItem("jwt"), id:props.baseId } }
+        GET_ITEM,
+        { variables: { jwt: SessionStorage.getItem("jwt"), id:props.itemId } }
     );
 
     useEffect(() => {
         if(data !== undefined){
-            setName(data.getBase.name)
-            setLevel(data.getBase.level)
-            setImagePath(data.getBase.imagePath)
-            setId(data.getBase._id)
+            setName(data.getItem.name)
+            setType(data.getItem.type)
+            setImagePath(data.getItem.imagePath)
+            setId(data.getItem._id)
         }
     }, [data])
 
@@ -135,14 +135,14 @@ const BaseDetail = (props:any) => {
     if(data) {
         return (
             <div>
-                <h1>기본 캐릭터 상세 정보</h1>
+                <h1>아이템 상세 정보</h1>
                 <div>
                     <label>이름</label>
                     <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
                 </div>
                 <div>
-                    <label>레벨</label>
-                    <input type="number" value={level} onChange={(e) => setLevel(parseInt(e.target.value))}/>
+                    <label>타입</label>
+                    <input type="number" value={type} onChange={(e) => setType(parseInt(e.target.value))}/>
                 </div>
                 <div>
                     <input type="file" onChange={(e) => {

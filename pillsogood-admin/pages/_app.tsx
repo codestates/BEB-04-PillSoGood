@@ -2,9 +2,9 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ApolloProvider } from '@apollo/client'
 import client from "../apollo-client";
+import { RouteGuard } from '../components/RouteGuard';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  
   return (
     <ApolloProvider client={client}>
       <header>
@@ -13,7 +13,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </header>
       <main>
-        <Component {...pageProps} />
+        <RouteGuard>
+          <Component {...pageProps} />
+        </RouteGuard>
       </main>
       <footer>
         © 2022. PillSoGood Co. all rights reserved.

@@ -66,7 +66,7 @@ const Users: NextPage = () => {
         )
     }
     return (
-        <></>
+        <>데이터가 없습니다.</>
     )
 }
 

@@ -5,7 +5,7 @@ import { createLog } from "../../utils/log"
 const User = require("../../models/user")
 const moment = require("moment")
 type user = {
-    _id: number
+    _id: string
     email: string
     password: string
     nickname: string

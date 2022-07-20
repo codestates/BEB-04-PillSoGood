@@ -6,8 +6,8 @@ import {
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Home from "../../screens/Home";
-import Health from "../../screens/Health";
-import Reminder from "../../screens/Reminder";
+import Health from "../../screens/Health/Health";
+import Reminder from "../../screens/Health/Reminder";
 export const navigationRef = createNavigationContainerRef;
 
 export default function TabNavigation() {

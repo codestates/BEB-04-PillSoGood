@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { BASE_COLOR } from "../../colors";
-import Login from "../../screens/Login";
-import Register from "../../screens/Register";
+import Login from "../../screens/Auth/Login";
+import Register from "../../screens/Auth/Register";
 const Nav = createNativeStackNavigator();
 
 const LoginStackScreen = () => (

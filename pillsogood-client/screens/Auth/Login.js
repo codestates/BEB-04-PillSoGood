@@ -1,18 +1,19 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components/native";
-import { BASE_COLOR } from "../colors";
+import { BASE_COLOR } from "../../colors";
 import { useMutation, gql, useQuery } from "@apollo/client";
-import { LOGIN } from "../src/query/MutationQuery";
+import { LOGIN } from "../../src/query/MutationQuery";
 import { useDispatch, useSelector } from "react-redux";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { loginActions } from "../src/store/loginSlice";
+import { loginActions } from "../../src/store/loginSlice";
 
 const Container = styled.View`
   background-color: ${BASE_COLOR};
   flex: 1;
   align-items: center;
   color: black;
+
   padding: 60px 20px;
 `;
 const TextInputs = styled.TextInput`

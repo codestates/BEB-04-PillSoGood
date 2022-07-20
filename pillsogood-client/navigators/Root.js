@@ -1,4 +1,3 @@
-
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigation from "./Tabs/Tabs";
@@ -8,8 +7,8 @@ const Nav = createNativeStackNavigator();
 
 const Root = () => (
   <Nav.Navigator screenOptions={{ headerShown: false }}>
-    <Nav.Screen name="LoginStackScreen" component={LoginStackScreen} />
-    <Nav.Screen name="RegisterStackScreen" component={RegisterStackScreen} />
+    {/* <Nav.Screen name="LoginStackScreen" component={LoginStackScreen} />
+    <Nav.Screen name="RegisterStackScreen" component={RegisterStackScreen} /> */}
     <Nav.Screen name="Tabs" component={TabNavigation} />
   </Nav.Navigator>
 );

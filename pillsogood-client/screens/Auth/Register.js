@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components/native";
 import { ActivityIndicator, Alert } from "react-native";
-import { BASE_COLOR } from "../colors";
-import Multiselect from "../src/utils/Multiselect";
-import DateTime from "../src/utils/DateTime";
+import { BASE_COLOR } from "../../colors";
+import Multiselect from "../../src/utils/Multiselect";
+import DateTime from "../../src/utils/DateTime";
 import { useMutation } from "@apollo/client";
-import { SIGN_UP } from "../src/query/MutationQuery";
+import { SIGN_UP } from "../../src/query/MutationQuery";
 const Container = styled.View`
   background-color: ${BASE_COLOR};
   flex: 1;

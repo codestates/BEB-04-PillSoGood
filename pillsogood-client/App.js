@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React, { useEffect } from "react";
 import { ApolloProvider } from "@apollo/client";
 
 import client from "./apolloClient";
@@ -13,22 +12,6 @@ import {
   GetFCMToken,
 } from "./src/utils/Pushnotification";
 
-import InNav from "./navigators/InNav";
-import OutNav from "./navigators/OutNav";
-
-const Nav = createNativeStackNavigator();
-const [isLoggedIn, setIsLoggedIn] = useState(false);
-useEffect(() => {
-  auth().onAuthStateChanged((user) => {
-    //인증상태감지
-    if (user) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  });
-  console.log(auth().currentUser);
-}, []);
 export default function App() {
   useEffect(() => {
     GetFCMToken();
@@ -39,9 +22,7 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <Provider store={store}>
-        <NavigationContainer>
-          {isLoggedIn ? <InNav /> : <OutNav />}
-        </NavigationContainer>
+        <Root />
       </Provider>
     </ApolloProvider>
   );

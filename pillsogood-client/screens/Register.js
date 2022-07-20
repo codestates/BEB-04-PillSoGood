@@ -62,9 +62,9 @@ const Register = () => {
   const onSubmitPasswordCheckEditing = () => {
     passwordCheckInput.current.focus();
   };
-  const onComplete = ({ navigation }) => {
+  const onComplete = ({ navigation: { navigate } }) => {
     if (!complete) {
-      navigation.navigate("Home");
+      navigate("Login");
       Alert.alert("Account created! Log in now");
     }
     if (complete) {
@@ -76,7 +76,7 @@ const Register = () => {
       return;
     }
     try {
-      setComplete(true);
+      setComplete(false);
       console.log(
         name,
         value,
@@ -100,6 +100,8 @@ const Register = () => {
       onComplete();
     } catch (err) {
       console.log(err);
+      setComplete(true);
+      Alert.alert("회원가입에 실패했습니다!");
     }
   };
   return (

@@ -11,7 +11,6 @@ export async function requestUserPermission() {
     console.log("Authorization status:", authStatus);
   }
 }
-
 export async function GetFCMToken() {
   let fcmToken = await AsyncStorage.getItem("fcmtoken");
   console.log("fcmToken:old token", fcmToken);

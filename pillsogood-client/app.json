@@ -3,11 +3,6 @@
     "name": "pillsogood-client",
     "slug": "pillsogood-client",
     "version": "1.0.0",
-    "splash":{
-     "image":"./src/assets/highland",
-     "resizeMode":"contain",
-     "backgroundColor":"#ffffff"
-    },
     "assetBundlePatterns": [
       "**/*"
     ]

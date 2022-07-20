@@ -64,7 +64,7 @@ const Register = () => {
   };
   const onComplete = ({ navigation: { navigate } }) => {
     if (!complete) {
-      navigate("Login");
+      navigate("Login", { screen: Login });
       Alert.alert("Account created! Log in now");
     }
     if (complete) {

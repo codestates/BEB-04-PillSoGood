@@ -61,6 +61,7 @@ const Reminder = () => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   console.log(date);
+
   const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
   const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
   const kr_curr = new Date(utc + KR_TIME_DIFF);
@@ -77,7 +78,7 @@ const Reminder = () => {
         date={date}
         onConfirm={(date) => {
           setOpen(false);
-          setDate(kr_curr);
+          setDate(data);
         }}
         onCancel={() => {
           setOpen(false);

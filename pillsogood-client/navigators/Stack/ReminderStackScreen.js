@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import Reminders from "../../screens/Reminders";
+import Reminder from "../../screens/Health/Reminder";
 
 export default function RemindersStackScreen() {
   const RemindersStack = createNativeStackNavigator();
@@ -9,7 +9,7 @@ export default function RemindersStackScreen() {
     <RemindersStack.Navigator
       screenOptions={({ route }) => ({ headerShown: false })}
     >
-      <RemindersStack.Screen name="Health" component={Reminders} />
+      <RemindersStack.Screen name="Health" component={Reminder} />
     </RemindersStack.Navigator>
   );
 }

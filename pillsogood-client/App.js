@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React, { useEffect } from "react";
 import { ApolloProvider } from "@apollo/client";
 import * as SplashScreen from "expo-splash-screen";
 import client from "./apolloClient";
@@ -13,16 +12,6 @@ import {
   GetFCMToken,
 } from "./src/utils/Pushnotification";
 import Root from "./navigators/Root";
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-SplashScreen.preventAutoHideAsync();
-async function delay_splash() {
-  await SplashScreen.preventAutoHideAsync();
-  await sleep(3000);
-  await SplashScreen.hideAsync();
-}
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

@@ -8,12 +8,12 @@ import { Platform } from "react-native";
 //   BLOCKED: "The permission is denied and not requestable anymore",
 // };
 const androidPermissions = {
-  notification: PERMISSIONS.ANDROID.RECEIVE_WAP_PUSH,
+  notification: PERMISSIONS.ANDROID.POST_NOTIFICATIONS,
   camera: PERMISSIONS.ANDROID.CAMERA,
   photo: PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
 };
 const iosPermissions = {
-  location: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+  location: PERMISSIONS.IOS.REMINDERS,
   camera: PERMISSIONS.IOS.CAMERA,
   photo: PERMISSIONS.IOS.PHOTO_LIBRARY,
 };

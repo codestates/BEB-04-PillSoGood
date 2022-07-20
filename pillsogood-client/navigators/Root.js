@@ -1,40 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
-import auth from "@react-native-firebase/auth";
-import Tabs from "./Tabs";
-import Stack from "./Stack";
-import InNav from "./InNav";
-import OutNav from "./OutNav";
 
+import React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import TabNavigation from "./Tabs/Tabs";
+import LoginStackScreen from "./Stack/RegisterStackScreen";
+import RegisterStackScreen from "./Stack/RegisterStackScreen";
 const Nav = createNativeStackNavigator();
 
-const Root = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  useEffect(() => {
-    auth().onAuthStateChanged((user) => {
-      //인증상태감지
-      if (user) {
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-      }
-    });
-    console.log(auth().currentUser);
-  }, []);
-
-  return (
-    <NavigationContainer>
-      <Nav.Navigator screenOptions={{ headerShown: false }}>
-        {isLoggedIn ? (
-          <Nav.Screen name="InNav" component={InNav} />
-        ) : (
-          <Nav.Screen name="OutNav" component={OutNav} />
-        )}
-        <Nav.Screen name="Tabs" component={Tabs} />
-        <Nav.Screen name="Stack" component={Stack} />
-      </Nav.Navigator>
-    </NavigationContainer>
-  );
-};
+const Root = () => (
+  <Nav.Navigator screenOptions={{ headerShown: false }}>
+    <Nav.Screen name="LoginStackScreen" component={LoginStackScreen} />
+    <Nav.Screen name="RegisterStackScreen" component={RegisterStackScreen} />
+    <Nav.Screen name="Tabs" component={TabNavigation} />
+  </Nav.Navigator>
+);
 export default Root;
+
+// Root {
+//     Tabs {
+//         Movies => navigate(navigate(Stack, {screen: One}))
+//     }
+//     Stack{
+//         one => navigate(Tabs, {screen:Search})
+//     }
+// }

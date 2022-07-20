@@ -5,9 +5,6 @@ import { configureStore, createSlice } from '@reduxjs/toolkit'
 //     initialState:'값'
 // })
 
-
-
-
 interface IUser {
   email: string
   password: string
@@ -16,7 +13,7 @@ interface IUser {
 const initialState: IUser = {
   email: '',
   password: '',
-  token: null
+  token: null,
 }
 export const loginSlice = createSlice({
   name: 'login',
@@ -30,7 +27,7 @@ export const loginSlice = createSlice({
     },
     setToken: (state, action) => {
       state.token = action.payload
-    }
+    },
   },
 })
 

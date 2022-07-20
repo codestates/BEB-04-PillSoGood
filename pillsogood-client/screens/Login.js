@@ -80,7 +80,7 @@ const Login = ({ navigation: { navigate } }) => {
     console.log(hi);
   };
 
-  const handleClick = ({ navigation }) => {
+  const handleClick = ({ navigation: { navigate } }) => {
     let Token;
     const loginVariables = login({
       variables: {
@@ -102,7 +102,7 @@ const Login = ({ navigation: { navigate } }) => {
         setPassword("");
         Token = AsyncStorage.getItem("token", appdata.data.login.jwt); //로컬에 jwt 토큰 저장
         dispatch(loginActions(setToken(Token))); //전역 state에 jwt저장
-        navigation.navigate("Home"); //로그인완료 후 Home으로 이동
+        navigate("Home"); //로그인완료 후 Home으로 이동
       }
     });
   };

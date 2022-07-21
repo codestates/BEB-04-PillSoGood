@@ -2,6 +2,9 @@ import type { NextPage } from 'next'
 import { gql, useQuery } from "@apollo/client";
 import SessionStorage from "../utils/sessionStorage"
 import Link from "next/link";
+import { PageTitle } from "../components/PageTitle"
+import { StyledTable, StyledTh, StyledTd, StyledTr } from "../components/StyledTable"
+import React from "react";
 
 const GET_USERS = gql`
     query GetUsers($jwt: String!, $nickname: String, $email: String) {
@@ -29,18 +32,18 @@ const Users: NextPage = () => {
     if (data) {
         return (
             <div>
-                <h1>사용자 목록</h1>
-                <table>
+                <PageTitle title="사용자 목록"/>
+                <StyledTable>
                     <thead>
-                        <tr>
-                            <th>닉네임</th>
-                            <th>이메일</th>
-                            <th>전화 번호</th>
-                            <th>생년월일</th>
-                            <th>리워드</th>
-                            <th>질환</th>
-                            <th>가입 일자</th>
-                        </tr>
+                        <StyledTr>
+                            <StyledTh scope="col">닉네임</StyledTh>
+                            <StyledTh scope="col">이메일</StyledTh>
+                            <StyledTh scope="col">전화 번호</StyledTh>
+                            <StyledTh scope="col">생년월일</StyledTh>
+                            <StyledTh scope="col">리워드</StyledTh>
+                            <StyledTh scope="col">질환</StyledTh>
+                            <StyledTh scope="col">가입 일자</StyledTh>
+                        </StyledTr>
                     </thead>
                     <tbody>
                         {
@@ -48,20 +51,20 @@ const Users: NextPage = () => {
                                 return (
                                     <Link key={data._id} href={`/users/${data._id}`}>
                                         <tr>
-                                            <td>{data.nickname}</td>
-                                            <td>{data.email}</td>
-                                            <td>{data.phoneNumber}</td>
-                                            <td>{data.dateOfBirth}</td>
-                                            <td>{data.pointBalance}</td>
-                                            <td>{data.disease}</td>
-                                            <td>{data.createdAt}</td>
+                                            <StyledTd>{data.nickname}</StyledTd>
+                                            <StyledTd>{data.email}</StyledTd>
+                                            <StyledTd>{data.phoneNumber}</StyledTd>
+                                            <StyledTd>{data.dateOfBirth}</StyledTd>
+                                            <StyledTd>{data.pointBalance}</StyledTd>
+                                            <StyledTd>{data.disease}</StyledTd>
+                                            <StyledTd>{data.createdAt}</StyledTd>
                                         </tr>
                                     </Link>
                                 )
                             })
                         }
                     </tbody>
-                </table>
+                </StyledTable>
             </div>
         )
     }

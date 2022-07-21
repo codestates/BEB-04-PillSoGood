@@ -3,6 +3,9 @@ import { gql, useQuery } from "@apollo/client";
 import SessionStorage from "../utils/sessionStorage"
 import Link from "next/link";
 import { useRouter } from 'next/router';
+import { PageTitle } from "../components/PageTitle"
+import { StyledTable, StyledTh, StyledTd, StyledTr } from "../components/StyledTable"
+import React from "react";
 
 const GET_ITEMS = gql`
     query GetItems($jwt: String!) {
@@ -27,14 +30,14 @@ const Items: NextPage = () => {
     if (data) {
         return (
             <div>
-                <h1>아이템 목록</h1>
+                <PageTitle title="아이템 목록"/>
                 <button type="button" onClick={() => router.push("/items/new")}>등록</button>
-                <table>
+                <StyledTable>
                     <thead>
-                        <tr>
-                            <th>이름</th>
-                            <th>타입</th>
-                        </tr>
+                        <StyledTr>
+                            <StyledTh scope="col">이름</StyledTh>
+                            <StyledTh scope="col">타입</StyledTh>
+                        </StyledTr>
                     </thead>
                     <tbody>
                         {
@@ -42,15 +45,15 @@ const Items: NextPage = () => {
                                 return (
                                     <Link key={data._id} href={`/items/${data._id}`}>
                                         <tr>
-                                            <td>{data.name}</td>
-                                            <td>{data.type}</td>
+                                            <StyledTd>{data.name}</StyledTd>
+                                            <StyledTd>{data.type}</StyledTd>
                                         </tr>
                                     </Link>
                                 )
                             })
                         }
                     </tbody>
-                </table>
+                </StyledTable>
             </div>
         )
     }

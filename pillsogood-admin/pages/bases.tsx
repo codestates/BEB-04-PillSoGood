@@ -3,6 +3,9 @@ import { gql, useQuery } from "@apollo/client";
 import SessionStorage from "../utils/sessionStorage"
 import Link from "next/link";
 import { useRouter } from 'next/router';
+import { PageTitle } from "../components/PageTitle"
+import { StyledTable, StyledTh, StyledTd, StyledTr } from "../components/StyledTable"
+import React from "react";
 
 const GET_BASES = gql`
     query GetBases($jwt: String!) {
@@ -27,14 +30,14 @@ const Bases: NextPage = () => {
     if (data) {
         return (
             <div>
-                <h1>기본 캐릭터 목록</h1>
+                <PageTitle title="기본 캐릭터 목록"/>
                 <button type="button" onClick={() => router.push("/bases/new")}>등록</button>
-                <table>
+                <StyledTable>
                     <thead>
-                        <tr>
-                            <th>이름</th>
-                            <th>레벨</th>
-                        </tr>
+                        <StyledTr>
+                            <StyledTh>이름</StyledTh>
+                            <StyledTh>레벨</StyledTh>
+                        </StyledTr>
                     </thead>
                     <tbody>
                         {
@@ -42,15 +45,15 @@ const Bases: NextPage = () => {
                                 return (
                                     <Link key={data._id} href={`/bases/${data._id}`}>
                                         <tr>
-                                            <td>{data.name}</td>
-                                            <td>{data.level}</td>
+                                            <StyledTd>{data.name}</StyledTd>
+                                            <StyledTd>{data.level}</StyledTd>
                                         </tr>
                                     </Link>
                                 )
                             })
                         }
                     </tbody>
-                </table>
+                </StyledTable>
             </div>
         )
     }

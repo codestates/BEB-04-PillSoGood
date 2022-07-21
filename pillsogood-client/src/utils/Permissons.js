@@ -17,10 +17,14 @@ const iosPermissions = {
   camera: PERMISSIONS.IOS.CAMERA,
   photo: PERMISSIONS.IOS.PHOTO_LIBRARY,
 };
-const permissionsPerOS =
-  Platform.OS === strings.PLATFORM_IOS ? iosPermissions : androidPermissions;
+const permissionsPerOS = androidPermissions;
 
-export const getPermission = async (essential = false) => {
+const getPermission = async (
+  [permission],
+  onSuccess,
+  onFailed,
+  essential = false
+) => {
   const needPermission = permissionsPerOS[permission];
   permissionModalStore.setMessage(PERMISSION_REQUEST_MESSAGE[permission]);
   permissionModalStore.setOpen(true);
@@ -57,4 +61,28 @@ export const getPermission = async (essential = false) => {
     default:
       return handlePermissionError(strings.PERMISSION_BLOCKED, essential);
   }
+};
+const getPermissions = async (
+  [permissions],
+  onSuccess,
+  onFailed,
+  essential = false
+) => {
+  const permissionsResult = permissions.reduce(
+    async (previousPermission, currentPermission) => {
+      const previousPermissionResult = await previousPermission;
+      const currentPermissionResult = await getPermission(currentPermission);
+      previousPermissionResult.push(currentPermissionResult);
+      return previousPermissionResult;
+    },
+    Promise.resolve([])
+  );
+
+  permissionsResult.then((result) => {
+    if (result.every(Boolean) && onSuccess) onSuccess();
+    if (!result.every(Boolean) && onFailed) {
+      if (essential) goToSettings(strings.PERMISSION_BLOCKED);
+      onFailed();
+    }
+  });
 };

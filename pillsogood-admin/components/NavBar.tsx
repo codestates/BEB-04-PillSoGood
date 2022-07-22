@@ -23,6 +23,9 @@ const StyledNavBarItem = styled.span`
 `
 
 export const StyledLogoutButton = styled.button`
+    position: absolute;
+    right: 10%;
+    top: 1%;
     background-color:transparent;
     border: 0;
     outline: 0;
@@ -38,6 +41,7 @@ export const NavBar = () => {
             <StyledNavBarItem onClick={() => router.push("/bases")}>기본 캐릭터 목록</StyledNavBarItem>
             <StyledNavBarItem onClick={() => router.push("/items")}>아이템 목록</StyledNavBarItem>
             <StyledNavBarItem onClick={() => router.push("/nfts")}>NFT 목록</StyledNavBarItem>
+            <StyledNavBarItem onClick={() => router.push("/admins")}>관리자 목록</StyledNavBarItem>
             <StyledLogoutButton onClick={() => logout()}><img src="/logout.png"  style={{width:30, height:30}}/></StyledLogoutButton>
         </StyledNavBar>
     )

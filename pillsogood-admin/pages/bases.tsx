@@ -4,18 +4,19 @@ import SessionStorage from "../utils/sessionStorage"
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { PageTitle } from "../components/PageTitle"
+import { StyledNewButton } from "../components/StyledTable"
 import { StyledTable, StyledTh, StyledTd, StyledTr } from "../components/StyledTable"
 import React from "react";
 
 const GET_BASES = gql`
     query GetBases($jwt: String!) {
-        getBases(jwt: $jwt) {
-            _id
-            name
-            level
-            imagePath
+            getBases(jwt: $jwt) {
+                _id
+                name
+                level
+                imagePath
+        }
     }
-}
 `
 
 const Bases: NextPage = () => {
@@ -31,7 +32,7 @@ const Bases: NextPage = () => {
         return (
             <div>
                 <PageTitle title="기본 캐릭터 목록"/>
-                <button type="button" onClick={() => router.push("/bases/new")}>등록</button>
+                <StyledNewButton type="button" onClick={() => router.push("/bases/new")}>등록</StyledNewButton>
                 <StyledTable>
                     <thead>
                         <StyledTr>

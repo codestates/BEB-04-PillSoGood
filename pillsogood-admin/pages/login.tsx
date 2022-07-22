@@ -3,6 +3,8 @@ import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import SessionStorage from "../utils/sessionStorage"
+import { PageTitle } from "../components/PageTitle"
+import React from "react";
 
 const LOGIN_ADMIN = gql`
 mutation LoginAmin($email: String!, $password: String!) {
@@ -40,7 +42,7 @@ const Login: NextPage = () => {
 
     return (
         <div>
-            <h1>관리자 로그인</h1>
+            <PageTitle title="관리자 로그인"/>
             <div>
                 <label>이메일</label>
                 <input type="email" onChange={(e) => {setEmail(e.target.value)}}/>

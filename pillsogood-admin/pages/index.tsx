@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import { useRouter } from "next/router";
 import SessionStorage from "../utils/sessionStorage"
 import { Bar } from "react-chartjs-2"
 import { CHART_BACKGROUND_COLOR, CHART_BORDER_COLOR } from "../constants/color"
@@ -10,6 +9,7 @@ import moment from "moment"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import React from "react";
+import { PageTitle } from "../components/PageTitle"
 
 const GET_LOGS_BY_CREATED_AT = gql`
   query GetLogsByCreatedAt($jwt: String, $createdAt: String) {
@@ -22,15 +22,8 @@ const GET_LOGS_BY_CREATED_AT = gql`
   }
 `
 
-const logout = () => {
-  SessionStorage.removeItem("jwt")
-  window.location.href = "/login"
-}
-
 const Home: NextPage = () => {
   Chart.register(CategoryScale, LinearScale, BarElement)
-
-  const router = useRouter()
   const [createdAt, setCreatedAt] = useState(moment().format("YYYYMMDD"))
   const [createdAtChartData, setCreatedAtChartData] = useState(null)
   
@@ -73,12 +66,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <main>
-        <h1>대시보드</h1>
-        <button onClick={() => router.push("/users")}>사용자 목록</button>
-        <button onClick={() => router.push("/bases")}>기본 캐릭터 목록</button>
-        <button onClick={() => router.push("/items")}>아이템 목록</button>
-        <button onClick={() => router.push("/nfts")}>NFT 목록</button>
-        <button onClick={() => logout()}>로그아웃</button>
+        <PageTitle title="대시보드"/>
         <div>
           <h2>일자 별 API 호출 현황</h2>
           <DatePicker dateFormat="yyyy-MM-dd" selected={moment(createdAt, "YYYYMMDD").toDate()} onChange={(date) => {setCreatedAt(moment(date).format("YYYYMMDD")); getCreatedAtNewData()}} />

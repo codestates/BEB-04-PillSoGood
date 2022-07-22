@@ -4,6 +4,8 @@ import { useRouter } from "next/router"
 import SessionStorage from "../../utils/sessionStorage"
 import { useState } from "react"
 import axios from "axios"
+import { PageTitle } from "../../components/PageTitle"
+import React from "react";
 
 const CREATE_BASE = gql`
     mutation CreateBase($jwt: String!, $name: String, $imagePath: String, $level: Int) {
@@ -18,7 +20,7 @@ const NewBase: NextPage = () => {
     const [imagePath, setImagePath] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
-    var [createBase, { data, loading, error }] = useMutation(CREATE_BASE, {
+    const [createBase, { data, loading, error }] = useMutation(CREATE_BASE, {
         onCompleted: (data) => {
             if(data.createBase === 200) {
                 alert("등록되었습니다.")
@@ -67,7 +69,7 @@ const NewBase: NextPage = () => {
     };
     return (
         <div>
-                <h1>새 기본 캐릭터 등록</h1>
+                <PageTitle title="새 기본 캐릭터 등록"/>
                 <div>
                     <label>이름</label>
                     <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>

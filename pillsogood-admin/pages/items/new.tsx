@@ -4,6 +4,8 @@ import { useRouter } from "next/router"
 import SessionStorage from "../../utils/sessionStorage"
 import { useState } from "react"
 import axios from "axios"
+import { PageTitle } from "../../components/PageTitle"
+import React from "react";
 
 const CREATE_ITEM = gql`
     mutation CreateItem($jwt: String!, $type: Int!, $name: String!, $imagePath: String!) {
@@ -18,7 +20,7 @@ const NewItem: NextPage = () => {
     const [imagePath, setImagePath] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
-    var [createItem, { data, loading, error }] = useMutation(CREATE_ITEM, {
+    const [createItem, { data, loading, error }] = useMutation(CREATE_ITEM, {
         onCompleted: (data) => {
             if(data.createItem === 200) {
                 alert("등록되었습니다.")
@@ -67,7 +69,7 @@ const NewItem: NextPage = () => {
     };
     return (
         <div>
-                <h1>새 아이템 등록</h1>
+                <PageTitle title="새 아이템 등록"/>
                 <div>
                     <label>이름</label>
                     <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>

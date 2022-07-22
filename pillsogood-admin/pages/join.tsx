@@ -2,6 +2,8 @@ import type { NextPage } from 'next'
 import { gql, useMutation } from "@apollo/client";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { PageTitle } from "../components/PageTitle"
+import React from "react";
 
 const JOIN_ADMIN = gql`
 mutation JoinAdmin($email: String!, $name: String!, $password: String) {
@@ -38,7 +40,7 @@ const Join: NextPage = () => {
 
     return (
         <div>
-            <h1>관리자 등록</h1>
+            <PageTitle title="관리자 등록"/>
             <div>
                 <label>이메일</label>
                 <input type="email" onChange={(e) => {setEmail(e.target.value)}}/>

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 import SessionStorage from "../../utils/sessionStorage"
 import { useRouter } from "next/router"
 import axios from "axios"
+import { PageTitle } from "../../components/PageTitle"
+import React from "react";
 
 const GET_BASE = gql`
     query GetBase($jwt: String!, $id: String!) {
@@ -26,7 +28,7 @@ const DELETE_BASE = gql`
     }
 `
 
-export async function getServerSideProps(context:any) {
+export function getServerSideProps(context:any) {
     const baseId = context.query.param[0]
     return {
       props: {baseId: baseId}
@@ -135,7 +137,7 @@ const BaseDetail = (props:any) => {
     if(data) {
         return (
             <div>
-                <h1>기본 캐릭터 상세 정보</h1>
+                <PageTitle title="기본 캐릭터 상세 정보"/>
                 <div>
                     <label>이름</label>
                     <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 import SessionStorage from "../../utils/sessionStorage"
 import { useRouter } from "next/router"
 import axios from "axios"
+import { PageTitle } from "../../components/PageTitle"
+import React from "react";
 
 const GET_ITEM = gql`
     query GetItem($jwt: String, $id: String) {
@@ -135,7 +137,7 @@ const BaseDetail = (props:any) => {
     if(data) {
         return (
             <div>
-                <h1>아이템 상세 정보</h1>
+                <PageTitle title="아이템 상세 정보"/>
                 <div>
                     <label>이름</label>
                     <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>

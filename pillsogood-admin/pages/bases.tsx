@@ -7,6 +7,7 @@ import { PageTitle } from "../components/PageTitle"
 import { StyledNewButton } from "../components/StyledTable"
 import { StyledTable, StyledTh, StyledTd, StyledTr } from "../components/StyledTable"
 import React from "react";
+import { StyledLoadingGif } from "../components/StyledCommon"
 
 const GET_BASES = gql`
     query GetBases($jwt: String!) {
@@ -26,7 +27,7 @@ const Bases: NextPage = () => {
         { variables: { jwt: SessionStorage.getItem("jwt") } }
       );
     if (loading) {
-        return (<div>대기중 ...</div>)
+        return (<StyledLoadingGif/>)
     }
     if (data) {
         return (
@@ -59,7 +60,7 @@ const Bases: NextPage = () => {
         )
     }
     return (
-        <>데이터가 없습니다.</>
+        <StyledLoadingGif/>
     )
 }
 

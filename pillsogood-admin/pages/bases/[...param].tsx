@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import axios from "axios"
 import { PageTitle } from "../../components/PageTitle"
 import React from "react";
+import { StyledLoadingGif } from "../../components/StyledCommon"
 
 const GET_BASE = gql`
     query GetBase($jwt: String!, $id: String!) {
@@ -132,7 +133,7 @@ const BaseDetail = (props:any) => {
     }, [data])
 
     if (loading) {
-        return (<div>대기중 ...</div>)
+        return (<StyledLoadingGif/>)
     } 
     if(data) {
         return (
@@ -159,7 +160,7 @@ const BaseDetail = (props:any) => {
                 <div>
                     {
                         isLoading? 
-                            <div>대기중...</div>:
+                            <StyledLoadingGif/>:
                             <>
                             <button onClick={() => router.back()}>목록으로</button>
                             <button type="submit" onClick={(e) => onUpdateSubmit(e)}>수정</button>
@@ -171,7 +172,7 @@ const BaseDetail = (props:any) => {
         )
     }
     return (
-        <>데이터가 없습니다.</>
+        <StyledLoadingGif/>
     )
 }
 

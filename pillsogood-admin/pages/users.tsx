@@ -4,6 +4,7 @@ import SessionStorage from "../utils/sessionStorage"
 import Link from "next/link";
 import { PageTitle } from "../components/PageTitle"
 import { StyledTable, StyledTh, StyledTd, StyledTr } from "../components/StyledTable"
+import { StyledLoadingGif } from "../components/StyledCommon"
 import React from "react";
 
 const GET_USERS = gql`
@@ -27,7 +28,7 @@ const Users: NextPage = () => {
         { variables: { jwt: SessionStorage.getItem("jwt") } }
       );
     if (loading) {
-        return (<div>대기중 ...</div>)
+        <StyledLoadingGif/>
     }
     if (data) {
         return (
@@ -67,10 +68,11 @@ const Users: NextPage = () => {
                 </StyledTable>
             </div>
         )
+    } else {
+        return (
+            <StyledLoadingGif/>
+        )
     }
-    return (
-        <>데이터가 없습니다.</>
-    )
 }
 
 export default Users

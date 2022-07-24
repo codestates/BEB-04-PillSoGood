@@ -3,9 +3,10 @@ import type { AppProps } from 'next/app'
 import { ApolloProvider } from '@apollo/client'
 import client from "../apollo-client";
 import { RouteGuard } from '../components/RouteGuard';
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { NavBar } from '../components/NavBar';
+import { useRouter } from 'next/router';
 
 const StyledFooter = styled.footer`
   position: fixed; 
@@ -14,6 +15,8 @@ const StyledFooter = styled.footer`
 `
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
   return (
       <ApolloProvider client={client}>
         <header>
@@ -22,9 +25,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           <link rel="icon" href="/favicon.ico" />
         </header>
         <main>
-          <NavBar/>
+          { router.pathname.includes("login") === true || router.pathname.includes("join") === true ? <></> : <NavBar/> }
           <RouteGuard>
-            <Component {...pageProps} />
+              <Component {...pageProps} />
           </RouteGuard>
         </main>
         <StyledFooter>

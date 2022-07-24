@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { PageTitle } from "../components/PageTitle"
 import { StyledTable, StyledTh, StyledTd, StyledTr } from "../components/StyledTable"
 import React from "react";
+import { StyledLoadingGif } from "../components/StyledCommon"
 
 const GET_ALL_NFTS = gql`
     query GetAllNfts($jwt: String!) {
@@ -34,7 +35,7 @@ const Nfts: NextPage = () => {
         { variables: { jwt: SessionStorage.getItem("jwt") } }
       );
     if (loading) {
-        return (<div>대기중 ...</div>)
+        return (<StyledLoadingGif/>)
     }
     if (data) {
         return (
@@ -70,7 +71,7 @@ const Nfts: NextPage = () => {
         )
     }
     return (
-        <>데이터가 없습니다.</>
+        <StyledLoadingGif/>
     )
 }
 

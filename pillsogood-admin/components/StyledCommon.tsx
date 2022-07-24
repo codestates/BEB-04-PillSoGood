@@ -1,5 +1,17 @@
 import styled from "styled-components";
 
+export const StyledLoadingGif = styled.img`
+    content:url("/loading.gif");
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+`
+
 export const StyledSubmitButton = styled.button`
     --bs-btn-padding-y: 0.5rem;
     --bs-btn-padding-x: 1rem;

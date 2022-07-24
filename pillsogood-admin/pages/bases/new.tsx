@@ -6,6 +6,7 @@ import { useState } from "react"
 import axios from "axios"
 import { PageTitle } from "../../components/PageTitle"
 import React from "react";
+import { StyledLoadingGif } from "../../components/StyledCommon"
 
 const CREATE_BASE = gql`
     mutation CreateBase($jwt: String!, $name: String, $imagePath: String, $level: Int) {
@@ -91,7 +92,7 @@ const NewBase: NextPage = () => {
                 <div>
                     {
                         isLoading? 
-                            <div>대기중...</div>:
+                            <StyledLoadingGif/>:
                             <>
                             <button onClick={() => router.back()}>목록으로</button>
                             <button type="submit" onClick={(e) => onSubmit(e)}>등록</button>

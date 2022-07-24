@@ -10,6 +10,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import React from "react";
 import { PageTitle } from "../components/PageTitle"
+import styled from "styled-components"
 
 const GET_LOGS_BY_CREATED_AT = gql`
   query GetLogsByCreatedAt($jwt: String, $createdAt: String) {
@@ -20,6 +21,15 @@ const GET_LOGS_BY_CREATED_AT = gql`
       count
     }
   }
+`
+
+const StyledDashboardTitle = styled.h2`
+  margin-left: 10%;
+`
+
+const StyledDashboard = styled.div`
+  margin: 0 auto;
+  width: 80%;
 `
 
 const Home: NextPage = () => {
@@ -68,22 +78,15 @@ const Home: NextPage = () => {
       <main>
         <PageTitle title="대시보드"/>
         <div>
-          <h2>일자 별 API 호출 현황</h2>
-          <DatePicker dateFormat="yyyy-MM-dd" selected={moment(createdAt, "YYYYMMDD").toDate()} onChange={(date) => {setCreatedAt(moment(date).format("YYYYMMDD")); getCreatedAtNewData()}} />
-          <div style={{height:'300px',width:'500px'}}>
+          <StyledDashboardTitle>일자 별 API 호출 현황</StyledDashboardTitle>
+          <DatePicker dateFormat="yyyy-MM-dd" selected={moment(createdAt, "YYYYMMDD").toDate()} onChange={(date) => {setCreatedAt(moment(date).format("YYYYMMDD")); getCreatedAtNewData()}}
+          />
+          <StyledDashboard>
             {
               createdAtChartData !== null && createdAtChartData !== undefined ? <Bar data={createdAtChartData}/> :<div>데이터가 없습니다.</div>
             }
-          </div>
+          </StyledDashboard>
         </div>
-        {/* <div>
-          <h2>NFT 발행 현황</h2>
-            <div style={{height:'300px',width:'500px'}}>
-            {
-              createdAtChartData !== null && createdAtChartData !== undefined ? <Bar data={createdAtChartData}/> :<div>데이터가 없습니다.</div>
-            }
-          </div>
-        </div> */}
       </main>
     </div>
   )

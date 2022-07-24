@@ -28,7 +28,7 @@ export const StyledTd = styled.td`
 export const StyledNewButton = styled.button`
     position: absolute;
     right: 10%;
-    top: 130px;    
+    top: 11%;    
     --bs-btn-padding-y: 0.5rem;
     --bs-btn-padding-x: 1rem;
     --bs-btn-font-size: 1.25rem;

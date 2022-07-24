@@ -10,9 +10,8 @@ const logout = () => {
 const StyledNavBar = styled.div`
     height: 50px;
     margin-bottom: 50px;
-    width: 100%;
-    border-bottom: 1px solid #cdd0d4;
-    padding-left: 10px;
+    width: 80%;
+    margin-left: 10%;
 `
 
 const StyledNavBarItem = styled.span`
@@ -23,9 +22,8 @@ const StyledNavBarItem = styled.span`
 `
 
 export const StyledLogoutButton = styled.button`
-    position: absolute;
-    right: 10%;
-    top: 1%;
+    float: right;
+    margin-top: 1%;
     background-color:transparent;
     border: 0;
     outline: 0;

@@ -6,6 +6,7 @@ import { PageTitle } from "../../components/PageTitle"
 import { StyledForm, StyledInput, StyledLabel, StyledSpan, StyledItemDiv, StyledButtonDiv, StyledEyeButton } from "../../components/StyledForm"
 import { StyledSubmitButton, StyledBackButton } from "../../components/StyledCommon"
 import React from "react";
+import { StyledLoadingGif } from "../../components/StyledCommon"
 
 const GET_USER_INFO = gql`
     query GetUserInfo($jwt: String!, $id: String) {
@@ -57,7 +58,7 @@ const UserDetail = (props:any)=> {
     );
 
     while (loading) {
-        return (<div>대기중 ...</div>)
+        return (<StyledLoadingGif/>)
     }
 
     const userInfo = data.getUserInfo
@@ -116,8 +117,7 @@ const UserDetail = (props:any)=> {
         )
     }
     return (
-        <>
-        </>
+        <StyledLoadingGif/>
     )
 }
 

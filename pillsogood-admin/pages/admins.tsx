@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import SessionStorage from "../utils/sessionStorage"
 import { PageTitle } from '../components/PageTitle';
 import { StyledTable, StyledTh, StyledTd, StyledTr } from "../components/StyledTable"
+import { StyledLoadingGif } from "../components/StyledCommon"
 
 const GET_ADMINS = gql`
     query GetAdmins($jwt: String!) {
@@ -24,7 +25,7 @@ const Admins: NextPage = () => {
         { variables: { jwt: SessionStorage.getItem("jwt") } }
       );
     if (loading) {
-        return (<div>대기중 ...</div>)
+        return (<StyledLoadingGif/>)
     }
     if (data) {
         return (
@@ -56,7 +57,7 @@ const Admins: NextPage = () => {
         )
     }
     return (
-        <>데이터가 없습니다.</>
+        <StyledLoadingGif/>
     )
 
 }

@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app'
 import { ApolloProvider } from '@apollo/client'
 import client from "../apollo-client";
 import { RouteGuard } from '../components/RouteGuard';
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { NavBar } from '../components/NavBar';
 import { useRouter } from 'next/router';
@@ -15,7 +15,6 @@ const StyledFooter = styled.footer`
 `
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   return (
       <ApolloProvider client={client}>

@@ -1,11 +1,11 @@
 
 import type { NextPage } from 'next'
 import { gql, useQuery } from "@apollo/client";
-import { useRouter } from 'next/router';
 import SessionStorage from "../utils/sessionStorage"
 import { PageTitle } from '../components/PageTitle';
 import { StyledTable, StyledTh, StyledTd, StyledTr } from "../components/StyledTable"
 import { StyledLoadingGif } from "../components/StyledCommon"
+import React from "react";
 
 const GET_ADMINS = gql`
     query GetAdmins($jwt: String!) {
@@ -19,7 +19,6 @@ const GET_ADMINS = gql`
 `
 
 const Admins: NextPage = () => {
-    const router = useRouter()
     const { loading, data } = useQuery(
         GET_ADMINS,
         { variables: { jwt: SessionStorage.getItem("jwt") } }
@@ -41,9 +40,9 @@ const Admins: NextPage = () => {
                     </thead>
                     <tbody>
                         {
-                            data.getAdmins.map((data:any) => {
+                            data.getAdmins.map((data:any, index:number) => {
                                 return (
-                                    <tr>
+                                    <tr key={index}>
                                         <StyledTd>{data.name}</StyledTd>
                                         <StyledTd>{data.email}</StyledTd>
                                         <StyledTd>{data.createdAt}</StyledTd>

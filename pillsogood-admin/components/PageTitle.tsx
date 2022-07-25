@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import React from "react"
 
 const StyledH1Title = styled.h1`
     text-align: center;

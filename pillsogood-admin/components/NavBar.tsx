@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { useRouter } from "next/router";
 import SessionStorage from "../utils/sessionStorage"
+import React from "react"
 
 const logout = () => {
     SessionStorage.removeItem("jwt")

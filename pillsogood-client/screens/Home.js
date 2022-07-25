@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect} from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../colors";
 import { Pressable, Image, StatusBar, Text, View, FlatList } from "react-native";
@@ -12,52 +12,52 @@ const Container = styled.View`
   background-color: ${BASE_COLOR};
   flex: 1;
   color: black;
-  padding: 20px 20px 60px ;
+  padding: 0px 20px ;
 
 `;
 const Birds = styled.Image`
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
+  width: 70px;
+  height: 70px;
+  border-radius: 35px;
 `;
 
 const Header = styled.View`
-  flex: 0.3
-  padding: 15px;
-  margin: 5px
-  background: rgba(255, 255, 255, 0.7)";
-  background-color:transparent;
-  border-radius: 20px;
-  justify-content: space-between;
   align-items: center;
   flex-direction: row;
+  padding: 5px;
+  margin: 5px
+  background-color:transparent;
+  justify-content: space-between;
 `;
-const Card = styled.View`
-  flex:1;
-  padding: 23px;
-  margin: 10px 0px;
-  background: papayawhip;
-  border-radius: 30px;
-  border-width: 2px;
-  border-color: "rgba(255, 255, 255, 0.7)";
+const HeadTxt = styled.Text`
+  color: #76a991;
+  font-size: 30px;
+  font-weight: bold;
+  text-shadow: 1px 3px 3px papayawhip;
 `;
 const MainTxt = styled.Text`
   color: "rgba(255, 255, 255, 0.7)";
   font-size: 15px;
   font-weight: bold;
-  padding-left: 25px;
-  margin-top: -20px;
+  padding-left: 5px;
+  margin-top: -30px;
 
 `;
-const HeadTxt = styled.Text`
-  color: #0D99FF;
-  font-size: 30px;
-  font-weight: bold;
+const Card = styled.View`
+  flex:0.3
+  padding: 23px;
+  margin: 10px 0px;
+  background: papayawhip;
+  border-radius: 30px;
+  border-width: 3px;
+  border-color: "rgba(255, 255, 255, 0.7)";
+
   
 `;
 
 const Cardtxt = styled.Text`
   color: black;
+  font-size: 15px;
 `;
 
 const Btn = styled.TouchableOpacity`
@@ -68,11 +68,25 @@ const Btn = styled.TouchableOpacity`
   border-radius: 50px;
   border-color: rgba(255, 255, 255, 0.5);
   justify-content: space-between;
-  align-items: center;
   background-color: #202d35;
 `;
 const BtnText = styled.Text`
   color: white;
+  font-size: 14px;
+  text-align: center;
+`;
+const AlarmBtn = styled.TouchableOpacity`
+  width: 100%;
+  padding: 10px 
+  border-radius: 25px;
+  border-color: rgba(255, 255, 255, 0.5);
+  background-color: #76a991;
+  align-items: center;
+  justify-content: center;
+`;
+const AlarmText = styled.Text`
+  color: white;
+  font-weight: bold;
   font-size: 14px;
   text-align: center;
 `;
@@ -98,7 +112,7 @@ const ModalCircle = styled.View`
 `;
 
 
-const Home = () => {
+const Home = ({ navigation: { navigate } }) => {
   const DATA = ["고지혈증", "고혈압", "당뇨"];
   const today = new Date();
   const [visible, setVisible] = useState(true);
@@ -107,7 +121,20 @@ const Home = () => {
     changeModalVisible = (bool) => {
     setisModalVisible(bool);
   };
-  
+  const [currentDate, setCurrentDate] = useState('');
+
+  useEffect(() => {
+    const date = new Date().getDate(); //Current Date
+    const month = new Date().getMonth() + 1; //Current Month
+    const year = new Date().getFullYear(); //Current Year
+    const hours = new Date().getHours(); //Current Hours
+    const min = new Date().getMinutes(); //Current Minutes
+    setCurrentDate(
+      year + '/' + month + '/' + date 
+      + ' ' + hours + ':' + min
+    );
+  }, []);
+
   const setData = (data) => {
     setchooseData(data);
   }
@@ -122,40 +149,59 @@ const Home = () => {
       </Header>     
 
 
-      <MainTxt> 당신의 건강을 책임지는 </MainTxt>  
+      <MainTxt> 약 먹을 시간입니다!</MainTxt>  
 
         {
-          visible ? (
+        visible
+          ? (
           <Card>
+            <Cardtxt>{currentDate}</Cardtxt>
             <Cardtxt>{DATA[0]}</Cardtxt>
-            <Btn onPress={()=> setVisible(!visible)}> 
+            <Btn onPress={() => {
+              setVisible(!visible)
+            }}> 
               <BtnText>약 먹었어요~</BtnText>
             </Btn>
           </Card>
-          ) : null
+          
+          )
+          : null
         }
       <Card>
         <Cardtxt>{DATA[1]}</Cardtxt>
-        <Btn>
-          <BtnText>먹었습니다</BtnText>
+        <Btn onPress={() => {
+          setVisible(!visible)
+            }}> 
+          <BtnText>약 먹었어요~</BtnText>
         </Btn>
       </Card>
 
 
       <Card>
         <Cardtxt>{DATA[2]}</Cardtxt>
-        <Btn>
-          <BtnText>먹었습니다</BtnText>
+        <Btn onPress={() => {
+          setVisible(!visible)
+            }}> 
+          <BtnText>약 먹었어요~</BtnText>
         </Btn>
       </Card>
       
-      <Cardtxt>
+
+        <AlarmBtn onPress={() => navigate("Reminder")}>
+          <AlarmText>알람 등록하기</AlarmText>
+        </AlarmBtn>
+
+
+      {/* <Cardtxt>
         {chooseData}
-      </Cardtxt>
+      </Cardtxt> */}
       
       {/* 모달시작 */}
-      <Modaltouch
-        onPress={()=> changeModalVisible(true)}
+      {/* <Modaltouch
+        onPress={()=> changeModalVisible(true)
+        // onBackdropPress={() => setModalVisible(false)
+        //콘텐츠 외부 눌러 모달 숨기기
+        }
         >
           <ModalCircle>
           <BtnText>약 추가</BtnText>
@@ -172,7 +218,7 @@ const Home = () => {
           changeModalVisible={isModalVisible}
           setData={setData}
         />
-      </Modals>
+      </Modals> */}
 
     </Container>
   );

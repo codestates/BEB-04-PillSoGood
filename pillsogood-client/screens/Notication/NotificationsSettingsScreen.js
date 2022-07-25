@@ -3,9 +3,9 @@ import styled from "styled-components/native";
 
 const Container = styled.View``;
 const Text = styled.Text``;
-const GetNFTItem = () => (
+const NotificationsSettingsScreen = () => (
   <Container>
-    <Text>GetNFTItem</Text>
+    <Text>NotificationsSettingsScreen</Text>
   </Container>
 );
-export default GetNFTItem;
+export default NotificationsSettingsScreen;

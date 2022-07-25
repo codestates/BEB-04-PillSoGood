@@ -76,7 +76,7 @@ const Register = () => {
       return;
     }
     try {
-      setComplete(false);
+      setComplete(true);
       console.log(
         name,
         value,
@@ -100,7 +100,7 @@ const Register = () => {
       onComplete();
     } catch (err) {
       console.log(err);
-      setComplete(true);
+      setComplete(false);
       Alert.alert("회원가입에 실패했습니다!");
     }
   };

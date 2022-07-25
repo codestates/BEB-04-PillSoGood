@@ -1,16 +1,12 @@
-import React from "react";
-import {
-  createNavigationContainerRef,
-  NavigationContainer,
-} from "@react-navigation/native";
+import React, { useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { DrawerActions } from "@react-navigation/native";
 import Home from "../../screens/Home";
-import Health from "../../screens/Health/Health";
 import Reminder from "../../screens/Health/Reminder";
-export const navigationRef = createNavigationContainerRef;
-
-export default function TabNavigation() {
+import MyHealth from "../../screens/Health/MyHealth";
+import DrawerTab from "./DrawerTab";
+export default function TabNavigation(props) {
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator
@@ -22,13 +18,13 @@ export default function TabNavigation() {
             case "Home":
               iconName = "home-outline";
               break;
-            case "Health":
-              iconName = "menu-outline";
+            case "DrawerTab":
+              iconName = "search";
               size = 30;
               break;
-            //   case 'SearchStackScreen':
-            //     iconName = 'search'
-            //     break
+            // case "HealthStackScreen":
+            //   iconName = "search";
+            //   break;
             case "Reminder":
               iconName = "person-circle-outline";
               size = 28;
@@ -45,7 +41,15 @@ export default function TabNavigation() {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Health" component={Health} />
+      <Tab.Screen
+        name="DrawerTab"
+        component={DrawerTab}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            navigation.dispatch(DrawerActions.openDrawer());
+          },
+        })}
+      />
       <Tab.Screen name="Reminder" component={Reminder} />
     </Tab.Navigator>
   );

@@ -12,8 +12,7 @@ const Container = styled.View`
   background-color: ${BASE_COLOR};
   flex: 1;
   color: black;
-  padding: 0px 20px ;
-
+  padding: 0px 20px;
 `;
 const Birds = styled.Image`
   width: 70px;
@@ -25,8 +24,8 @@ const Header = styled.View`
   align-items: center;
   flex-direction: row;
   padding: 5px;
-  margin: 5px
-  background-color:transparent;
+  margin: 5px;
+  background-color: transparent;
   justify-content: space-between;
 `;
 const HeadTxt = styled.Text`
@@ -41,18 +40,15 @@ const MainTxt = styled.Text`
   font-weight: bold;
   padding-left: 5px;
   margin-top: -30px;
-
 `;
 const Card = styled.View`
-  flex:0.3
+  flex: 0.3;
   padding: 23px;
   margin: 10px 0px;
   background: papayawhip;
   border-radius: 30px;
   border-width: 3px;
   border-color: "rgba(255, 255, 255, 0.7)";
-
-  
 `;
 
 const Cardtxt = styled.Text`
@@ -129,49 +125,42 @@ const Home = ({ navigation: { navigate } }) => {
     const year = new Date().getFullYear(); //Current Year
     const hours = new Date().getHours(); //Current Hours
     const min = new Date().getMinutes(); //Current Minutes
-    setCurrentDate(
-      year + '/' + month + '/' + date 
-      + ' ' + hours + ':' + min
-    );
+    setCurrentDate(year + "/" + month + "/" + date + " " + hours + ":" + min);
   }, []);
 
   const setData = (data) => {
     setchooseData(data);
-  }
+  };
 
   return (
     <Container>
-      <WrapperComponent />
-      <Header> 
-        <HeadTxt>Pill So Good</HeadTxt>  
-        <Birds
-          source={require('../src/assets/bird.png')}/>
-      </Header>     
+      <Header>
+        <HeadTxt>Pill So Good</HeadTxt>
+        <Birds source={require("../src/assets/highland.jpg")} />
+      </Header>
 
+      <MainTxt> 약 먹을 시간입니다!</MainTxt>
 
-      <MainTxt> 약 먹을 시간입니다!</MainTxt>  
-
-        {
-        visible
-          ? (
-          <Card>
-            <Cardtxt>{currentDate}</Cardtxt>
-            <Cardtxt>{DATA[0]}</Cardtxt>
-            <Btn onPress={() => {
-              setVisible(!visible)
-            }}> 
-              <BtnText>약 먹었어요~</BtnText>
-            </Btn>
-          </Card>
-          
-          )
-          : null
-        }
+      {visible ? (
+        <Card>
+          <Cardtxt>{currentDate}</Cardtxt>
+          <Cardtxt>{DATA[0]}</Cardtxt>
+          <Btn
+            onPress={() => {
+              setVisible(!visible);
+            }}
+          >
+            <BtnText>약 먹었어요~</BtnText>
+          </Btn>
+        </Card>
+      ) : null}
       <Card>
         <Cardtxt>{DATA[1]}</Cardtxt>
-        <Btn onPress={() => {
-          setVisible(!visible)
-            }}> 
+        <Btn
+          onPress={() => {
+            setVisible(!visible);
+          }}
+        >
           <BtnText>약 먹었어요~</BtnText>
         </Btn>
       </Card>

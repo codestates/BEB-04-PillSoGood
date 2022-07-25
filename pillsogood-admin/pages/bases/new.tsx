@@ -92,7 +92,7 @@ const NewBase: NextPage = () => {
                         <StyledItemDiv>
                            { imagePath ? <StyledImg src={imagePath} alt=""/> : <></>}
                         </StyledItemDiv>
-                        <StyledItemDiv>
+                        <div>
                             {
                                 isLoading? 
                                     <StyledLoadingGif/>:
@@ -101,7 +101,7 @@ const NewBase: NextPage = () => {
                                         <StyledSubmitButton type="submit" onClick={(e) => onSubmit(e)}>등록</StyledSubmitButton>
                                     </StyledButtonDiv>
                             }
-                        </StyledItemDiv>
+                        </div>
                     </StyledForm>
                 </StyledMain>
             </div>

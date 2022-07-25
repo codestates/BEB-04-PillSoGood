@@ -11,6 +11,8 @@ import {
 import Swiper from "react-native-web-swiper";
 import { BASE_COLOR } from "../../../colors";
 
+//  import { NFTStorage } from "nft.storage";
+
 // 0번째 이슈 : 이미지 뽑고 나서 단일 이미지만 보여야 하는데 여러 이미지가 같이 보임 ---- 대충 해결? random Num이 9까지 생성되는데 샘플 리스트는 9미만 이엇음
 // 1번째 이슈 : result에 배열을 담아와도 maps를 사용 못함. 직접 변수 list를 선언하여 maps를 돌릴 때는 정상 진행; --- 해결. Loading 순서 바뀜
 // 2. 캐릭터 뽑으면 해당 url을 서버에 mutation 요청 필요.
@@ -74,7 +76,12 @@ const BgImg = styled.Image`
 `;
 
 const BgImg2 = styled.Image`
-  flex: 1.5;
+  width: 320px;
+  height: 320px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  justify-content: center;
+  align-items: center;
 `;
 
 const Selected = styled.Image`
@@ -122,8 +129,10 @@ const RandomCharacter = () => {
   const [randomImg, setRandomImg] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const [name, setName] = useState("");
+  console.log("randomImg:", randomImg);
   const [description, setDescription] = useState("");
   const [metadata, setMetadata] = useState("");
+
   const getImage2 = async () => {
     // 1번째 이슈 : result에 배열을 담아와도 maps를 사용 못함. 직접 변수 list를 선언하여 maps를 돌릴 때는 정상 진행;
 
@@ -142,21 +151,27 @@ const RandomCharacter = () => {
 
   const Draw = () => {
     // 버튼 누르면 로딩 애니메이션 뜨고 5초 뒤에 랜덤 뽑기 실행
-    setDraw(true);
+
     console.log(draw);
     const randomNumber = Math.floor(Math.random() * 10); // 10 이하의 랜덤 넘버 생성. 인덱스로 들어갈 예정
     console.log(randomNumber);
 
     const pic = result[randomNumber];
     const picJson = JSON.stringify(pic);
-    console.log(picJson);
+    console.log(picJson, "picJson");
 
-    setTimeout(() => {
-      // 3초 뒤 랜덤 뽑기 실행
-      // URL에서 받아온 이미지 데이터의 랜덤 인덱스값으로 RandomImg값 변경
-      setRandomImg(picJson);
-      Alert.alert(" 캐릭터를 생성했습니다!");
-    }, 3000);
+    try {
+      setTimeout(() => {
+        // 3초 뒤 랜덤 뽑기 실행
+        // URL에서 받아온 이미지 데이터의 랜덤 인덱스값으로 RandomImg값 변경
+        setRandomImg(picJson);
+        console.log("setTimeOut console:", randomImg);
+        Alert.alert(" 캐릭터를 생성했습니다!");
+      }, 3000);
+      setDraw(true);
+    } catch (e) {
+      console.error(e);
+    }
     //3초 동안 로딩 이미지 보여주어야 함
 
     // 서버에 mutation 요청 필요
@@ -172,24 +187,22 @@ const RandomCharacter = () => {
     setRandomImg([]);
   };
 
-  const characterIssue = async () => {
-    try {
-      const apiKey =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDQyM2JlNzc4ZDE5RTQ2NzI0ZjI4QThlYUFhMUI4MTAxZEY3ODY4ZTUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1ODcxMzQ4MzQ4MSwibmFtZSI6InRlc3QxIn0.cHAy-MaOtNd50WU-ww799_PkrDdHsghRms98FAycd2Q";
-      const client = new NFTStorage({ token: apiKey });
+  // const characterIssue = async () => {
+  //   try {
+  //     const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDQyM2JlNzc4ZDE5RTQ2NzI0ZjI4QThlYUFhMUI4MTAxZEY3ODY4ZTUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1ODcxMzQ4MzQ4MSwibmFtZSI6InRlc3QxIn0.cHAy-MaOtNd50WU-ww799_PkrDdHsghRms98FAycd2Q"
+  //     const client = new NFTStorage({ token: apiKey})
 
-      metadata = await client.store({
-        name: name,
-        description: description,
-        image: randomImg,
-      });
-      setMetadata(metadata);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  console.log("randomImg :", randomImg);
+  //     metadata = await client.store({
+  //       name: name,
+  //       description: description,
+  //       image: randomImg
+  //     })
+  //     setMetadata(metadata)
+  //   }
+  //   catch (e) {
+  //     console.error(e)
+  //   }
+  // }
 
   return loading ? (
     <Loader>
@@ -247,9 +260,7 @@ const RandomCharacter = () => {
       <View>
         <Text>당신의 캐릭터를 환영해주세요</Text>
       </View>
-      <View>
-        <BgImg source={{ uri: randomImg[0] }} />
-      </View>
+      <BgImg2 source={{ uri: randomImg }} />
       <Text> 캐릭터를 다시 뽑으시려면 화면을 스크롤해 새로고침 해주세요 </Text>
       <TextInputs
         placeholder="캐릭터 이름을 지어주세요"

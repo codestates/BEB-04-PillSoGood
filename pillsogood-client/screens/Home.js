@@ -111,7 +111,7 @@ const Home = ({ navigation: { navigate } }) => {
     <Container>
       <Header>
         <HeadTxt>Pill So Good</HeadTxt>
-        <Birds source={require("../src/assets/bird.png")} />
+        <Birds source={require("../src/assets/highland.jpg")} />
       </Header>
 
       <MainTxt> 약 먹을 시간입니다!</MainTxt>

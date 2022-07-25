@@ -161,7 +161,7 @@ const BaseDetail = (props:any) => {
                         <StyledItemDiv>
                             { imagePath ? <StyledImg src={imagePath} alt=""/> : <></>}
                         </StyledItemDiv>
-                        <StyledItemDiv>
+                        <div>
                             {
                                 isLoading? 
                                     <StyledLoadingGif/>:
@@ -171,7 +171,7 @@ const BaseDetail = (props:any) => {
                                         <StyledBackButton type="button" onClick={(e) => onDeleteSubmit(e)}>삭제</StyledBackButton>
                                     </StyledButtonDiv>
                             }
-                        </StyledItemDiv>
+                        </div>
                     </StyledForm>
                 </StyledMain>
             </div>

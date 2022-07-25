@@ -1,5 +1,18 @@
 import React, { useState } from "react";
-import { Button } from "react-native";
+import styled from "styled-components/native";
+import { BASE_COLOR } from "../../colors";
+
+import {
+  Button,
+  View,
+  Text,
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  Alert } from "react-native";
 import DatePicker from "react-native-date-picker";
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return " ";
@@ -65,10 +78,50 @@ const Reminder = () => {
   const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
   const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
   const kr_curr = new Date(utc + KR_TIME_DIFF);
+  const Btn = styled.TouchableOpacity`
+    margin-top: 40px;
+    width: 100%;
+    padding: 10px 
+    border-width: 1px;
+    border-radius: 50px;
+    border-color: rgba(255, 255, 255, 0.5);
+    justify-content: space-between;
+    background-color: #202d35;
+  `;
+  const BtnText = styled.Text`
+    color: white;
+    font-size: 14px;
+    text-align: center;
+  `;
+  const Container = styled.View`
+  background-color: ${BASE_COLOR}
+  flex: 1;
+  color: black;
+  padding: 0px 20px ;
 
+`;
   return (
-    <>
-      <Button title="약 언제 먹을래요?" onPress={() => setOpen(true)} />
+    
+      <Container>
+      <View>
+        <Text>등록된 약</Text>
+      </View>
+
+
+      <View>
+        <Text>알람 이름</Text>
+        <TextInput></TextInput>
+      </View>
+
+
+      <View>
+        <Text>메모 작성</Text>
+        <TextInput></TextInput>
+      </View>
+
+
+      <View>
+      <Button title="약 언제 먹을래요?" onPress={() => setOpen(trurre)} />
       <DatePicker
         modal
         locale="ko"
@@ -84,7 +137,12 @@ const Reminder = () => {
           setOpen(false);
         }}
       />
-    </>
+      </View>
+
+      <Btn>
+        <BtnText>마일리지 적립</BtnText>
+        </Btn>
+        </Container>
   );
 };
 export default Reminder;

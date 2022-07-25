@@ -14,8 +14,7 @@ import {
   NotificationListener,
   GetFCMToken,
 } from "./src/utils/Pushnotification";
-import { getPermission, getPermissions } from "./src/utils/Permissons";
-import { request } from "react-native-permissions";
+import askPermission from "./src/utils/Permissons";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   // const [openSettingsForNotifications] = useMMKVStorage(
@@ -59,6 +58,7 @@ export default function App() {
   //     });
   // }, []);
   useEffect(() => {
+    askPermission();
     GetFCMToken();
     requestUserPermission();
     // NotificationListener();

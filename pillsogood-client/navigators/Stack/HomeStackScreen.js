@@ -1,23 +1,20 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "../../screens/Home";
-import Register from "../../screens/Auth/Register";
-
-export default function HomeStackScreen() {
-  const HomeStack = createNativeStackNavigator();
+import Reminder from "../../screens/Health/Reminder";
+import Health from "../../screens/Health/Health";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+export default function HomeStackScreen({ e }) {
+  const HomeStack = createDrawerNavigator();
 
   return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen
-        name="Home"
-        component={Home}
-        options={{ headerShown: false }}
-      />
-      <HomeStack.Screen
-        name="Register"
-        component={Register}
-        options={{ headerShown: false }}
-      />
+    <HomeStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <HomeStack.Screen name="Home" component={Home} />
+      <HomeStack.Screen name="Reminder" component={Reminder} />
     </HomeStack.Navigator>
   );
 }

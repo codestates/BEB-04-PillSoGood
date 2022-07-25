@@ -2,6 +2,11 @@ import { gql, useQuery, useMutation } from "@apollo/client";
 import { useRouter } from "next/router"
 import SessionStorage from "../../utils/sessionStorage"
 import { useState } from "react"
+import { PageTitle } from "../../components/PageTitle"
+import { StyledForm, StyledInput, StyledLabel, StyledSpan, StyledItemDiv, StyledButtonDiv, StyledEyeButton, StyledMain } from "../../components/StyledForm"
+import { StyledSubmitButton, StyledBackButton } from "../../components/StyledCommon"
+import React from "react";
+import { StyledLoadingGif } from "../../components/StyledCommon"
 
 const GET_USER_INFO = gql`
     query GetUserInfo($jwt: String!, $id: String) {
@@ -53,7 +58,7 @@ const UserDetail = (props:any)=> {
     );
 
     while (loading) {
-        return (<div>대기중 ...</div>)
+        return (<StyledLoadingGif/>)
     }
 
     const userInfo = data.getUserInfo
@@ -72,43 +77,49 @@ const UserDetail = (props:any)=> {
     if(data) {
         return (
             <div>
-                <h1>사용자 상세 정보</h1>
-                <div>
-                    <label>닉네임</label>
-                    <span>{userInfo.nickname}</span>
-                </div>
-                <div>
-                    <label>생년월일</label>
-                    <span>{userInfo.dateOfBirth}</span>
-                </div>
-                <div>
-                    <label>리워드 잔액</label>
-                    <span>{userInfo.pointBalance}</span>
-                </div>
-                <div>
-                    <label>전화 번호</label>
-                    <span>{userInfo.phoneNumber}</span>
-                </div>
-                <div>
-                    <label>가입 일자</label>
-                    <span>{userInfo.createdAt}</span>
-                </div>
-                <div>
-                    <label>새 비밀번호</label>
-                    <input type="password" id="password" onChange={(e) => setPassword(e.target.value)}/>
-                    <button onMouseDown={() => document.querySelector('#password')!.setAttribute('type', 'text')} 
-                        onMouseUp={() => document.querySelector('#password')!.setAttribute('type', 'password')}>비밀번호 보이기</button>
-                </div>
-                <div>
-                    <button onClick={() => router.back()}>목록으로</button>
-                    <button type="submit" onClick={(e) => onSubmit(e)}>비밀번호 변경</button>
-                </div>
+                <PageTitle title="사용자 상세 정보"/>
+                <StyledMain>
+                    <StyledForm>
+                        <StyledItemDiv>
+                            <StyledLabel>닉네임</StyledLabel>
+                            <StyledSpan>{userInfo.nickname}</StyledSpan>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>생년월일</StyledLabel>
+                            <StyledSpan>{userInfo.dateOfBirth}</StyledSpan>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>리워드 잔액</StyledLabel>
+                            <StyledSpan>{userInfo.pointBalance}</StyledSpan>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>전화 번호</StyledLabel>
+                            <StyledSpan>{userInfo.phoneNumber}</StyledSpan>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>가입 일자</StyledLabel>
+                            <StyledSpan>{userInfo.createdAt}</StyledSpan>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>새 비밀번호</StyledLabel>
+                            <StyledInput type="password" id="password" onChange={(e) => setPassword(e.target.value)}/>
+                            <StyledEyeButton type="button" onMouseDown={() => document.querySelector('#password')!.setAttribute('type', 'text')} 
+                                onMouseUp={() => document.querySelector('#password')!.setAttribute('type', 'password')}>
+                                    <img id="eye" src="/eye-default.png" width="30px;" onMouseDown={() => document.querySelector("#eye")!.setAttribute('src', '/eye-show.png')}
+                                        onMouseUp={() => document.querySelector("#eye")!.setAttribute('src', '/eye-default.png')}/>
+                                </StyledEyeButton>
+                        </StyledItemDiv>
+                        <StyledButtonDiv>
+                            <StyledBackButton type="button" onClick={() => router.back()}>목록으로</StyledBackButton>
+                            <StyledSubmitButton type="submit" onClick={(e) => onSubmit(e)}>비밀번호 변경</StyledSubmitButton>
+                        </StyledButtonDiv>
+                    </StyledForm>
+                </StyledMain>
             </div>
         )
     }
     return (
-        <>
-        </>
+        <StyledLoadingGif/>
     )
 }
 

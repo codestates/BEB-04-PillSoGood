@@ -3,6 +3,10 @@ import { gql, useQuery } from "@apollo/client";
 import SessionStorage from "../utils/sessionStorage"
 import Link from "next/link";
 import { useRouter } from 'next/router';
+import { PageTitle } from "../components/PageTitle"
+import { StyledTable, StyledTh, StyledTd, StyledTr, StyledNewButton, StyledNewButtonDiv } from "../components/StyledTable"
+import React from "react";
+import { StyledLoadingGif } from "../components/StyledCommon"
 
 const GET_ITEMS = gql`
     query GetItems($jwt: String!) {
@@ -22,19 +26,21 @@ const Items: NextPage = () => {
         { variables: { jwt: SessionStorage.getItem("jwt") } }
       );
     if (loading) {
-        return (<div>대기중 ...</div>)
+        return (<StyledLoadingGif/>)
     }
     if (data) {
         return (
             <div>
-                <h1>아이템 목록</h1>
-                <button type="button" onClick={() => router.push("/items/new")}>등록</button>
-                <table>
+                <PageTitle title="아이템 목록"/>
+                <StyledNewButtonDiv>
+                    <StyledNewButton type="button" onClick={() => router.push("/items/new")}>등록</StyledNewButton>
+                </StyledNewButtonDiv>
+                <StyledTable>
                     <thead>
-                        <tr>
-                            <th>이름</th>
-                            <th>타입</th>
-                        </tr>
+                        <StyledTr>
+                            <StyledTh scope="col">이름</StyledTh>
+                            <StyledTh scope="col">타입</StyledTh>
+                        </StyledTr>
                     </thead>
                     <tbody>
                         {
@@ -42,20 +48,20 @@ const Items: NextPage = () => {
                                 return (
                                     <Link key={data._id} href={`/items/${data._id}`}>
                                         <tr>
-                                            <td>{data.name}</td>
-                                            <td>{data.type}</td>
+                                            <StyledTd>{data.name}</StyledTd>
+                                            <StyledTd>{data.type}</StyledTd>
                                         </tr>
                                     </Link>
                                 )
                             })
                         }
                     </tbody>
-                </table>
+                </StyledTable>
             </div>
         )
     }
     return (
-        <>데이터가 없습니다.</>
+        <StyledLoadingGif/>
     )
 }
 

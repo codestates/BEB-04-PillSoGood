@@ -4,7 +4,11 @@ import { useRouter } from "next/router"
 import SessionStorage from "../../utils/sessionStorage"
 import { useState } from "react"
 import axios from "axios"
-
+import { PageTitle } from "../../components/PageTitle"
+import React from "react";
+import { StyledLoadingGif } from "../../components/StyledCommon"
+import { StyledForm, StyledLabel, StyledInput, StyledItemDiv, StyledButtonDiv, StyledMain, StyledImg } from "../../components/StyledForm"
+import { StyledSubmitButton, StyledBackButton } from '../../components/StyledCommon';
 const CREATE_BASE = gql`
     mutation CreateBase($jwt: String!, $name: String, $imagePath: String, $level: Int) {
         createBase(jwt: $jwt, name: $name, imagePath: $imagePath, level: $level)
@@ -18,7 +22,7 @@ const NewBase: NextPage = () => {
     const [imagePath, setImagePath] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
-    var [createBase, { data, loading, error }] = useMutation(CREATE_BASE, {
+    const [createBase, { data, loading, error }] = useMutation(CREATE_BASE, {
         onCompleted: (data) => {
             if(data.createBase === 200) {
                 alert("등록되었습니다.")
@@ -67,35 +71,39 @@ const NewBase: NextPage = () => {
     };
     return (
         <div>
-                <h1>새 기본 캐릭터 등록</h1>
-                <div>
-                    <label>이름</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
-                </div>
-                <div>
-                    <label>레벨</label>
-                    <input type="number" value={level} onChange={(e) => setLevel(parseInt(e.target.value))}/>
-                </div>
-                <div>
-                    <input type="file" onChange={(e) => {
-                            saveFileImage(e)
-                            sendFileToIPFS(e.target.files[0])
-                        }
-                    }/>
-                </div>
-                <div>
-                    <img src={imagePath} alt=""/>
-                </div>
-                <div>
-                    {
-                        isLoading? 
-                            <div>대기중...</div>:
-                            <>
-                            <button onClick={() => router.back()}>목록으로</button>
-                            <button type="submit" onClick={(e) => onSubmit(e)}>등록</button>
-                            </>
-                    }
-                </div>
+                <PageTitle title="새 기본 캐릭터 등록"/>
+                <StyledMain>
+                    <StyledForm>
+                        <StyledItemDiv>
+                            <StyledLabel>이름</StyledLabel>
+                            <StyledInput type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>레벨</StyledLabel>
+                            <StyledInput type="number" value={level} onChange={(e) => setLevel(parseInt(e.target.value))}/>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledInput type="file" onChange={(e) => {
+                                    saveFileImage(e)
+                                    sendFileToIPFS(e.target.files[0])
+                                }
+                            }/>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                           { imagePath ? <StyledImg src={imagePath} alt=""/> : <></>}
+                        </StyledItemDiv>
+                        <div>
+                            {
+                                isLoading? 
+                                    <StyledLoadingGif/>:
+                                    <StyledButtonDiv>
+                                        <StyledBackButton onClick={() => router.back()}>목록으로</StyledBackButton>
+                                        <StyledSubmitButton type="submit" onClick={(e) => onSubmit(e)}>등록</StyledSubmitButton>
+                                    </StyledButtonDiv>
+                            }
+                        </div>
+                    </StyledForm>
+                </StyledMain>
             </div>
     )
 }

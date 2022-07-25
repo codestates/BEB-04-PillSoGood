@@ -2,6 +2,10 @@ import type { NextPage } from 'next'
 import { gql, useQuery } from "@apollo/client";
 import SessionStorage from "../utils/sessionStorage"
 import { useRouter } from 'next/router';
+import { PageTitle } from "../components/PageTitle"
+import { StyledTable, StyledTh, StyledTd, StyledTr } from "../components/StyledTable"
+import React from "react";
+import { StyledLoadingGif } from "../components/StyledCommon"
 
 const GET_ALL_NFTS = gql`
     query GetAllNfts($jwt: String!) {
@@ -31,43 +35,43 @@ const Nfts: NextPage = () => {
         { variables: { jwt: SessionStorage.getItem("jwt") } }
       );
     if (loading) {
-        return (<div>대기중 ...</div>)
+        return (<StyledLoadingGif/>)
     }
     if (data) {
         return (
             <div>
-                <h1>NFT 목록</h1>
-                <table>
+                <PageTitle title="NFT 목록"/>
+                <StyledTable>
                     <thead>
-                        <tr>
-                            <th>닉네임</th>
-                            <th>이메일</th>
-                            <th>전화번호</th>
-                            <th>NFT Hash</th>
-                            <th>Token Id</th>
-                        </tr>
+                        <StyledTr>
+                            <StyledTh scope="col">닉네임</StyledTh>
+                            <StyledTh scope="col">이메일</StyledTh>
+                            <StyledTh scope="col">전화번호</StyledTh>
+                            <StyledTh scope="col">NFT Hash</StyledTh>
+                            <StyledTh scope="col">Token Id</StyledTh>
+                        </StyledTr>
                     </thead>
                     <tbody>
                         {
                             data.getAllNfts.map((data:any) => {
                                 return (
                                     <tr key={data._id}>
-                                        <td>{data.user.nickname}</td>
-                                        <td>{data.user.email}</td>
-                                        <td>{data.user.phoneNumber}</td>
-                                        <td>{data.nftHash}</td>
-                                        <td>{data.tokenId}</td>
+                                        <StyledTd>{data.user.nickname}</StyledTd>
+                                        <StyledTd>{data.user.email}</StyledTd>
+                                        <StyledTd>{data.user.phoneNumber}</StyledTd>
+                                        <StyledTd>{data.nftHash}</StyledTd>
+                                        <StyledTd>{data.tokenId}</StyledTd>
                                     </tr>
                                 )
                             })
                         }
                     </tbody>
-                </table>
+                </StyledTable>
             </div>
         )
     }
     return (
-        <>데이터가 없습니다.</>
+        <StyledLoadingGif/>
     )
 }
 

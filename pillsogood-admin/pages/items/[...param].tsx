@@ -3,6 +3,11 @@ import { useEffect, useState } from "react"
 import SessionStorage from "../../utils/sessionStorage"
 import { useRouter } from "next/router"
 import axios from "axios"
+import { PageTitle } from "../../components/PageTitle"
+import React from "react";
+import { StyledLoadingGif } from "../../components/StyledCommon"
+import { StyledForm, StyledLabel, StyledInput, StyledItemDiv, StyledButtonDiv, StyledImg, StyledMain } from "../../components/StyledForm"
+import { StyledSubmitButton, StyledBackButton } from '../../components/StyledCommon';
 
 const GET_ITEM = gql`
     query GetItem($jwt: String, $id: String) {
@@ -130,46 +135,50 @@ const BaseDetail = (props:any) => {
     }, [data])
 
     if (loading) {
-        return (<div>대기중 ...</div>)
+        return (<StyledLoadingGif/>)
     } 
     if(data) {
         return (
             <div>
-                <h1>아이템 상세 정보</h1>
-                <div>
-                    <label>이름</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
-                </div>
-                <div>
-                    <label>타입</label>
-                    <input type="number" value={type} onChange={(e) => setType(parseInt(e.target.value))}/>
-                </div>
-                <div>
-                    <input type="file" onChange={(e) => {
-                            saveFileImage(e)
-                            sendFileToIPFS(e.target.files[0])
-                        }
-                    }/>
-                </div>
-                <div>
-                    <img src={imagePath} alt=""/>
-                </div>
-                <div>
-                    {
-                        isLoading? 
-                            <div>대기중...</div>:
-                            <>
-                            <button onClick={() => router.back()}>목록으로</button>
-                            <button type="submit" onClick={(e) => onUpdateSubmit(e)}>수정</button>
-                            <button type="button" onClick={(e) => onDeleteSubmit(e)}>삭제</button>
-                            </>
-                    }
-                </div>
+                <PageTitle title="아이템 상세 정보"/>
+                <StyledMain>
+                    <StyledForm>
+                        <StyledItemDiv>
+                            <StyledLabel>이름</StyledLabel>
+                            <StyledInput type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>타입</StyledLabel>
+                            <StyledInput type="number" value={type} onChange={(e) => setType(parseInt(e.target.value))}/>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledInput type="file" onChange={(e) => {
+                                    saveFileImage(e)
+                                    sendFileToIPFS(e.target.files[0])
+                                }
+                            }/>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            { imagePath ? <StyledImg src={imagePath} alt=""/> : <></>}
+                        </StyledItemDiv>
+                        <div>
+                            {
+                                isLoading? 
+                                    <StyledLoadingGif/>:
+                                    <StyledButtonDiv>
+                                        <StyledBackButton onClick={() => router.back()}>목록으로</StyledBackButton>
+                                        <StyledSubmitButton type="submit" onClick={(e) => onUpdateSubmit(e)}>수정</StyledSubmitButton>
+                                        <StyledBackButton type="button" onClick={(e) => onDeleteSubmit(e)}>삭제</StyledBackButton>
+                                    </StyledButtonDiv>
+                            }
+                        </div>
+                    </StyledForm>
+                </StyledMain>
             </div>
         )
     }
     return (
-        <>데이터가 없습니다.</>
+        <StyledLoadingGif/>
     )
 }
 

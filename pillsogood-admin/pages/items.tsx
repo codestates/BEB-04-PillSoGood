@@ -4,7 +4,7 @@ import SessionStorage from "../utils/sessionStorage"
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { PageTitle } from "../components/PageTitle"
-import { StyledTable, StyledTh, StyledTd, StyledTr, StyledNewButton } from "../components/StyledTable"
+import { StyledTable, StyledTh, StyledTd, StyledTr, StyledNewButton, StyledNewButtonDiv } from "../components/StyledTable"
 import React from "react";
 import { StyledLoadingGif } from "../components/StyledCommon"
 
@@ -32,7 +32,9 @@ const Items: NextPage = () => {
         return (
             <div>
                 <PageTitle title="아이템 목록"/>
-                <StyledNewButton type="button" onClick={() => router.push("/items/new")}>등록</StyledNewButton>
+                <StyledNewButtonDiv>
+                    <StyledNewButton type="button" onClick={() => router.push("/items/new")}>등록</StyledNewButton>
+                </StyledNewButtonDiv>
                 <StyledTable>
                     <thead>
                         <StyledTr>

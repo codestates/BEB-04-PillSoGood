@@ -25,10 +25,13 @@ export const StyledTd = styled.td`
     border-bottom: 1px solid #B5B5B5;
 `
 
+export const StyledNewButtonDiv = styled.div`
+    text-align: right;
+    margin-right: 10%;
+    margin-bottom: 1%;
+`
+
 export const StyledNewButton = styled.button`
-    position: absolute;
-    right: 10%;
-    top: 11%;    
     --bs-btn-padding-y: 0.5rem;
     --bs-btn-padding-x: 1rem;
     --bs-btn-font-size: 1.25rem;

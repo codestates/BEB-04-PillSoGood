@@ -23,17 +23,21 @@ const GET_LOGS_BY_CREATED_AT = gql`
   }
 `
 
-const StyledDashboardTitle = styled.span`
+const StyledDashboardCaption = styled.div`
+  display: flex;
   margin-left: 10%;
+`
+
+const StyledDashboardTitle = styled.span`
   font-size: 1.5em;
-  margin-top: 0.83em;
   margin-bottom: 0.83em;
   font-weight: bold;
+  width: 400px;
 `
 
 const StyledDashboard = styled.div`
-  margin: 0 auto;
   width: 80%;
+  margin-left: 10%;
 `
 
 const Home: NextPage = () => {
@@ -82,11 +86,13 @@ const Home: NextPage = () => {
       <main>
         <PageTitle title="대시보드"/>
         <div>
-          <StyledDashboardTitle>일자 별 API 호출 현황</StyledDashboardTitle>
-          <DatePicker dateFormat="yyyy-MM-dd" selected={moment(createdAt, "YYYYMMDD").toDate()} 
-            onChange={(date) => {setCreatedAt(moment(date).format("YYYYMMDD")); getCreatedAtNewData()}}
-            className="custom"
-          />
+          <StyledDashboardCaption>
+            <StyledDashboardTitle>일자 별 API 호출 현황</StyledDashboardTitle>
+            <DatePicker dateFormat="yyyy-MM-dd" selected={moment(createdAt, "YYYYMMDD").toDate()} 
+              onChange={(date) => {setCreatedAt(moment(date).format("YYYYMMDD")); getCreatedAtNewData()}}
+              className="custom"
+            />
+          </StyledDashboardCaption>
           <StyledDashboard>
             {
               createdAtChartData !== null && createdAtChartData !== undefined ? <Bar data={createdAtChartData}/> :<div>데이터가 없습니다.</div>

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from 'next/router';
 import { PageTitle } from "../components/PageTitle"
 import { StyledNewButton } from "../components/StyledTable"
-import { StyledTable, StyledTh, StyledTd, StyledTr } from "../components/StyledTable"
+import { StyledTable, StyledTh, StyledTd, StyledTr, StyledNewButtonDiv } from "../components/StyledTable"
 import React from "react";
 import { StyledLoadingGif } from "../components/StyledCommon"
 
@@ -33,7 +33,9 @@ const Bases: NextPage = () => {
         return (
             <div>
                 <PageTitle title="기본 캐릭터 목록"/>
-                <StyledNewButton type="button" onClick={() => router.push("/bases/new")}>등록</StyledNewButton>
+                <StyledNewButtonDiv>
+                    <StyledNewButton type="button" onClick={() => router.push("/bases/new")}>등록</StyledNewButton>
+                </StyledNewButtonDiv>
                 <StyledTable>
                     <thead>
                         <StyledTr>

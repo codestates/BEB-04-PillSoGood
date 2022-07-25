@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import SessionStorage from "../../utils/sessionStorage"
 import { useState } from "react"
 import { PageTitle } from "../../components/PageTitle"
-import { StyledForm, StyledInput, StyledLabel, StyledSpan, StyledItemDiv, StyledButtonDiv, StyledEyeButton } from "../../components/StyledForm"
+import { StyledForm, StyledInput, StyledLabel, StyledSpan, StyledItemDiv, StyledButtonDiv, StyledEyeButton, StyledMain } from "../../components/StyledForm"
 import { StyledSubmitButton, StyledBackButton } from "../../components/StyledCommon"
 import React from "react";
 import { StyledLoadingGif } from "../../components/StyledCommon"
@@ -78,41 +78,43 @@ const UserDetail = (props:any)=> {
         return (
             <div>
                 <PageTitle title="사용자 상세 정보"/>
-                <StyledForm>
-                    <StyledItemDiv>
-                        <StyledLabel>닉네임</StyledLabel>
-                        <StyledSpan>{userInfo.nickname}</StyledSpan>
-                    </StyledItemDiv>
-                    <StyledItemDiv>
-                        <StyledLabel>생년월일</StyledLabel>
-                        <StyledSpan>{userInfo.dateOfBirth}</StyledSpan>
-                    </StyledItemDiv>
-                    <StyledItemDiv>
-                        <StyledLabel>리워드 잔액</StyledLabel>
-                        <StyledSpan>{userInfo.pointBalance}</StyledSpan>
-                    </StyledItemDiv>
-                    <StyledItemDiv>
-                        <StyledLabel>전화 번호</StyledLabel>
-                        <StyledSpan>{userInfo.phoneNumber}</StyledSpan>
-                    </StyledItemDiv>
-                    <StyledItemDiv>
-                        <StyledLabel>가입 일자</StyledLabel>
-                        <StyledSpan>{userInfo.createdAt}</StyledSpan>
-                    </StyledItemDiv>
-                    <StyledItemDiv>
-                        <StyledLabel>새 비밀번호</StyledLabel>
-                        <StyledInput type="password" id="password" onChange={(e) => setPassword(e.target.value)}/>
-                        <StyledEyeButton type="button" onMouseDown={() => document.querySelector('#password')!.setAttribute('type', 'text')} 
-                            onMouseUp={() => document.querySelector('#password')!.setAttribute('type', 'password')}>
-                                <img id="eye" src="/eye-default.png" width="30px;" onMouseDown={() => document.querySelector("#eye")!.setAttribute('src', '/eye-show.png')}
-                                    onMouseUp={() => document.querySelector("#eye")!.setAttribute('src', '/eye-default.png')}/>
-                            </StyledEyeButton>
-                    </StyledItemDiv>
-                    <StyledButtonDiv>
-                        <StyledBackButton type="button" onClick={() => router.back()}>목록으로</StyledBackButton>
-                        <StyledSubmitButton type="submit" onClick={(e) => onSubmit(e)}>비밀번호 변경</StyledSubmitButton>
-                    </StyledButtonDiv>
-                </StyledForm>
+                <StyledMain>
+                    <StyledForm>
+                        <StyledItemDiv>
+                            <StyledLabel>닉네임</StyledLabel>
+                            <StyledSpan>{userInfo.nickname}</StyledSpan>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>생년월일</StyledLabel>
+                            <StyledSpan>{userInfo.dateOfBirth}</StyledSpan>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>리워드 잔액</StyledLabel>
+                            <StyledSpan>{userInfo.pointBalance}</StyledSpan>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>전화 번호</StyledLabel>
+                            <StyledSpan>{userInfo.phoneNumber}</StyledSpan>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>가입 일자</StyledLabel>
+                            <StyledSpan>{userInfo.createdAt}</StyledSpan>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>새 비밀번호</StyledLabel>
+                            <StyledInput type="password" id="password" onChange={(e) => setPassword(e.target.value)}/>
+                            <StyledEyeButton type="button" onMouseDown={() => document.querySelector('#password')!.setAttribute('type', 'text')} 
+                                onMouseUp={() => document.querySelector('#password')!.setAttribute('type', 'password')}>
+                                    <img id="eye" src="/eye-default.png" width="30px;" onMouseDown={() => document.querySelector("#eye")!.setAttribute('src', '/eye-show.png')}
+                                        onMouseUp={() => document.querySelector("#eye")!.setAttribute('src', '/eye-default.png')}/>
+                                </StyledEyeButton>
+                        </StyledItemDiv>
+                        <StyledButtonDiv>
+                            <StyledBackButton type="button" onClick={() => router.back()}>목록으로</StyledBackButton>
+                            <StyledSubmitButton type="submit" onClick={(e) => onSubmit(e)}>비밀번호 변경</StyledSubmitButton>
+                        </StyledButtonDiv>
+                    </StyledForm>
+                </StyledMain>
             </div>
         )
     }

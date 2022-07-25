@@ -5,6 +5,8 @@ import { useState } from "react";
 import SessionStorage from "../utils/sessionStorage"
 import { PageTitle } from "../components/PageTitle"
 import React from "react";
+import { StyledForm, StyledLabel, StyledInput, StyledItemDiv, StyledButtonDiv, StyledMain } from "../components/StyledForm"
+import { StyledSubmitButton, StyledBackButton } from '../components/StyledCommon';
 
 const LOGIN_ADMIN = gql`
 mutation LoginAmin($email: String!, $password: String!) {
@@ -43,17 +45,22 @@ const Login: NextPage = () => {
     return (
         <div>
             <PageTitle title="관리자 로그인"/>
-            <div>
-                <label>이메일</label>
-                <input type="email" onChange={(e) => {setEmail(e.target.value)}}/>
-            </div>
-            <div>
-                <label>비밀번호</label>
-                <input type="password" onChange={(e) => {setPassword(e.target.value)}}/>
-            </div>
-            <div>
-                <button type="submit" onClick={(e) => onSubmit(e)}>로그인</button>
-            </div>
+            <StyledMain>
+                <StyledForm>
+                    <StyledItemDiv>
+                        <StyledLabel>이메일</StyledLabel>
+                        <StyledInput type="email" onChange={(e) => {setEmail(e.target.value)}}/>
+                    </StyledItemDiv>
+                    <StyledItemDiv>
+                        <StyledLabel>비밀번호</StyledLabel>
+                        <StyledInput type="password" onChange={(e) => {setPassword(e.target.value)}}/>
+                    </StyledItemDiv>
+                    <StyledButtonDiv>
+                        <StyledSubmitButton type="submit" onClick={(e) => onSubmit(e)}>로그인</StyledSubmitButton>
+                        <StyledBackButton type="button" onClick={() => router.push("/join")}>회원가입</StyledBackButton>
+                    </StyledButtonDiv>
+                </StyledForm>
+            </StyledMain>
         </div>
     )
 }

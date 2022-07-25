@@ -7,6 +7,8 @@ import axios from "axios"
 import { PageTitle } from "../../components/PageTitle"
 import React from "react";
 import { StyledLoadingGif } from "../../components/StyledCommon"
+import { StyledForm, StyledLabel, StyledInput, StyledItemDiv, StyledButtonDiv, StyledMain, StyledImg } from "../../components/StyledForm"
+import { StyledSubmitButton, StyledBackButton } from '../../components/StyledCommon';
 
 const CREATE_ITEM = gql`
     mutation CreateItem($jwt: String!, $type: Int!, $name: String!, $imagePath: String!) {
@@ -71,34 +73,38 @@ const NewItem: NextPage = () => {
     return (
         <div>
                 <PageTitle title="새 아이템 등록"/>
-                <div>
-                    <label>이름</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
-                </div>
-                <div>
-                    <label>타입</label>
-                    <input type="number" value={type} onChange={(e) => setType(parseInt(e.target.value))}/>
-                </div>
-                <div>
-                    <input type="file" onChange={(e) => {
-                            saveFileImage(e)
-                            sendFileToIPFS(e.target.files[0])
-                        }
-                    }/>
-                </div>
-                <div>
-                    <img src={imagePath} alt=""/>
-                </div>
-                <div>
-                    {
-                        isLoading? 
-                            <StyledLoadingGif/>:
-                            <>
-                            <button onClick={() => router.back()}>목록으로</button>
-                            <button type="submit" onClick={(e) => onSubmit(e)}>등록</button>
-                            </>
-                    }
-                </div>
+                <StyledMain>
+                    <StyledForm>
+                        <StyledItemDiv>
+                            <StyledLabel>이름</StyledLabel>
+                            <StyledInput type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>타입</StyledLabel>
+                            <StyledInput type="number" value={type} onChange={(e) => setType(parseInt(e.target.value))}/>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledInput type="file" onChange={(e) => {
+                                    saveFileImage(e)
+                                    sendFileToIPFS(e.target.files[0])
+                                }
+                            }/>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            { imagePath ? <StyledImg src={imagePath} alt=""/> : <></>}
+                        </StyledItemDiv>
+                        <div>
+                            {
+                                isLoading? 
+                                    <StyledLoadingGif/>:
+                                    <StyledButtonDiv>
+                                        <StyledBackButton onClick={() => router.back()}>목록으로</StyledBackButton>
+                                        <StyledSubmitButton type="submit" onClick={(e) => onSubmit(e)}>등록</StyledSubmitButton>
+                                    </StyledButtonDiv>
+                            }
+                        </div>
+                    </StyledForm>
+                </StyledMain>
             </div>
     )
 }

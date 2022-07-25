@@ -23,8 +23,12 @@ const GET_LOGS_BY_CREATED_AT = gql`
   }
 `
 
-const StyledDashboardTitle = styled.h2`
+const StyledDashboardTitle = styled.span`
   margin-left: 10%;
+  font-size: 1.5em;
+  margin-top: 0.83em;
+  margin-bottom: 0.83em;
+  font-weight: bold;
 `
 
 const StyledDashboard = styled.div`
@@ -79,7 +83,9 @@ const Home: NextPage = () => {
         <PageTitle title="대시보드"/>
         <div>
           <StyledDashboardTitle>일자 별 API 호출 현황</StyledDashboardTitle>
-          <DatePicker dateFormat="yyyy-MM-dd" selected={moment(createdAt, "YYYYMMDD").toDate()} onChange={(date) => {setCreatedAt(moment(date).format("YYYYMMDD")); getCreatedAtNewData()}}
+          <DatePicker dateFormat="yyyy-MM-dd" selected={moment(createdAt, "YYYYMMDD").toDate()} 
+            onChange={(date) => {setCreatedAt(moment(date).format("YYYYMMDD")); getCreatedAtNewData()}}
+            className="custom"
           />
           <StyledDashboard>
             {

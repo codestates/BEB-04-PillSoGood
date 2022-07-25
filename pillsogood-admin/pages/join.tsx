@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { PageTitle } from "../components/PageTitle"
 import React from "react";
+import { StyledForm, StyledLabel, StyledInput, StyledItemDiv, StyledButtonDiv, StyledMain } from "../components/StyledForm"
+import { StyledSubmitButton, StyledBackButton } from '../components/StyledCommon';
 
 const JOIN_ADMIN = gql`
 mutation JoinAdmin($email: String!, $name: String!, $password: String) {
@@ -41,21 +43,26 @@ const Join: NextPage = () => {
     return (
         <div>
             <PageTitle title="관리자 등록"/>
-            <div>
-                <label>이메일</label>
-                <input type="email" onChange={(e) => {setEmail(e.target.value)}}/>
-            </div>
-            <div>
-                <label>비밀번호</label>
-                <input type="password" onChange={(e) => {setPassword(e.target.value)}}/>
-            </div>
-            <div>
-                <label>이름</label>
-                <input type="text" onChange={(e) => {setName(e.target.value)}}/>
-            </div>
-            <div>
-                <button type="submit" onClick={(e) => onSubmit(e)}>등록</button>
-            </div>
+            <StyledMain>
+                <StyledForm>
+                    <StyledItemDiv>
+                        <StyledLabel>이메일</StyledLabel>
+                        <StyledInput type="email" onChange={(e) => {setEmail(e.target.value)}}/>
+                    </StyledItemDiv>
+                    <StyledItemDiv>
+                        <StyledLabel>비밀번호</StyledLabel>
+                        <StyledInput type="password" onChange={(e) => {setPassword(e.target.value)}}/>
+                    </StyledItemDiv>
+                    <StyledItemDiv>
+                        <StyledLabel>이름</StyledLabel>
+                        <StyledInput type="text" onChange={(e) => {setName(e.target.value)}}/>
+                    </StyledItemDiv>
+                    <StyledButtonDiv>
+                        <StyledSubmitButton type="submit" onClick={(e) => onSubmit(e)}>등록</StyledSubmitButton>
+                        <StyledBackButton type="button" onClick={() => router.back()}>취소</StyledBackButton> 
+                    </StyledButtonDiv>
+                </StyledForm>
+            </StyledMain>
         </div>
     )
 }

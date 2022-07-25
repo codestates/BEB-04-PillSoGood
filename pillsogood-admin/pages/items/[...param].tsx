@@ -6,6 +6,8 @@ import axios from "axios"
 import { PageTitle } from "../../components/PageTitle"
 import React from "react";
 import { StyledLoadingGif } from "../../components/StyledCommon"
+import { StyledForm, StyledLabel, StyledInput, StyledItemDiv, StyledButtonDiv, StyledImg, StyledMain } from "../../components/StyledForm"
+import { StyledSubmitButton, StyledBackButton } from '../../components/StyledCommon';
 
 const GET_ITEM = gql`
     query GetItem($jwt: String, $id: String) {
@@ -139,35 +141,39 @@ const BaseDetail = (props:any) => {
         return (
             <div>
                 <PageTitle title="아이템 상세 정보"/>
-                <div>
-                    <label>이름</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
-                </div>
-                <div>
-                    <label>타입</label>
-                    <input type="number" value={type} onChange={(e) => setType(parseInt(e.target.value))}/>
-                </div>
-                <div>
-                    <input type="file" onChange={(e) => {
-                            saveFileImage(e)
-                            sendFileToIPFS(e.target.files[0])
-                        }
-                    }/>
-                </div>
-                <div>
-                    <img src={imagePath} alt=""/>
-                </div>
-                <div>
-                    {
-                        isLoading? 
-                            <StyledLoadingGif/>:
-                            <>
-                            <button onClick={() => router.back()}>목록으로</button>
-                            <button type="submit" onClick={(e) => onUpdateSubmit(e)}>수정</button>
-                            <button type="button" onClick={(e) => onDeleteSubmit(e)}>삭제</button>
-                            </>
-                    }
-                </div>
+                <StyledMain>
+                    <StyledForm>
+                        <StyledItemDiv>
+                            <StyledLabel>이름</StyledLabel>
+                            <StyledInput type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledLabel>타입</StyledLabel>
+                            <StyledInput type="number" value={type} onChange={(e) => setType(parseInt(e.target.value))}/>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            <StyledInput type="file" onChange={(e) => {
+                                    saveFileImage(e)
+                                    sendFileToIPFS(e.target.files[0])
+                                }
+                            }/>
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            { imagePath ? <StyledImg src={imagePath} alt=""/> : <></>}
+                        </StyledItemDiv>
+                        <StyledItemDiv>
+                            {
+                                isLoading? 
+                                    <StyledLoadingGif/>:
+                                    <StyledButtonDiv>
+                                        <StyledBackButton onClick={() => router.back()}>목록으로</StyledBackButton>
+                                        <StyledSubmitButton type="submit" onClick={(e) => onUpdateSubmit(e)}>수정</StyledSubmitButton>
+                                        <StyledBackButton type="button" onClick={(e) => onDeleteSubmit(e)}>삭제</StyledBackButton>
+                                    </StyledButtonDiv>
+                            }
+                        </StyledItemDiv>
+                    </StyledForm>
+                </StyledMain>
             </div>
         )
     }

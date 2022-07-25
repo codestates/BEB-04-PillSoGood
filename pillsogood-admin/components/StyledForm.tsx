@@ -1,11 +1,13 @@
 import styled from "styled-components";
 
-export const StyledForm = styled.form`
-    position:absolute;
-    left:50%;
-    margin-left:-170px;
+export const StyledMain = styled.div`
+    display: flex;
+    justify-content: center;
 `
+export const StyledForm = styled.form`
 
+`
+//TODO: flex; justify content center; 
 export const StyledLabel = styled.label`
     text-align: right;
     color: #212529;
@@ -39,13 +41,14 @@ export const StyledItemDiv = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 `
 
 export const StyledButtonDiv = styled.div`
     display: flex;
     justify-content: space-around;
+
 `
 
 export const StyledEyeButton = styled.button`
@@ -54,3 +57,7 @@ export const StyledEyeButton = styled.button`
     outline: 0;
 `
 
+export const StyledImg = styled.img`
+    width: 300px;
+    height: 300px;
+`

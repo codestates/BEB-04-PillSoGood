@@ -1,12 +1,7 @@
-import React, { useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../colors";
-import { Pressable, Image, StatusBar, Text, View, FlatList } from "react-native";
-// import { Card } from "../src/components/Card";
-import { dateHead } from "../src/components/dateHead"
-import { SimpleModal } from "../src/components/SimpleModal";
 // import { set } from "immer/dist/internal";
-import { WrapperComponent } from "../src/components/WrapperComponent";
 
 const Container = styled.View`
   background-color: ${BASE_COLOR};
@@ -30,16 +25,16 @@ const Header = styled.View`
 `;
 const HeadTxt = styled.Text`
   color: #76a991;
-  font-size: 30px;
+  font-size: 40px;
   font-weight: bold;
-  text-shadow: 1px 3px 3px papayawhip;
+  text-shadow: 1px 3px 3px white;
 `;
 const MainTxt = styled.Text`
   color: "rgba(255, 255, 255, 0.7)";
   font-size: 15px;
   font-weight: bold;
-  padding-left: 5px;
-  margin-top: -30px;
+  padding-left: 20px;
+  margin-top: -25px;
 `;
 const Card = styled.View`
   flex: 0.3;
@@ -86,27 +81,6 @@ const AlarmText = styled.Text`
   font-size: 14px;
   text-align: center;
 `;
-const Modals = styled.Modal`
-  color: white;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-`;
-const Modaltouch = styled.TouchableOpacity`
-  color: white;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center; 
-  virtical-align: center;
-`;
-const ModalCircle = styled.View`
-  width: 70px;
-  height: 70px;
-  border-radius: 20px;
-  align-items: center;
-  background: blue;
-`;
-
 
 const Home = ({ navigation: { navigate } }) => {
   const DATA = ["고지혈증", "고혈압", "당뇨"];
@@ -114,10 +88,10 @@ const Home = ({ navigation: { navigate } }) => {
   const [visible, setVisible] = useState(true);
   const [isModalVisible, setisModalVisible] = useState(false);
   const [chooseData, setchooseData] = useState();
-    changeModalVisible = (bool) => {
+  changeModalVisible = (bool) => {
     setisModalVisible(bool);
   };
-  const [currentDate, setCurrentDate] = useState('');
+  const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
     const date = new Date().getDate(); //Current Date
@@ -165,50 +139,20 @@ const Home = ({ navigation: { navigate } }) => {
         </Btn>
       </Card>
 
-
       <Card>
         <Cardtxt>{DATA[2]}</Cardtxt>
-        <Btn onPress={() => {
-          setVisible(!visible)
-            }}> 
+        <Btn
+          onPress={() => {
+            setVisible(!visible);
+          }}
+        >
           <BtnText>약 먹었어요~</BtnText>
         </Btn>
       </Card>
-      
 
-        <AlarmBtn onPress={() => navigate("Reminder")}>
-          <AlarmText>알람 등록하기</AlarmText>
-        </AlarmBtn>
-
-
-      {/* <Cardtxt>
-        {chooseData}
-      </Cardtxt> */}
-      
-      {/* 모달시작 */}
-      {/* <Modaltouch
-        onPress={()=> changeModalVisible(true)
-        // onBackdropPress={() => setModalVisible(false)
-        //콘텐츠 외부 눌러 모달 숨기기
-        }
-        >
-          <ModalCircle>
-          <BtnText>약 추가</BtnText>
-          </ModalCircle>
-      </Modaltouch>
-
-      <Modals
-        transparent={true}
-        animationType="fade"
-        visible={isModalVisible}
-        nRequestClose={() => changeModalVisible(false)}
-      >
-        <SimpleModal
-          changeModalVisible={isModalVisible}
-          setData={setData}
-        />
-      </Modals> */}
-
+      <AlarmBtn onPress={() => navigate("Reminder")}>
+        <AlarmText>알람 등록하기</AlarmText>
+      </AlarmBtn>
     </Container>
   );
 };

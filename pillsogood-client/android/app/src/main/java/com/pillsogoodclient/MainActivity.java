@@ -2,6 +2,7 @@ package com.pillsogoodclient;
 
 import android.os.Build;
 import android.os.Bundle;
+import org.devio.rn.splashscreen.SplashScreen; // 추가
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -12,11 +13,12 @@ import expo.modules.ReactActivityDelegateWrapper;
 public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    // Set the theme to AppTheme BEFORE onCreate to support 
+    // Set the theme to AppTheme BEFORE onCreate to support
     // coloring the background, status bar, and navigation bar.
     // This is required for expo-splash-screen.
-    setTheme(R.style.AppTheme);
-    super.onCreate(null);
+    SplashScreen.show(this); // 추가
+    // setTheme(R.style.AppTheme);
+    super.onCreate(savedInstanceState);
   }
 
   /**
@@ -31,14 +33,15 @@ public class MainActivity extends ReactActivity {
   @Override
   protected ReactActivityDelegate createReactActivityDelegate() {
     return new ReactActivityDelegateWrapper(this,
-      new ReactActivityDelegate(this, getMainComponentName())
-    );
+        new ReactActivityDelegate(this, getMainComponentName()));
   }
 
   /**
    * Align the back button behavior with Android S
    * where moving root activities to background instead of finishing activities.
-   * @see <a href="https://developer.android.com/reference/android/app/Activity#onBackPressed()">onBackPressed</a>
+   * 
+   * @see <a href=
+   *      "https://developer.android.com/reference/android/app/Activity#onBackPressed()">onBackPressed</a>
    */
   @Override
   public void invokeDefaultOnBackPressed() {

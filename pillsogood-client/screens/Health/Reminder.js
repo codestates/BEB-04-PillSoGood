@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../../colors";
+import Lottie from "lottie-react-native";
 
 import {
   Button,
@@ -12,7 +13,8 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
-  Alert } from "react-native";
+  Alert,
+} from "react-native";
 import DatePicker from "react-native-date-picker";
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return " ";
@@ -78,8 +80,16 @@ const Reminder = () => {
   const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
   const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
   const kr_curr = new Date(utc + KR_TIME_DIFF);
+
+  const Container = styled.View`
+  background-color: ${BASE_COLOR}
+  flex: 1;
+  color: black;
+
+`;
+
   const Btn = styled.TouchableOpacity`
-    margin-top: 40px;
+
     width: 100%;
     padding: 10px 
     border-width: 1px;
@@ -93,56 +103,100 @@ const Reminder = () => {
     font-size: 14px;
     text-align: center;
   `;
-  const Container = styled.View`
-  background-color: ${BASE_COLOR}
-  flex: 1;
-  color: black;
-  padding: 0px 20px ;
-
+  const HeadTxt = styled.Text`
+  color: #76a991;
+  font-size: 30px;
+  font-weight: bold;
+  margin: 30px 10px; 0px 20px;
 `;
+  const SubTxt = styled.Text`
+    color: white;
+    font-size: 19px;
+    font-weight: bold;
+    margin-top: -30px;
+    margin-left: 10px;
+  `;
+
+  const Whenbtn = styled.Button`
+    color: black;
+    font-size: 19px;
+    font-weight: bold;
+  `;
+  const Rewardtxt = styled.Text`
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+  `;
+  const Titletxt = styled.Text`
+  background-color: ${BASE_COLOR}
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 30px
+`;
+
+  const Inner = styled.View`
+    background-color: white;
+    flex: 1;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    margin-top: 50px;
+    padding: 20px;
+  `;
   return (
-    
-      <Container>
-      <View>
-        <Text>등록된 약</Text>
-      </View>
+    <Container>
+      <HeadTxt>약 등록하기</HeadTxt>
+      <SubTxt>복용 알람을 등록하세요</SubTxt>
 
+      <Inner>
+        <View>
+          <Titletxt>약의 이름</Titletxt>
+          <TextInput placeholder="알람 이름을 등록해주세요"></TextInput>
+        </View>
 
-      <View>
-        <Text>알람 이름</Text>
-        <TextInput></TextInput>
-      </View>
+        <View>
+          <Titletxt>메모 작성</Titletxt>
+          <TextInput placeholder="메모를 작성해주세요"></TextInput>
+        </View>
 
+        <View>
+          {/* <Whenbtn title="약 언제 먹을래요?"
+            onPress={() => setOpen(true)} /> */}
+          <Titletxt> 알람을 받고 싶은 시간을 선택해주세요</Titletxt>
+          <View>
+            <DatePicker
+              locale="ko"
+              androidVariant="nativeAndroid"
+              textColor="black"
+              open={open}
+              date={date}
+              onConfirm={(date) => {
+                setOpen(false);
+                setDate(data);
+              }}
+              onCancel={() => {
+                setOpen(false);
+              }}
+            />
+          </View>
+        </View>
+        <View></View>
 
-      <View>
-        <Text>메모 작성</Text>
-        <TextInput></TextInput>
-      </View>
-
-
-      <View>
-      <Button title="약 언제 먹을래요?" onPress={() => setOpen(trurre)} />
-      <DatePicker
-        modal
-        locale="ko"
-        androidVariant="nativeAndroid"
-        textColor="black"
-        open={open}
-        date={date}
-        onConfirm={(date) => {
-          setOpen(false);
-          setDate(data);
-        }}
-        onCancel={() => {
-          setOpen(false);
-        }}
-      />
-      </View>
-
-      <Btn>
-        <BtnText>마일리지 적립</BtnText>
+        <Rewardtxt>알람을 등록하고 리워드를 받으세요!</Rewardtxt>
+        <Btn
+          onPress={() => (
+            <Lottie
+              source={require("../../src/assets/data.json")}
+              autoPlay
+              loop
+            />
+          )}
+        >
+          <BtnText>100코인 획득</BtnText>
         </Btn>
-        </Container>
+      </Inner>
+    </Container>
   );
 };
 export default Reminder;

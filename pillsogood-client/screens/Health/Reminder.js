@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../../colors";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import RNTextDetector from "rn-text-detector";
 import DatePicker from "react-native-date-picker";
-
+import ImagePickerComponent from "../../src/utils/ImagePickerComponent";
+import callGoogleVisionAsync from "./../../src/utils/helperFunctions";
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return " ";
 
@@ -100,9 +100,7 @@ const Reminder = () => {
     },
   });
   console.log(date);
-  const onButtonPress = () => {
-    launchImageLibrary();
-  };
+
   //////////////////////////////////////////////////////////////
   function onPress(type) {
     setState({ ...state, loading: true });
@@ -117,20 +115,16 @@ const Reminder = () => {
     }
     if (!!media && media.assets) {
       const file = media.assets[0].uri;
-      const textRecognition = await RNTextDetector.detectFromUri(file);
+      const textRecognition = TextRecognition.recognize(file);
+      console.log(textRecognition);
       const INFLIGHT_IT = "Inflight IT";
       //if match toast will appear
-      const matchText = textRecognition.findIndex((item) =>
-        item.text.match(INFLIGHT_IT)
-      );
+
       setState({
         ...state,
         textRecognition,
         image: file,
-        toast: {
-          message: matchText > -1 ? "Ohhh i love this company!!" : "",
-          isVisible: matchText > -1,
-        },
+
         loading: false,
       });
     }
@@ -141,6 +135,7 @@ const Reminder = () => {
 
   return (
     <ReminderContainer>
+      <ImagePickerComponent onSubmit={callGoogleVisionAsync} />
       <PillTxt>약 이름을 입력해주세요</PillTxt>
       <PillTxtInput
         placeholder="약 이름"
@@ -179,37 +174,6 @@ const Reminder = () => {
           setOpen(false);
         }}
       />
-
-      <ViewRN>
-        <PillTxt>RN OCR SAMPLE</PillTxt>
-        <ViewRN>
-          <Touch onPress={() => onPress("capture")}>
-            <PillTxt>Take Photo</PillTxt>
-          </Touch>
-          <ViewRN>
-            <Touch onPress={() => onPress("library")}>
-              <PillTxt>Pick a Photo</PillTxt>
-            </Touch>
-          </ViewRN>
-          <ViewRN>
-            <ViewRN>
-              <Imges source={{ uri: state.image }} />
-            </ViewRN>
-            {!!state.textRecognition &&
-              state.textRecognition.map((item, i) => (
-                <PillTxt key={i}>{item.text}</PillTxt>
-              ))}
-          </ViewRN>
-        </ViewRN>
-        {state.toast.isVisible &&
-          ToastAndroid.showWithGravityAndOffset(
-            state.toast.message,
-            ToastAndroid.LONG,
-            ToastAndroid.BOTTOM,
-            25,
-            50
-          )}
-      </ViewRN>
     </ReminderContainer>
   );
 };

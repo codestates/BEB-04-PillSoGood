@@ -1,8 +1,17 @@
 import React, { useState } from "react";
-import { Button } from "react-native";
-import DatePicker from "react-native-date-picker";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../../colors";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import RNTextDetector from "rn-text-detector";
+import {
+  Button,
+  View,
+  Image,
+  SafeAreaView,
+  TouchableOpacity,
+} from "react-native";
+import DatePicker from "react-native-date-picker";
+
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return " ";
 
@@ -65,6 +74,7 @@ const ReminderContainer = styled.View`
   color: black;
   padding: 30px 20px;
 `;
+
 const PillTxtInput = styled.TextInput`
   font-size: 16;
 `;
@@ -73,6 +83,7 @@ const PillTxt = styled.Text`
 `;
 const PillBtn = styled.Button``;
 const Reminder = () => {
+  const [response, setResponse] = useState(null);
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [medicine, setMedicine] = useState("");
@@ -82,8 +93,51 @@ const Reminder = () => {
     pillscale,
     date,
   });
+  const [state, setState] = useState({
+    loading: false,
+    image: null,
+    textRecognition: null,
+    toast: {
+      message: "",
+      isVisible: false,
+    },
+  });
   console.log(date);
-
+  const onButtonPress = () => {
+    launchImageLibrary();
+  };
+  //////////////////////////////////////////////////////////////
+  function onPress() {
+    setState({ ...state, loading: true });
+    type === "capture"
+      ? launchCamera({ mediaType: "image" }, onImageSelect)
+      : launchImageLibrary({ mediaType: "image" }, onImageSelect);
+  }
+  async function onImageSelect(media) {
+    if (!media) {
+      setState({ ...state, loading: false });
+      return;
+    }
+    if (!!media && media.assets) {
+      const file = media.assets[0].uri;
+      const textRecognition = await RNTextDetector.detectFromUri(file);
+      const INFLIGHT_IT = "Inflight IT";
+      //if match toast will appear
+      const matchText = textRecognition.findIndex((item) =>
+        item.text.match(INFLIGHT_IT)
+      );
+      setState({
+        ...state,
+        textRecognition,
+        image: file,
+        toast: {
+          message: matchText > -1 ? "Ohhh i love this company!!" : "",
+          isVisible: matchText > -1,
+        },
+        loading: false,
+      });
+    }
+  }
   const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
   const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
   const kr_curr = new Date(utc + KR_TIME_DIFF);
@@ -112,7 +166,7 @@ const Reminder = () => {
         onChangeText={(text) => setMedicine(text)}
         placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
       />
-      <Button title="약 언제 먹을래요?" onPress={() => setOpen(true)} />
+      <PillBtn title="약 언제 먹을래요?" onPress={() => setOpen(true)} />
       <DatePicker
         modal
         locale="ko"
@@ -128,7 +182,40 @@ const Reminder = () => {
           setOpen(false);
         }}
       />
-      <Button title="알람 입력" onPress={() => setOpen(true)} />
+      <SafeAreaView style={{ flex: 1 }}>
+        <View>
+          <Text>RN OCR SAMPLE</Text>
+          <View>
+            <TouchableOpacity onPress={() => onPress("capture")}>
+              <Text>Take Photo</Text>
+            </TouchableOpacity>
+            <View>
+              <TouchableOpacity onPress={() => onPress("library")}>
+                <Text>Pick a Photo</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <WrapLoading loading={state.loading}>
+                <View>
+                  <Image source={{ uri: state.image }} />
+                </View>
+                {!!state.textRecognition &&
+                  state.textRecognition.map((item, i) => (
+                    <Text key={i}>{item.text}</Text>
+                  ))}
+              </WrapLoading>
+            </View>
+          </View>
+          {state.toast.isVisible &&
+            ToastAndroid.showWithGravityAndOffset(
+              state.toast.message,
+              ToastAndroid.LONG,
+              ToastAndroid.BOTTOM,
+              25,
+              50
+            )}
+        </View>
+      </SafeAreaView>
     </ReminderContainer>
   );
 };

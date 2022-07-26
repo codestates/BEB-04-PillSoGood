@@ -10,6 +10,7 @@ export default gql`
 
     type Query {
         getItems(jwt:String!):[Item]
+        getItem(jwt:String, _id:String):Item
     }
 
     type Mutation {

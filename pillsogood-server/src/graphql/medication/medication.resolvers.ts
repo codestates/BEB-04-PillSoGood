@@ -4,6 +4,7 @@ import { createLog } from "../../utils/log"
 
 const Medication = require("../../models/medication")
 const moment = require("moment")
+const User = require("../../models/user")
 
 type medication = {
     _id:String,
@@ -32,6 +33,7 @@ export default {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
 
+            
             createLog("createMedicationRecord", userInfo._id)
 
             const newMedication = new Medication()
@@ -42,7 +44,14 @@ export default {
             newMedication.userId = userInfo._id
             
             const res = await newMedication.save()
-            if(!res) return status.SERVER_ERROR
+            
+            const findUser = await User.findOne({_id:userInfo._id})
+            const previousBalance = findUser.pointBalance
+            const currentBalance = Number(previousBalance+10)
+            const newData = { pointBalance: currentBalance }               // 제공할 포인트 점수
+            const res2 = await User.updateOne({_id:userInfo._id}, newData) // 업데이트 하기 
+    
+            if(!res || !res2) return status.SERVER_ERROR
             return status.SUCCESS
         },
         async  updateMedicationRecord(_:any, args:  {jwt:string, _id:string, medicine:String,  condition:String}) {

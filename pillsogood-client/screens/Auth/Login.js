@@ -3,17 +3,16 @@ import styled from "styled-components/native";
 import { BASE_COLOR } from "../../colors";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import { LOGIN } from "../../src/query/MutationQuery";
-import { useDispatch, useSelector } from "react-redux";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch, useSelector } from "react-redux";
 import { loginActions } from "../../src/store/loginSlice";
-
+import { useNavigation } from "@react-navigation/native";
 const Container = styled.View`
   background-color: ${BASE_COLOR};
   flex: 1;
   align-items: center;
   color: black;
-
   padding: 60px 20px;
 `;
 const TextInputs = styled.TextInput`
@@ -35,7 +34,6 @@ const LoginBtn = styled.TouchableOpacity`
   border-color: rgba(255, 255, 255, 0.5);
   justify-content: center;
   align-items: center;
-
   background-color: #202d35;
 `;
 const BtnText = styled.Text`
@@ -62,6 +60,7 @@ const BtnTxt = styled.Text`
 `;
 
 const Login = ({ navigation: { navigate } }) => {
+  const navigation = useNavigation();
   let state = useSelector((state) => state.login); //redux store의 state꺼내는법
   const dispatch = useDispatch();
   //참고사항 state= store안에 있는 모든 state
@@ -81,7 +80,7 @@ const Login = ({ navigation: { navigate } }) => {
     console.log(hi);
   };
 
-  const handleClick = ({ navigation: { navigate } }) => {
+  const handleClick = () => {
     let Token;
     const loginVariables = login({
       variables: {
@@ -101,17 +100,18 @@ const Login = ({ navigation: { navigate } }) => {
         Alert.alert("로그인완료");
         setEmail("");
         setPassword("");
-        Token = AsyncStorage.getItem("token", appdata.data.login.jwt); //로컬에 jwt 토큰 저장
-        dispatch(loginActions(setToken(Token))); //전역 state에 jwt저장
-        navigate("Home"); //로그인완료 후 Home으로 이동
+
+        AsyncStorage.setItem("token", appdata.data.login.jwt); //로컬에 jwt 토큰 저장
+        Token = appdata.data.login.jwt;
+
+        dispatch(loginActions.setToken(Token)); //전역 state에 jwt저장
+        navigation.navigate("Tabs"); //로그인완료 후 Home으로 이동
       }
     });
   };
 
   const onSubmitEmailEditing = () => {
     passwordInput.current.focus();
-
-    console.log("focus password");
   };
 
   return (

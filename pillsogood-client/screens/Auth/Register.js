@@ -6,6 +6,7 @@ import Multiselect from "../../src/utils/Multiselect";
 import DateTime from "../../src/utils/DateTime";
 import { useMutation } from "@apollo/client";
 import { SIGN_UP } from "../../src/query/MutationQuery";
+import { useNavigation } from "@react-navigation/native";
 const Container = styled.View`
   background-color: ${BASE_COLOR};
   flex: 1;
@@ -41,6 +42,7 @@ const BtnText = styled.Text`
 `;
 const Register = () => {
   // const user = useSelector((state) => state.user.value)
+  const navigation = useNavigation();
   const passwordInput = useRef();
   const emailInput = useRef();
   const passwordCheckInput = useRef();
@@ -62,9 +64,9 @@ const Register = () => {
   const onSubmitPasswordCheckEditing = () => {
     passwordCheckInput.current.focus();
   };
-  const onComplete = ({ navigation: { navigate } }) => {
+  const onComplete = () => {
     if (!complete) {
-      navigate("Login", { screen: Login });
+      navigation.navigate("Login");
       Alert.alert("Account created! Log in now");
     }
     if (complete) {
@@ -76,7 +78,7 @@ const Register = () => {
       return;
     }
     try {
-      setComplete(true);
+      setComplete(false);
       console.log(
         name,
         value,
@@ -99,8 +101,8 @@ const Register = () => {
       });
       onComplete();
     } catch (err) {
-      console.log(err);
-      setComplete(false);
+      console.log(err.stack);
+      setComplete(true);
       Alert.alert("회원가입에 실패했습니다!");
     }
   };

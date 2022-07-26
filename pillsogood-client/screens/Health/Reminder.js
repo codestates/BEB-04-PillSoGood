@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Button } from "react-native";
 import DatePicker from "react-native-date-picker";
+import styled from "styled-components/native";
+import { BASE_COLOR } from "../../colors";
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return " ";
 
@@ -56,10 +58,30 @@ String.prototype.zf = function (len) {
 Number.prototype.zf = function (len) {
   return this.toString().zf(len);
 };
-
+const ReminderContainer = styled.View`
+  background-color: ${BASE_COLOR};
+  flex: 1;
+  align-items: center;
+  color: black;
+  padding: 30px 20px;
+`;
+const PillTxtInput = styled.TextInput`
+  font-size: 16;
+`;
+const PillTxt = styled.Text`
+  font-size: 16;
+`;
+const PillBtn = styled.Button``;
 const Reminder = () => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
+  const [medicine, setMedicine] = useState("");
+  const [pillscale, setPillscale] = useState(0);
+  const [pillmatadata, setPillmetadata] = useState({
+    medicine,
+    pillscale,
+    date,
+  });
   console.log(date);
 
   const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
@@ -67,7 +89,29 @@ const Reminder = () => {
   const kr_curr = new Date(utc + KR_TIME_DIFF);
 
   return (
-    <>
+    <ReminderContainer>
+      <PillTxt>약 이름을 입력해주세요</PillTxt>
+      <PillTxtInput
+        placeholder="약 이름"
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="default"
+        value={medicine}
+        returnKeyType="next"
+        onChangeText={(text) => setPill(text)}
+        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+      />
+      <PillTxt>하루에 몇번 먹어야 하나요?</PillTxt>
+      <PillTxtInput
+        placeholder="오늘 먹는 약 횟수"
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="number-pad"
+        value={pillscale}
+        returnKeyType="next"
+        onChangeText={(text) => setMedicine(text)}
+        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+      />
       <Button title="약 언제 먹을래요?" onPress={() => setOpen(true)} />
       <DatePicker
         modal
@@ -84,7 +128,8 @@ const Reminder = () => {
           setOpen(false);
         }}
       />
-    </>
+      <Button title="알람 입력" onPress={() => setOpen(true)} />
+    </ReminderContainer>
   );
 };
 export default Reminder;

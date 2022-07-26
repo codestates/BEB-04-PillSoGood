@@ -11,8 +11,6 @@ import {
 import Swiper from "react-native-web-swiper";
 import { BASE_COLOR } from "../../../colors";
 
-//  import { NFTStorage } from "nft.storage";
-
 // 0번째 이슈 : 이미지 뽑고 나서 단일 이미지만 보여야 하는데 여러 이미지가 같이 보임 ---- 대충 해결? random Num이 9까지 생성되는데 샘플 리스트는 9미만 이엇음
 // 1번째 이슈 : result에 배열을 담아와도 maps를 사용 못함. 직접 변수 list를 선언하여 maps를 돌릴 때는 정상 진행; --- 해결. Loading 순서 바뀜
 // 2. 캐릭터 뽑으면 해당 url을 서버에 mutation 요청 필요.
@@ -24,45 +22,13 @@ import { BASE_COLOR } from "../../../colors";
 
 // 7/25 이슈 및 구현 필요사항
 // 1.setRandomImg 먹통
-// 2. Nft.storage 사용 불가
+// 2. Nft.storage 사용 불가 . Pinata ? --- node.js 환경에서 사용 가능.. 즉슨 서버쪽에서 구현 필요?
 // 3. 작명하기 버튼 클릭시 서버에 mutation 필요
 // 4. css 수정
 
-const Text = styled.Text``;
-
-const Header = styled.Text`
-  color: black;
-  font-size: 12px;
-  font-weight: 600;
-  margin-left: 10px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  text-align: center;
-`;
-
-const Middle = styled.Text`
-  color: black;
-  font-size: 18px;
-  font-weight: 600;
-  margin-left: 10px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  text-align: center;
-`;
-
-const MidText = styled.Text`
-  margin-top: 50px;
-  justify-content: center;
-  text-align: center;
-`;
-
-const Container = styled.ScrollView`
-  background-color: ${BASE_COLOR};
-`;
-
-const View = styled.View`
-  flex: 1;
-`;
+// 해야할 것 :
+// 1. Mutation
+// 2. CSS
 
 const Loader = styled.View`
   flex: 1;
@@ -71,24 +37,52 @@ const Loader = styled.View`
   background-color: ${BASE_COLOR};
 `;
 
+const Container = styled.ScrollView`
+  background-color: ${BASE_COLOR};
+`;
+
+const HeaderView = styled.View`
+  background-color: #fefbea;
+  flex: 1;
+`;
+const Header = styled.Text`
+  color: #696969;
+  font-size: 20px;
+  margin-left: 10px;
+  margin-top: 22px;
+  margin-bottom: 22px;
+  text-align: center;
+  font-weight: 900;
+  text-shadow: 1px 1px 2px papayawhip;
+`;
+
+const View = styled.View`
+  flex: 1;
+  border: 2px solid;
+  border-color: #99c49e;
+`;
+
 const BgImg = styled.Image`
   flex: 1;
 `;
 
-const BgImg2 = styled.Image`
-  width: 320px;
-  height: 320px;
-  border-radius: 5px;
-  background-color: rgba(255, 255, 255, 0.5);
-  justify-content: center;
-  align-items: center;
+const MidView = styled.View`
+  background-color: #ffffed;
+  flex: 1;
+  border: 1px solid;
+  border-color: #8fc9a3;
+  border-radius: 3px;
 `;
 
-const Selected = styled.Image`
-  flex: 1;
-  border-radius: 20px;
-  margin-left: 50px;
-  margin-right: 50px;
+const MidText = styled.Text`
+  margin-top: 40px;
+  margin-bottom: 30px;
+  justify-content: center;
+  text-align: center;
+  font-size: 16px;
+  color: #696969;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px papayawhip;
 `;
 
 const Button = styled.TouchableOpacity`
@@ -109,8 +103,57 @@ const BtnText = styled.Text`
   text-align: center;
 `;
 
-const TextInputs = styled.TextInput`
+const BtnView = styled.View`
+  flex: 1;
+  justify-content: center;
+`;
+
+const Text1View = styled.View`
+  flex: 1;
+  background-color: #ffffff7f;
+`;
+const Text1 = styled.Text`
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 16px;
+  color: #696969;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px papayawhip;
+`;
+
+const Text2View = styled.View`
+  flex: 1;
+`;
+
+const Text2 = styled.Text`
+  margin-top: 20px;
+  margin-bottom: 30px;
+  justify-content: center;
+  text-align: center;
+  font-weight: 600;
+  color: #696969;
+`;
+const Bgimg2View = styled.View`
+  flex: 1;
+`;
+
+const BgImg2 = styled.Image`
   width: 100%;
+  height: 250px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  justify-content: center;
+  align-items: center;
+`;
+
+const TextInputView = styled.View`
+  margin-top: 30px;
+  align-items: center;
+`;
+
+const TextInputs = styled.TextInput`
+  width: 90%;
   margin-top: 10px;
   padding: 10px 20px;
   border-radius: 20px;
@@ -126,22 +169,20 @@ const RandomCharacter = () => {
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState([]);
   const [draw, setDraw] = useState(false);
-  const [randomImg, setRandomImg] = useState("");
+  const [randomImg, setRandomImg] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [name, setName] = useState("");
-  console.log("randomImg:", randomImg);
   const [description, setDescription] = useState("");
   const [metadata, setMetadata] = useState("");
 
   const getImage2 = async () => {
-    // 1번째 이슈 : result에 배열을 담아와도 maps를 사용 못함. 직접 변수 list를 선언하여 maps를 돌릴 때는 정상 진행;
+    // 1번째 이슈 : result에 배열을 담아와도 maps를 사용 못함. 직접 변수 list를 선언하여 maps를 돌릴 때는 정상 진행; --- 해결
 
     const res = await fetch(
       "https://gateway.pinata.cloud/ipfs/QmfExvMdoWcQMNihsexYLfaCaGGQjFw851NiFwn1Hy9LaK"
     );
     const json = await res.json();
     setResult(json);
-    console.log(result);
     setLoading(false);
   };
 
@@ -150,25 +191,22 @@ const RandomCharacter = () => {
   }, []);
 
   const Draw = () => {
-    // 버튼 누르면 로딩 애니메이션 뜨고 5초 뒤에 랜덤 뽑기 실행
-
+    // 버튼 누르면 로딩 애니메이션 뜨고 3초 뒤에 랜덤 뽑기 실행
+    setDraw(true);
     console.log(draw);
-    const randomNumber = Math.floor(Math.random() * 10); // 10 이하의 랜덤 넘버 생성. 인덱스로 들어갈 예정
-    console.log(randomNumber);
-
-    const pic = result[randomNumber];
-    const picJson = JSON.stringify(pic);
-    console.log(picJson, "picJson");
-
     try {
       setTimeout(() => {
         // 3초 뒤 랜덤 뽑기 실행
         // URL에서 받아온 이미지 데이터의 랜덤 인덱스값으로 RandomImg값 변경
-        setRandomImg(picJson);
+        const randomNumber = Math.floor(Math.random() * 10); // 10 이하의 랜덤 넘버 생성. 인덱스로 들어갈 예정
+        console.log(randomNumber);
+        const pic = result[randomNumber];
+        console.log("pic:", pic);
+        setRandomImg([pic]);
+
         console.log("setTimeOut console:", randomImg);
         Alert.alert(" 캐릭터를 생성했습니다!");
       }, 3000);
-      setDraw(true);
     } catch (e) {
       console.error(e);
     }
@@ -180,29 +218,13 @@ const RandomCharacter = () => {
   };
 
   const Write = () => {};
+
   const onRefresh = () => {
     setRefreshing(true);
     setDraw(false);
     setRefreshing(false);
     setRandomImg([]);
   };
-
-  // const characterIssue = async () => {
-  //   try {
-  //     const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDQyM2JlNzc4ZDE5RTQ2NzI0ZjI4QThlYUFhMUI4MTAxZEY3ODY4ZTUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1ODcxMzQ4MzQ4MSwibmFtZSI6InRlc3QxIn0.cHAy-MaOtNd50WU-ww799_PkrDdHsghRms98FAycd2Q"
-  //     const client = new NFTStorage({ token: apiKey})
-
-  //     metadata = await client.store({
-  //       name: name,
-  //       description: description,
-  //       image: randomImg
-  //     })
-  //     setMetadata(metadata)
-  //   }
-  //   catch (e) {
-  //     console.error(e)
-  //   }
-  // }
 
   return loading ? (
     <Loader>
@@ -214,7 +236,9 @@ const RandomCharacter = () => {
         <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
       }
     >
-      <Header> 캐릭터 리스트 </Header>
+      <HeaderView>
+        <Header> 캐릭터 리스트 </Header>
+      </HeaderView>
       <Swiper
         loop
         timeout={3.5}
@@ -229,9 +253,9 @@ const RandomCharacter = () => {
       </Swiper>
 
       {draw === false ? (
-        <View>
+        <MidView>
           <MidText>캐릭터를 뽑으시려면 버튼을 클릭해주세요</MidText>
-        </View>
+        </MidView>
       ) : (
         <Swiper
           loop
@@ -246,10 +270,11 @@ const RandomCharacter = () => {
           ))}
         </Swiper>
       )}
-
-      <Button>
-        <BtnText onPress={Draw}>뽑기</BtnText>
-      </Button>
+      <BtnView>
+        <Button>
+          <BtnText onPress={Draw}>뽑기</BtnText>
+        </Button>
+      </BtnView>
     </Container>
   ) : (
     <Container
@@ -257,34 +282,42 @@ const RandomCharacter = () => {
         <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
       }
     >
-      <View>
-        <Text>당신의 캐릭터를 환영해주세요</Text>
-      </View>
-      <BgImg2 source={{ uri: randomImg }} />
-      <Text> 캐릭터를 다시 뽑으시려면 화면을 스크롤해 새로고침 해주세요 </Text>
-      <TextInputs
-        placeholder="캐릭터 이름을 지어주세요"
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="default"
-        value={name}
-        returnKeyType="next"
-        onChangeText={(text) => setName(text)}
-        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-      />
-      <TextInputs
-        placeholder="간단한 설명을 입력해주세요"
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="default"
-        value={description}
-        returnKeyType="next"
-        onChangeText={(text) => setDescription(text)}
-        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-      />
+      <Text1View>
+        <Text1>당신의 캐릭터를 환영해주세요</Text1>
+      </Text1View>
+      <Text2View>
+        <Text2>
+          캐릭터를 다시 뽑으시려면 화면을 스크롤해 새로고침 해주세요
+        </Text2>
+      </Text2View>
+      <Bgimg2View>
+        <BgImg2 source={{ uri: randomImg[0] }} />
+      </Bgimg2View>
+      <TextInputView>
+        <TextInputs
+          placeholder="캐릭터 이름을 지어주세요"
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="default"
+          value={name}
+          returnKeyType="next"
+          onChangeText={(text) => setName(text)}
+          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+        />
+        <TextInputs
+          placeholder="간단한 설명을 입력해주세요"
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="default"
+          value={description}
+          returnKeyType="next"
+          onChangeText={(text) => setDescription(text)}
+          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+        />
+      </TextInputView>
 
       <Button>
-        <BtnText onPress={Write}>작명하기</BtnText>
+        <BtnText onPress={Write}>생성하기</BtnText>
       </Button>
     </Container>
   );

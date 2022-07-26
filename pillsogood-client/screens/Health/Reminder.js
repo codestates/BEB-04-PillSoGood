@@ -3,13 +3,6 @@ import styled from "styled-components/native";
 import { BASE_COLOR } from "../../colors";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import RNTextDetector from "rn-text-detector";
-import {
-  Button,
-  View,
-  Image,
-  SafeAreaView,
-  TouchableOpacity,
-} from "react-native";
 import DatePicker from "react-native-date-picker";
 
 Date.prototype.format = function (f) {
@@ -81,7 +74,11 @@ const PillTxtInput = styled.TextInput`
 const PillTxt = styled.Text`
   font-size: 16;
 `;
+const ViewRN = styled.View``;
 const PillBtn = styled.Button``;
+const Touch = styled.TouchableOpacity``;
+
+const Imges = styled.Image``;
 const Reminder = () => {
   const [response, setResponse] = useState(null);
   const [date, setDate] = useState(new Date());
@@ -107,7 +104,7 @@ const Reminder = () => {
     launchImageLibrary();
   };
   //////////////////////////////////////////////////////////////
-  function onPress() {
+  function onPress(type) {
     setState({ ...state, loading: true });
     type === "capture"
       ? launchCamera({ mediaType: "image" }, onImageSelect)
@@ -182,40 +179,37 @@ const Reminder = () => {
           setOpen(false);
         }}
       />
-      <SafeAreaView style={{ flex: 1 }}>
-        <View>
-          <Text>RN OCR SAMPLE</Text>
-          <View>
-            <TouchableOpacity onPress={() => onPress("capture")}>
-              <Text>Take Photo</Text>
-            </TouchableOpacity>
-            <View>
-              <TouchableOpacity onPress={() => onPress("library")}>
-                <Text>Pick a Photo</Text>
-              </TouchableOpacity>
-            </View>
-            <View>
-              <WrapLoading loading={state.loading}>
-                <View>
-                  <Image source={{ uri: state.image }} />
-                </View>
-                {!!state.textRecognition &&
-                  state.textRecognition.map((item, i) => (
-                    <Text key={i}>{item.text}</Text>
-                  ))}
-              </WrapLoading>
-            </View>
-          </View>
-          {state.toast.isVisible &&
-            ToastAndroid.showWithGravityAndOffset(
-              state.toast.message,
-              ToastAndroid.LONG,
-              ToastAndroid.BOTTOM,
-              25,
-              50
-            )}
-        </View>
-      </SafeAreaView>
+
+      <ViewRN>
+        <PillTxt>RN OCR SAMPLE</PillTxt>
+        <ViewRN>
+          <Touch onPress={() => onPress("capture")}>
+            <PillTxt>Take Photo</PillTxt>
+          </Touch>
+          <ViewRN>
+            <Touch onPress={() => onPress("library")}>
+              <PillTxt>Pick a Photo</PillTxt>
+            </Touch>
+          </ViewRN>
+          <ViewRN>
+            <ViewRN>
+              <Imges source={{ uri: state.image }} />
+            </ViewRN>
+            {!!state.textRecognition &&
+              state.textRecognition.map((item, i) => (
+                <PillTxt key={i}>{item.text}</PillTxt>
+              ))}
+          </ViewRN>
+        </ViewRN>
+        {state.toast.isVisible &&
+          ToastAndroid.showWithGravityAndOffset(
+            state.toast.message,
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50
+          )}
+      </ViewRN>
     </ReminderContainer>
   );
 };

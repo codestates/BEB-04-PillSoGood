@@ -5,7 +5,7 @@ import { createLog } from "../../utils/log"
 const User = require("../../models/user")
 const moment = require("moment")
 type user = {
-    _id: number
+    _id: string
     email: string
     password: string
     nickname: string
@@ -28,10 +28,10 @@ export default {
         async getUserInfo(_:any, args:{jwt:string, _id:string}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
-
-            if(args._id !== null) {
+            
+            if(args._id !== null && args._id !== undefined) {
                 let user = await User.findOne({
-                    _id:userInfo._id
+                    _id:args._id
                 })
                 return user
             }

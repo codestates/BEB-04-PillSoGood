@@ -4,6 +4,7 @@ import { createLog } from "../../utils/log"
 
 const Prescription = require("../../models/prescription")
 const moment = require("moment")
+const User = require("../../models/user")
 
 type prescription = {
     _id:String,
@@ -38,7 +39,7 @@ export default {
             lastMedicationCount:Number}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
-
+            
             createLog("createPrescriptionRecord", userInfo._id)
 
             const newPrescription = new Prescription()
@@ -51,7 +52,13 @@ export default {
             newPrescription.userId = userInfo._id
             
             const res = await newPrescription.save()
-            if(!res) return status.SERVER_ERROR
+            const findUser = await User.findOne({_id:userInfo._id})
+            const previousBalance = findUser.pointBalance
+            const currentBalance = Number(previousBalance+10)
+            const newData = { pointBalance: currentBalance }               // 제공할 포인트 점수
+            const res2 = await User.updateOne({_id:userInfo._id}, newData) // 업데이트 하기 
+    
+            if(!res || !res2) return status.SERVER_ERROR
             return status.SUCCESS
         },
         async  updatePrescriptionRecord(_:any, args:  

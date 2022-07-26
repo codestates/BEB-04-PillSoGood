@@ -11,6 +11,8 @@ dotenv.config();
 declare let process : {
   env : {
     MONGODB_URL : string;
+    KAS_ACCESSKEY_ID : string;
+    KAS_SECRET_ACCESS_KEY : string;
   }} 
 
 const PILL_SO_GOOD_SERVER_PORT = 4000;
@@ -40,6 +42,7 @@ agenda.define("push", function (job, done) {
 agenda.on('ready', () => {
   agenda.every("3 seconds", "push", { by: "chris" });
   agenda.start();
+
 });}
 
 async function initApolloServer() {

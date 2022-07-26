@@ -1,5 +1,20 @@
 import React, { useState } from "react";
-import { Button } from "react-native";
+import styled from "styled-components/native";
+import { BASE_COLOR } from "../../colors";
+import Lottie from "lottie-react-native";
+
+import {
+  Button,
+  View,
+  Text,
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import DatePicker from "react-native-date-picker";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../../colors";
@@ -88,6 +103,67 @@ const Reminder = () => {
   const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
   const kr_curr = new Date(utc + KR_TIME_DIFF);
 
+  const Container = styled.View`
+    background-color: ${BASE_COLOR};
+    flex: 1;
+    color: black;
+  `;
+
+  const Btn = styled.TouchableOpacity`
+    width: 100%;
+    padding: 10px;
+    border-width: 1px;
+    border-radius: 50px;
+    border-color: rgba(255, 255, 255, 0.5);
+    justify-content: space-between;
+    background-color: #202d35;
+  `;
+  const BtnText = styled.Text`
+    color: white;
+    font-size: 14px;
+    text-align: center;
+  `;
+  const HeadTxt = styled.Text`
+    color: #76a991;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 30px 10px 0px 20px;
+  `;
+  const SubTxt = styled.Text`
+    color: white;
+    font-size: 19px;
+    font-weight: bold;
+    margin-top: -30px;
+    margin-left: 10px;
+  `;
+
+  const Whenbtn = styled.Button`
+    color: black;
+    font-size: 19px;
+    font-weight: bold;
+  `;
+  const Rewardtxt = styled.Text`
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+  `;
+  const Titletxt = styled.Text`
+    background-color: ${BASE_COLOR};
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 30px;
+  `;
+
+  const Inner = styled.View`
+    background-color: white;
+    flex: 1;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    margin-top: 50px;
+    padding: 20px;
+  `;
   return (
     <ReminderContainer>
       <PillTxt>약 이름을 입력해주세요</PillTxt>

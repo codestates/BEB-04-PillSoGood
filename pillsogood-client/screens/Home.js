@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../colors";
-
 // import { set } from "immer/dist/internal";
 
 const Container = styled.View`
@@ -26,16 +25,16 @@ const Header = styled.View`
 `;
 const HeadTxt = styled.Text`
   color: #76a991;
-  font-size: 30px;
+  font-size: 40px;
   font-weight: bold;
-  text-shadow: 1px 3px 3px papayawhip;
+  text-shadow: 1px 3px 3px white;
 `;
 const MainTxt = styled.Text`
   color: "rgba(255, 255, 255, 0.7)";
   font-size: 15px;
   font-weight: bold;
-  padding-left: 5px;
-  margin-top: -30px;
+  padding-left: 20px;
+  margin-top: -25px;
 `;
 const Card = styled.View`
   flex: 0.3;
@@ -55,7 +54,7 @@ const Cardtxt = styled.Text`
 const Btn = styled.TouchableOpacity`
   margin-top: 40px;
   width: 100%;
-  padding: 10px;
+  padding: 10px 
   border-width: 1px;
   border-radius: 50px;
   border-color: rgba(255, 255, 255, 0.5);
@@ -69,7 +68,7 @@ const BtnText = styled.Text`
 `;
 const AlarmBtn = styled.TouchableOpacity`
   width: 100%;
-  padding: 10px;
+  padding: 10px 
   border-radius: 25px;
   border-color: rgba(255, 255, 255, 0.5);
   background-color: #76a991;

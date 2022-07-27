@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../../colors";
-import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import DatePicker from "react-native-date-picker";
 import ImagePickerComponent from "../../src/utils/ImagePickerComponent";
 import callGoogleVisionAsync from "../../src/utils/helperFunctions";
-
+const moment = require("moment");
 import { Dimensions } from "react-native";
 import { useSelector } from "react-redux";
-import { SuccessModal } from "../../src/components/SuccessModal";
-import { FailModal } from "../../src/components/FailModal";
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return " ";
 
@@ -75,43 +72,59 @@ const ReminderContainer = styled.View`
   padding: 0px 20px;
 `;
 const HeadTxt = styled.Text`
-  color: #76a991;
-  font-size: 30px;
+  color: #202d35;
+  font-size: 20px;
   font-weight: bold;
   margin: 10px 10px 0px 20px;
 `;
 const HeadWapper = styled.View`
-  flex: 1;
+  flex: 0.1;
+  background-color: #ffffff7f;
+  border-radius: 20px;
+  padding: 20px;
+  width: ${SCREEN_WIDTH * 0.7};
+  padding-top: -10px;
+  margin-top: 5px;
+  margin-bottom: -10px;
+  align-items: center;
 `;
 
 const SubTxt = styled.Text`
   color: #202d35;
-  font-size: 19px;
+  font-size: 15px;
   font-weight: bold;
-  margin-top: -30px;
+  margin-top: -20px;
   margin-left: 10px;
   margin-bottom: 10px;
 `;
-const PillTxtInput = styled.TextInput`
-  font-size: 16;
-`;
+
 const PillTxt = styled.Text`
   font-size: 16;
 `;
-const ViewRN = styled.View`
-  flex-direction: row;
+const PillVerifyTxt = styled.Text`
+  font-size: 16;
+  margin-top: -10px;
+  margin-bottom: -40px;
 `;
-const PillBtnTxt = styled.Text`
-  color: #fff;
-`;
-const Btn = styled.Button``;
 
+const Btn = styled.Button``;
+const DateTxt = styled.Text`
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: black;
+  background-color: #ffffff7f;
+  font-size: 16px;
+`;
 const Titletxt = styled.Text`
   background-color: ${BASE_COLOR};
   color: #202d35;
   font-size: 16px;
   font-weight: bold;
-  margin-top: 30px;
+  margin-top: -10px;
 `;
 const TextInputs = styled.TextInput`
   width: 100%;
@@ -124,21 +137,38 @@ const TextInputs = styled.TextInput`
   background-color: #ffffff7f;
 `;
 const Inner = styled.View`
-  flex: 5;
+  flex: 1;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   width: ${SCREEN_WIDTH * 0.8};
   padding: 20px;
 `;
+const VerifyWrapper = styled.View`
+  width: 50%;
+`;
+const VerifyContainer = styled.View`
+  flex-direction: row;
+  width: 100%;
+`;
+
+const SubmitAlarm = styled.View`
+  margin-top: 10px;
+  flex: 1;
+  height: 50%;
+  vertical-align: text-top;
+  justify-content: center;
+  align-items: center;
+`;
+const SubmitTxt = styled.Button``;
 const Reminder = () => {
   let verifying = useSelector((state) => state.verify.verify);
-  let modalopend = useSelector((state) => state.verify.modalopend);
   const [response, setResponse] = useState(null);
-
+  const [times, setTimes] = useState("");
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [medicine, setMedicine] = useState("");
   const [pillscale, setPillscale] = useState(0);
+  const [pillday, setPillday] = useState(0);
   const [pillmatadata, setPillmetadata] = useState({
     medicine,
     pillscale,
@@ -148,80 +178,81 @@ const Reminder = () => {
   console.log(date);
   console.log(verifying, "verifying");
   //////////////////////////////////////////////////////////////
-
+  const setVerify = verifying.toString();
   const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
   const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
   const kr_curr = new Date(utc + KR_TIME_DIFF);
-
+  const time = moment(kr_curr).format("MM-DD dddd HH:mm");
   return (
     <ReminderContainer>
-      {verifying !== false ? (
-        <>
-          (
-          <HeadWapper>
-            <HeadTxt>약 복용 입력</HeadTxt>
-          </HeadWapper>
-          <SubTxt>복용 알람을 등록하세요</SubTxt>
-          <Inner>
-            <Titletxt>약 이름을 입력해주세요</Titletxt>
-            <TextInputs
-              placeholder="약 이름"
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="default"
-              value={medicine}
-              returnKeyType="next"
-              onChangeText={(text) => setPill(text)}
-              placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-            />
-            <PillTxt>하루에 몇번 먹어야 하나요?</PillTxt>
-            <TextInputs
-              placeholder="오늘 먹는 약 횟수"
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="number-pad"
-              value={pillscale}
-              returnKeyType="next"
-              onChangeText={(text) => setMedicine(text)}
-              placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-            />
-            <Btn
-              title="약은 언제 드시나요?"
-              onPress={() => setOpen(true)}
-            ></Btn>
-            <DatePicker
-              modal
-              locale="ko"
-              androidVariant="nativeAndroid"
-              textColor="black"
-              open={open}
-              date={date}
-              onConfirm={(date) => {
-                setOpen(false);
-                setDate(data);
-              }}
-              onCancel={() => {
-                setOpen(false);
-              }}
-            />
-            {date.length == 0
-              ? date.map((item, key) => {
-                  <PillTxt key={key}>{item}</PillTxt>;
-                })
-              : null}
-          </Inner>
-          )
-        </>
-      ) : (
-        <>
-          {!modalopend ? <SuccessModal /> : <FailModal />}
-          <HeadWapper>
-            <HeadTxt>약 봉투 검증</HeadTxt>
-          </HeadWapper>
-          <SubTxt>복용 알람을 등록하세요</SubTxt>
-          <ImagePickerComponent onSubmit={callGoogleVisionAsync} />
-        </>
-      )}
+      <HeadWapper>
+        <HeadTxt>알람등록하기</HeadTxt>
+      </HeadWapper>
+      <SubTxt>복용 알람을 등록하세요</SubTxt>
+      <Inner>
+        <Titletxt>약 이름을 입력해주세요</Titletxt>
+        <TextInputs
+          placeholder="약 이름"
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="default"
+          value={medicine}
+          returnKeyType="next"
+          onChangeText={(text) => setPill(text)}
+          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+        />
+        <PillTxt>하루에 몇 번 먹어야 하나요?</PillTxt>
+        <TextInputs
+          placeholder="하루에 먹는 약 개수"
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="number-pad"
+          value={pillscale}
+          returnKeyType="next"
+          onChangeText={(text) => setPillscale(text)}
+          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+        />
+        <PillTxt>몇 일 동안 약을 드시나요?</PillTxt>
+        <TextInputs
+          placeholder=" 먹는 약 일수"
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="number-pad"
+          value={pillday}
+          returnKeyType="next"
+          onChangeText={(text) => setPillday(text)}
+          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+        />
+        <Btn title="약은 언제 드시나요?" onPress={() => setOpen(true)}></Btn>
+        <DatePicker
+          modal
+          locale="ko"
+          androidVariant="nativeAndroid"
+          textColor="black"
+          open={open}
+          date={date}
+          onConfirm={(date) => {
+            setOpen(false);
+            setDate(date);
+            setDate(kr_curr);
+            setTimes(time);
+            console.log(date);
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
+        <DateTxt>설정한 시간:{times}</DateTxt>
+        <VerifyContainer>
+          <VerifyWrapper>
+            <ImagePickerComponent onSubmit={callGoogleVisionAsync} />
+            <PillVerifyTxt>검증상태 :{setVerify}</PillVerifyTxt>
+          </VerifyWrapper>
+          <SubmitAlarm>
+            <SubmitTxt title="알람 등록"></SubmitTxt>
+          </SubmitAlarm>
+        </VerifyContainer>
+      </Inner>
     </ReminderContainer>
   );
 };

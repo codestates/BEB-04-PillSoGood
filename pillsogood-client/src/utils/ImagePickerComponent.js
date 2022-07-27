@@ -1,10 +1,14 @@
 import * as ImagePicker from "expo-image-picker";
 import React, { useState, useEffect } from "react";
-import { Button, Image, View, Text } from "react-native";
-
+import styled from "styled-components/native";
 import { useDispatch, useSelector } from "react-redux";
-import { modalActions } from "../store/modalSlice";
-
+import { verifyActions } from "../store/visionVerifySlice";
+const ImagePickView = styled.View`
+  width: 100%;
+  height: 80px;
+  padding-top: 30px;
+`;
+const ImageBtn = styled.Button``;
 function ImagePickerComponent({ onSubmit }) {
   let username = useSelector((state) => state.login.nickname);
   const [image, setImage] = useState(null);
@@ -28,15 +32,15 @@ function ImagePickerComponent({ onSubmit }) {
       setText(responseData.text); //change the value of this Hook again.
     }
     if (text.includes(username)) {
-      dispatch(modalActions.setModalOpen(true)); //success modal 열림
+      dispatch(verifyActions.setVerify(true)); //검증성공
     } else {
-      dispatch(modalActions.setModalOpen(false)); //fail modal 열림
+      dispatch(verifyActions.setVerify(false)); //검증실패
     }
   };
   return (
-    <View>
-      <Button title="약 봉투를 찍어주세요!" onPress={pickImage} />
-    </View>
+    <ImagePickView>
+      <ImageBtn title="약 봉투를 찍어주세요!" onPress={pickImage} />
+    </ImagePickView>
   );
 }
 export default ImagePickerComponent;

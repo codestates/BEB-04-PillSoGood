@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { registerSlice } from "./registerSlice";
 import { loginSlice } from "./loginSlice";
-import { modalSlice } from "./modalSlice";
+import { verifySlice } from "./visionVerifySlice";
 export const store = configureStore({
   reducer: {
     register: registerSlice.reducer,
     login: loginSlice.reducer,
-    verify: modalSlice.reducer,
+    verify: verifySlice.reducer,
   },
 });
 

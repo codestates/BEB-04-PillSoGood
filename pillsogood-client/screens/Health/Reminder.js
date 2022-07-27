@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
-const jwt = require("jsonwebtoken");
 import { BASE_COLOR } from "../../colors";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import DatePicker from "react-native-date-picker";
@@ -9,6 +8,8 @@ import callGoogleVisionAsync from "../../src/utils/helperFunctions";
 
 import { Dimensions } from "react-native";
 import { useSelector } from "react-redux";
+import { SuccessModal } from "../../src/components/SuccessModal";
+import { FailModal } from "../../src/components/FailModal";
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return " ";
 
@@ -130,10 +131,10 @@ const Inner = styled.View`
   padding: 20px;
 `;
 const Reminder = () => {
-  let accessToken = useSelector((state) => state.token);
-
-  const decodedToken = jwt.verify(accessToken, process.env.ACCESS_SECRET);
+  let verifying = useSelector((state) => state.verify.verify);
+  let modalopend = useSelector((state) => state.verify.modalopend);
   const [response, setResponse] = useState(null);
+
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [medicine, setMedicine] = useState("");
@@ -145,7 +146,7 @@ const Reminder = () => {
   });
 
   console.log(date);
-  console.log(decodedToken, "token");
+  console.log(verifying, "verifying");
   //////////////////////////////////////////////////////////////
 
   const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
@@ -154,58 +155,73 @@ const Reminder = () => {
 
   return (
     <ReminderContainer>
-      <HeadWapper>
-        <HeadTxt>약 복용 입력</HeadTxt>
-      </HeadWapper>
-      <SubTxt>복용 알람을 등록하세요</SubTxt>
-      <Inner>
-        <Titletxt>약 이름을 입력해주세요</Titletxt>
-        <TextInputs
-          placeholder="약 이름"
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="default"
-          value={medicine}
-          returnKeyType="next"
-          onChangeText={(text) => setPill(text)}
-          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-        />
-        <PillTxt>하루에 몇번 먹어야 하나요?</PillTxt>
-        <TextInputs
-          placeholder="오늘 먹는 약 횟수"
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="number-pad"
-          value={pillscale}
-          returnKeyType="next"
-          onChangeText={(text) => setMedicine(text)}
-          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-        />
-
-        <ImagePickerComponent onSubmit={callGoogleVisionAsync} />
-        <Btn title="약은 언제 드시나요?" onPress={() => setOpen(true)}></Btn>
-
-        <DatePicker
-          modal
-          locale="ko"
-          androidVariant="nativeAndroid"
-          textColor="black"
-          open={open}
-          date={date}
-          onConfirm={(date) => {
-            setOpen(false);
-            setDate(data);
-          }}
-          onCancel={() => {
-            setOpen(false);
-          }}
-        />
-        {date.length == 0
-          ? date.map((item, key) => {
-              <PillTxt key={key}>{item}</PillTxt>;
-            })
-          : null}
-      </Inner>
+      {verifying !== false ? (
+        <>
+          (
+          <HeadWapper>
+            <HeadTxt>약 복용 입력</HeadTxt>
+          </HeadWapper>
+          <SubTxt>복용 알람을 등록하세요</SubTxt>
+          <Inner>
+            <Titletxt>약 이름을 입력해주세요</Titletxt>
+            <TextInputs
+              placeholder="약 이름"
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="default"
+              value={medicine}
+              returnKeyType="next"
+              onChangeText={(text) => setPill(text)}
+              placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+            />
+            <PillTxt>하루에 몇번 먹어야 하나요?</PillTxt>
+            <TextInputs
+              placeholder="오늘 먹는 약 횟수"
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="number-pad"
+              value={pillscale}
+              returnKeyType="next"
+              onChangeText={(text) => setMedicine(text)}
+              placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+            />
+            <Btn
+              title="약은 언제 드시나요?"
+              onPress={() => setOpen(true)}
+            ></Btn>
+            <DatePicker
+              modal
+              locale="ko"
+              androidVariant="nativeAndroid"
+              textColor="black"
+              open={open}
+              date={date}
+              onConfirm={(date) => {
+                setOpen(false);
+                setDate(data);
+              }}
+              onCancel={() => {
+                setOpen(false);
+              }}
+            />
+            {date.length == 0
+              ? date.map((item, key) => {
+                  <PillTxt key={key}>{item}</PillTxt>;
+                })
+              : null}
+          </Inner>
+          )
+        </>
+      ) : (
+        <>
+          {!modalopend ? <SuccessModal /> : <FailModal />}
+          <HeadWapper>
+            <HeadTxt>약 봉투 검증</HeadTxt>
+          </HeadWapper>
+          <SubTxt>복용 알람을 등록하세요</SubTxt>
+          <ImagePickerComponent onSubmit={callGoogleVisionAsync} />
+        </>
+      )}
     </ReminderContainer>
   );
 };

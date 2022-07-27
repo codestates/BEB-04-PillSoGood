@@ -14,7 +14,10 @@ export default gql`
     }
 
     type Token {
-        jwt:String
+        jwt:String,
+        email: String,
+        nickname: String,
+        _id: String
     }
 
     type Query {

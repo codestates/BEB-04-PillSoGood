@@ -101,7 +101,7 @@ export default {
               {expiresIn:'365d'}
             )
 
-            return {"jwt": accessToken}
+            return {"jwt": accessToken, "email": loginUser.email, "nickname": loginUser.nickname, "_id":loginUser._id}
 
         },
         async updateUserInfo(_:any, args:{jwt:string, nickname:string, password:string, phoneNumber:string, email:string, disease:[number]}) {

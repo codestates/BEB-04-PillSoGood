@@ -1,5 +1,6 @@
 import { applyMiddleware } from 'redux'
 import { configureStore, createSlice } from '@reduxjs/toolkit'
+import { set } from 'immer/dist/internal'
 // let user =createSlice({
 //     name:'state이름',
 //     initialState:'값'
@@ -9,11 +10,13 @@ interface IUser {
   email: string
   password: string
   token: any
+  nickname: string
 }
 const initialState: IUser = {
   email: '',
   password: '',
   token: null,
+  nickname: '',
 }
 export const loginSlice = createSlice({
   name: 'login',
@@ -27,6 +30,9 @@ export const loginSlice = createSlice({
     },
     setToken: (state, action) => {
       state.token = action.payload
+    },
+    setNickname: (state, action) => {
+      state.nickname = action.payload
     },
   },
 })

@@ -54,7 +54,7 @@ const Cardtxt = styled.Text`
 const Btn = styled.TouchableOpacity`
   margin-top: 40px;
   width: 100%;
-  padding: 10px 
+  padding: 10px;
   border-width: 1px;
   border-radius: 50px;
   border-color: rgba(255, 255, 255, 0.5);
@@ -68,7 +68,7 @@ const BtnText = styled.Text`
 `;
 const AlarmBtn = styled.TouchableOpacity`
   width: 100%;
-  padding: 10px 
+  padding: 10px;
   border-radius: 25px;
   border-color: rgba(255, 255, 255, 0.5);
   background-color: #76a991;

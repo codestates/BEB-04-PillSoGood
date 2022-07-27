@@ -10,6 +10,7 @@ type character = {
     userId:string
     name:string
     level:number
+    description: string
 }
 
 export default {
@@ -27,7 +28,7 @@ export default {
         }
     },
     Mutation: {
-        async createCharacter(_:any, args:{jwt:string, name:string, baseId:string}) {
+        async createCharacter(_:any, args:{jwt:string, name:string, baseId:string, description:string}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
 
@@ -38,12 +39,14 @@ export default {
             newCharacter.level = 1
             newCharacter.userId = userInfo._id
             newCharacter.baseId = args.baseId
+            newCharacter.description = args.description
             newCharacter.createdAt = moment().format("YYYY-MM-DD HH:mm:ss")
+
             const res = await newCharacter.save()
             if(!res) return status.SERVER_ERROR
             return status.SUCCESS
         },
-        async updateCharacter(_:any, args:{jwt:string, _id:string, name:string, level:number}){
+        async updateCharacter(_:any, args:{jwt:string, _id:string, name:string, level:number, description:string}){
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
 
@@ -51,7 +54,7 @@ export default {
 
             const res = await Character.updateOne(
                 {_id:args._id, userId:userInfo._id},
-                {name:args.name, level:args.level}
+                {name:args.name, level:args.level, description: args.description}
             )
             if(!res) return status.SERVER_ERROR
             return status.SUCCESS

@@ -5,6 +5,7 @@ const character = new Schema({
     name: String,
     level: Number,
     baseId: String,
+    description: String,
     createdAt: String
 })
 

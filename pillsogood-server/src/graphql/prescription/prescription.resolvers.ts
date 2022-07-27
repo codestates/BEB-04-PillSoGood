@@ -10,7 +10,6 @@ type prescription = {
     _id:String,
         medicine:String,
         alertTime:String,
-        hospital:String,
         lastMedicationCount:Number,
         createdAt:String,
         userId:string
@@ -35,7 +34,6 @@ export default {
             {jwt:string, 
             medicine:String, 
             alertTime:String, 
-            hospital:String, 
             lastMedicationCount:Number}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
@@ -46,7 +44,6 @@ export default {
 
             newPrescription.medicine = args.medicine
             newPrescription.alertTime = args.alertTime
-            newPrescription.hospital = args.hospital
             newPrescription.lastMedicationCount = args.lastMedicationCount
             newPrescription.createdAt =  moment().format("YYYY-MM-DD HH:mm:ss")
             newPrescription.userId = userInfo._id
@@ -66,7 +63,6 @@ export default {
             _id:string, 
             medicine:String,
             alertTime:String,
-            hospital:String,
             lastMedicationCount:Number}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
@@ -77,7 +73,6 @@ export default {
                 {_id:args._id, userId:userInfo._id},
                 {medicine:args.medicine, 
                  alertTime:args.alertTime, 
-                 hospital:args.hospital, 
                  lastMedicationCount:args.lastMedicationCount,
                  createdAt:new Date()})
             if(!res) return status.SERVER_ERROR

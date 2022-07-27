@@ -27,3 +27,43 @@ export const SIGN_UP = gql`
     )
   }
 `;
+
+  export const USERQUERY = gql`
+  query GetUserInfo($jwt: String!) {
+  getUserInfo(jwt: $jwt) {
+    email
+    nickname
+    password
+    dateOfBirth
+    pointBalance
+    _id
+    createdAt
+    disease
+    phoneNumber
+  }
+}
+  `
+
+  export const UserMutation = gql`
+  mutation UpdateUserInfo($jwt: String!, $nickname: String, $password: String, $phoneNumber: String, $email: String, $disease: [Int]) {
+  updateUserInfo(jwt: $jwt, nickname: $nickname, password: $password, phoneNumber: $phoneNumber, email: $email, disease: $disease)
+}`
+
+
+  export const CharQuery = gql`
+  query GetBases($jwt: String!) {
+   getBases(jwt: $jwt) {
+     _id
+     name
+     level
+     imagePath
+   }
+  }
+ `
+
+ 
+  export const CharSubmit = gql`
+  mutation CreateCharacter($jwt: String!, $name: String!, $baseId: String!) {
+   createCharacter(jwt: $jwt, name: $name, baseId: $baseId)
+ }
+  ` 

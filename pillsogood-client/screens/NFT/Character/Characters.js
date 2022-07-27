@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../../../colors";
+import { useMutation, useQuery, gql } from "@apollo/client";
+
 
 // Container가 ScrollView이기 때문에 그냥 View로
 const Container = styled.ScrollView`

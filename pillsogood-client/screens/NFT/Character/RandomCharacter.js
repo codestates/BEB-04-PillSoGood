@@ -10,6 +10,9 @@ import {
 } from "react-native";
 import Swiper from "react-native-web-swiper";
 import { BASE_COLOR } from "../../../colors";
+import { gql, useQuery, useMutation, useLazyQuery } from "@apollo/client";
+import { useSelector } from "react-redux";
+import { LOGIN, USERQUERY, UserMutation, CharQuery, CharSubmit } from "../../../src/query/MutationQuery"
 
 // 0번째 이슈 : 이미지 뽑고 나서 단일 이미지만 보여야 하는데 여러 이미지가 같이 보임 ---- 대충 해결? random Num이 9까지 생성되는데 샘플 리스트는 9미만 이엇음
 // 1번째 이슈 : result에 배열을 담아와도 maps를 사용 못함. 직접 변수 list를 선언하여 maps를 돌릴 때는 정상 진행; --- 해결. Loading 순서 바뀜
@@ -173,23 +176,35 @@ const RandomCharacter = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [metadata, setMetadata] = useState("");
+  const [bal, setBal] = useState("")
+  const jwt = useSelector((state) => state.login.token )
+  const { data } = useQuery(USERQUERY, { variables: {jwt: jwt}});
+  
+  const [userMutation] = useMutation(UserMutation);
+  const charQuery = useQuery(CharQuery);
+  const [charSubmit] = useMutation(CharSubmit);
+ 
 
   const getImage2 = async () => {
-    // 1번째 이슈 : result에 배열을 담아와도 maps를 사용 못함. 직접 변수 list를 선언하여 maps를 돌릴 때는 정상 진행; --- 해결
-
+    
     const res = await fetch(
       "https://gateway.pinata.cloud/ipfs/QmfExvMdoWcQMNihsexYLfaCaGGQjFw851NiFwn1Hy9LaK"
     );
     const json = await res.json();
     setResult(json);
+    console.log('json', result)
     setLoading(false);
   };
 
   useEffect(() => {
     getImage2();
-  }, []);
+    if(data !== undefined) {
+      const balance = data.getUserInfo.pointBalance
+      setBal(balance)
+    }
+  }, [data]);
 
+   
   const Draw = () => {
     // 버튼 누르면 로딩 애니메이션 뜨고 3초 뒤에 랜덤 뽑기 실행
     setDraw(true);
@@ -254,7 +269,7 @@ const RandomCharacter = () => {
 
       {draw === false ? (
         <MidView>
-          <MidText>캐릭터를 뽑으시려면 버튼을 클릭해주세요</MidText>
+          <MidText>마일리지 : {bal} </MidText>
         </MidView>
       ) : (
         <Swiper

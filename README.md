@@ -1,3 +1,3 @@
-# BEB-04-final-01
+# BEB-04-PillSoGood
 
-test
+약 복용 알림 어플

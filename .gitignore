@@ -2,3 +2,4 @@ pillsogood-server/node_modules
 .env
 package-lock.json
 .DS_Store
+pillsogood-client/node_modules

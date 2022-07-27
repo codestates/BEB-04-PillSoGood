@@ -101,7 +101,7 @@ export default {
               {expiresIn:'365d'}
             )
 
-            return {"jwt": accessToken}
+            return {"jwt": accessToken, "email": loginUser.email, "nickname": loginUser.nickname, "_id":loginUser._id}
 
         },
         async updateUserInfo(_:any, args:{jwt:string, nickname:string, password:string, phoneNumber:string, email:string, disease:[number]}) {
@@ -129,6 +129,17 @@ export default {
             const crypto = require('crypto');
             const encryptedPassword = crypto.createHmac('sha256', process.env.PASSWORD_SECRET).update(args.password).digest('hex');
             const res = await User.updateOne({_id:args._id}, {password:encryptedPassword})
+            if(!res) return status.SERVER_ERROR
+            return status.SUCCESS
+        },
+        async updateUserBalance(_:any, args:{jwt:string, pointBalance:number}) {
+            const userInfo = getUserInfoByToken(args.jwt)
+            if(!userInfo) return status.TOKEN_EXPIRED
+
+            const res = await User.updateOne(
+                {_id:userInfo._id},
+                {pointBalance: args.pointBalance}
+            )
             if(!res) return status.SERVER_ERROR
             return status.SUCCESS
         }

@@ -14,7 +14,10 @@ export default gql`
     }
 
     type Token {
-        jwt:String
+        jwt:String,
+        email: String,
+        nickname: String,
+        _id: String
     }
 
     type Query {
@@ -28,5 +31,6 @@ export default gql`
         login(email:String!, password:String!):Token!
         updateUserInfo(jwt:String!, nickname:String, password:String, phoneNumber:String, email:String, disease:[Int]):Int!
         updateUserPassword(jwt:String!, _id:String!, password:String):Int!
+        updateUserBalance(jwt:String!, pointBalance:Int):Int!
     }
 `;

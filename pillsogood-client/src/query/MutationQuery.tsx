@@ -45,9 +45,10 @@ export const SIGN_UP = gql`
   `
 
   export const UserMutation = gql`
-  mutation UpdateUserInfo($jwt: String!, $nickname: String, $password: String, $phoneNumber: String, $email: String, $disease: [Int]) {
-  updateUserInfo(jwt: $jwt, nickname: $nickname, password: $password, phoneNumber: $phoneNumber, email: $email, disease: $disease)
-}`
+  mutation UpdateUserBalance($jwt: String!, $pointBalance: Int) {
+  updateUserBalance(jwt: $jwt, pointBalance: $pointBalance)
+}
+`
 
 
   export const CharQuery = gql`

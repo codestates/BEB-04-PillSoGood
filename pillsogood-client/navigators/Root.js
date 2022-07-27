@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigation from "./Tabs/Tabs";
 import HomeStackScreen from "./Stack/HomeStackScreen";
 import ReminderStackScreen from "./Stack/HealthStack/ReminderStackScreen";
+import RegisterStackScreen from "./Stack/AuthStack/RegisterStackScreen";
 // import LoginStackScreen from "./Stack/AuthStack/LoginStackScreen";
 // import RegisterStackScreen from "./Stack/AuthStack/RegisterStackScreen";
 
@@ -11,9 +12,8 @@ const Nav = createNativeStackNavigator();
 const Root = () => {
   return (
     <Nav.Navigator screenOptions={{ headerShown: false }}>
-      {/* <Nav.Screen name="RegisterStackScreen" component={RegisterStackScreen} />
-      <Nav.Screen name="LoginStackScreen" component={LoginStackScreen} /> */}
-      <Nav.Screen name="Tabs" component={TabNavigation}></Nav.Screen>
+      <Nav.Screen name="RegisterStackScreen" component={RegisterStackScreen} />
+      <Nav.Screen name="Tabs" component={TabNavigation} />
       <Nav.Group>
         <Nav.Screen name="HomeStackScreen" component={HomeStackScreen} />
         <Nav.Screen

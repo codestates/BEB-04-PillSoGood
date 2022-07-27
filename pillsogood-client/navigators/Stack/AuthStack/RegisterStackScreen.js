@@ -17,6 +17,7 @@ const RegisterStackScreen = () => {
         headerStyle: {
           backgroundColor: BASE_COLOR,
         },
+        headerShown: false,
       }}
     >
       {Token == "" ? (

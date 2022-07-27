@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
+const jwt = require("jsonwebtoken");
 import { BASE_COLOR } from "../../colors";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import DatePicker from "react-native-date-picker";
 import ImagePickerComponent from "../../src/utils/ImagePickerComponent";
-import callGoogleVisionAsync from "./../../src/utils/helperFunctions";
+import callGoogleVisionAsync from "../../src/utils/helperFunctions";
+
+import { Dimensions } from "react-native";
+import { useSelector } from "react-redux";
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return " ";
 
@@ -60,26 +64,75 @@ String.prototype.zf = function (len) {
 Number.prototype.zf = function (len) {
   return this.toString().zf(len);
 };
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const ReminderContainer = styled.View`
   background-color: ${BASE_COLOR};
   flex: 1;
   align-items: center;
   color: black;
-  padding: 30px 20px;
+  padding: 0px 20px;
+`;
+const HeadTxt = styled.Text`
+  color: #76a991;
+  font-size: 30px;
+  font-weight: bold;
+  margin: 10px 10px 0px 20px;
+`;
+const HeadWapper = styled.View`
+  flex: 1;
 `;
 
+const SubTxt = styled.Text`
+  color: #202d35;
+  font-size: 19px;
+  font-weight: bold;
+  margin-top: -30px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+`;
 const PillTxtInput = styled.TextInput`
   font-size: 16;
 `;
 const PillTxt = styled.Text`
   font-size: 16;
 `;
-const ViewRN = styled.View``;
-const PillBtn = styled.Button``;
-const Touch = styled.TouchableOpacity``;
+const ViewRN = styled.View`
+  flex-direction: row;
+`;
+const PillBtnTxt = styled.Text`
+  color: #fff;
+`;
+const Btn = styled.Button``;
 
-const Imges = styled.Image``;
+const Titletxt = styled.Text`
+  background-color: ${BASE_COLOR};
+  color: #202d35;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 30px;
+`;
+const TextInputs = styled.TextInput`
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: black;
+  background-color: #ffffff7f;
+`;
+const Inner = styled.View`
+  flex: 5;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  width: ${SCREEN_WIDTH * 0.8};
+  padding: 20px;
+`;
 const Reminder = () => {
+  let accessToken = useSelector((state) => state.token);
+
+  const decodedToken = jwt.verify(accessToken, process.env.ACCESS_SECRET);
   const [response, setResponse] = useState(null);
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
@@ -90,90 +143,69 @@ const Reminder = () => {
     pillscale,
     date,
   });
-  const [state, setState] = useState({
-    loading: false,
-    image: null,
-    textRecognition: null,
-    toast: {
-      message: "",
-      isVisible: false,
-    },
-  });
+
   console.log(date);
-
+  console.log(decodedToken, "token");
   //////////////////////////////////////////////////////////////
-  function onPress(type) {
-    setState({ ...state, loading: true });
-    type === "capture"
-      ? launchCamera({ mediaType: "image" }, onImageSelect)
-      : launchImageLibrary({ mediaType: "image" }, onImageSelect);
-  }
-  async function onImageSelect(media) {
-    if (!media) {
-      setState({ ...state, loading: false });
-      return;
-    }
-    if (!!media && media.assets) {
-      const file = media.assets[0].uri;
-      const textRecognition = TextRecognition.recognize(file);
-      console.log(textRecognition);
-      const INFLIGHT_IT = "Inflight IT";
-      //if match toast will appear
 
-      setState({
-        ...state,
-        textRecognition,
-        image: file,
-
-        loading: false,
-      });
-    }
-  }
   const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
   const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
   const kr_curr = new Date(utc + KR_TIME_DIFF);
 
   return (
     <ReminderContainer>
-      <ImagePickerComponent onSubmit={callGoogleVisionAsync} />
-      <PillTxt>약 이름을 입력해주세요</PillTxt>
-      <PillTxtInput
-        placeholder="약 이름"
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="default"
-        value={medicine}
-        returnKeyType="next"
-        onChangeText={(text) => setPill(text)}
-        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-      />
-      <PillTxt>하루에 몇번 먹어야 하나요?</PillTxt>
-      <PillTxtInput
-        placeholder="오늘 먹는 약 횟수"
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="number-pad"
-        value={pillscale}
-        returnKeyType="next"
-        onChangeText={(text) => setMedicine(text)}
-        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-      />
-      <PillBtn title="약 언제 먹을래요?" onPress={() => setOpen(true)} />
-      <DatePicker
-        modal
-        locale="ko"
-        androidVariant="nativeAndroid"
-        textColor="black"
-        open={open}
-        date={date}
-        onConfirm={(date) => {
-          setOpen(false);
-          setDate(data);
-        }}
-        onCancel={() => {
-          setOpen(false);
-        }}
-      />
+      <HeadWapper>
+        <HeadTxt>약 복용 입력</HeadTxt>
+      </HeadWapper>
+      <SubTxt>복용 알람을 등록하세요</SubTxt>
+      <Inner>
+        <Titletxt>약 이름을 입력해주세요</Titletxt>
+        <TextInputs
+          placeholder="약 이름"
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="default"
+          value={medicine}
+          returnKeyType="next"
+          onChangeText={(text) => setPill(text)}
+          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+        />
+        <PillTxt>하루에 몇번 먹어야 하나요?</PillTxt>
+        <TextInputs
+          placeholder="오늘 먹는 약 횟수"
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="number-pad"
+          value={pillscale}
+          returnKeyType="next"
+          onChangeText={(text) => setMedicine(text)}
+          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+        />
+
+        <ImagePickerComponent onSubmit={callGoogleVisionAsync} />
+        <Btn title="약은 언제 드시나요?" onPress={() => setOpen(true)}></Btn>
+
+        <DatePicker
+          modal
+          locale="ko"
+          androidVariant="nativeAndroid"
+          textColor="black"
+          open={open}
+          date={date}
+          onConfirm={(date) => {
+            setOpen(false);
+            setDate(data);
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
+        {date.length == 0
+          ? date.map((item, key) => {
+              <PillTxt key={key}>{item}</PillTxt>;
+            })
+          : null}
+      </Inner>
     </ReminderContainer>
   );
 };

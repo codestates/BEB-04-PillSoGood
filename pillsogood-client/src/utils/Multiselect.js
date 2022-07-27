@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { diseaseActions } from "../store/diseaseSlice";
 import { View } from "react-native";
 function Multiselect({ value, setValue }) {
   const [FAT_BLOOD_RATE, HIGH_BLOOD_PRESSURE, SUGAR_BLOOD_RATE] = [0, 1, 2];

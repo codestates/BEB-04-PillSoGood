@@ -7,6 +7,8 @@ import DateTime from "../../src/utils/DateTime";
 import { useMutation } from "@apollo/client";
 import { SIGN_UP } from "../../src/query/MutationQuery";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { registerActions } from "../../src/store/registerSlice";
 const Container = styled.View`
   background-color: ${BASE_COLOR};
   flex: 1;
@@ -41,6 +43,7 @@ const BtnText = styled.Text`
   font-size: 16px;
 `;
 const Register = () => {
+  const dispatch = useDispatch();
   // const user = useSelector((state) => state.user.value)
   const navigation = useNavigation();
   const passwordInput = useRef();
@@ -100,6 +103,9 @@ const Register = () => {
         },
       });
       onComplete();
+      dispatch(registerActions.setNickName(name));
+      dispatch(registerActions.setDateOfBirth(birth));
+      dispatch(registerActions.setPhoneNumber(phoneNumber));
     } catch (err) {
       console.log(err.stack);
       setComplete(true);
@@ -109,7 +115,7 @@ const Register = () => {
   return (
     <Container>
       <TextInputs
-        placeholder="닉네임"
+        placeholder="이름"
         autoCapitalize="none"
         autoCorrect={false}
         keyboardType="default"

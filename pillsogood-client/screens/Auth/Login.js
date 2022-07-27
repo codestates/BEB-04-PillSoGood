@@ -103,7 +103,6 @@ const Login = ({ navigation: { navigate } }) => {
 
         AsyncStorage.setItem("token", appdata.data.login.jwt); //로컬에 jwt 토큰 저장
         Token = appdata.data.login.jwt;
-
         dispatch(loginActions.setToken(Token)); //전역 state에 jwt저장
         navigation.navigate("Tabs"); //로그인완료 후 Home으로 이동
       }

@@ -113,4 +113,21 @@ export const HEALTH_RECORD = gql`
       bloodSugarLevel: $bloodSugarLevel
     )
   }
+  mutation CreateHealthRecord(
+    $jwt: String!
+    $height: Int!
+    $weight: Int!
+    $lowHypertension: Int!
+    $highHypertension: Int!
+    $bloodSugarLevel: Int!
+  ) {
+    createHealthRecord(
+      jwt: $jwt
+      height: $height
+      weight: $weight
+      lowHypertension: $lowHypertension
+      highHypertension: $highHypertension
+      bloodSugarLevel: $bloodSugarLevel
+    )
+  }
 `;

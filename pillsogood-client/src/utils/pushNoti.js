@@ -10,14 +10,13 @@ const displayNotification = async (message) => {
     name: "PillSoGood",
     importance: AndroidImportance.HIGH,
   });
-
   await notifee.displayNotification({
-    title: message.data.title,
-    body: message.data.body,
     android: {
       channelId: channelAnoucement,
       smallIcon: "ic_launcher", //
     },
+    title: message.notification.title,
+    body: message.notification.body,
   });
 };
 

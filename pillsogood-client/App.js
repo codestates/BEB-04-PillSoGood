@@ -25,8 +25,6 @@ import notifee, {
 export default function App() {
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      console.log(unsubscribe);
-      console.log(remoteMessage);
       pushNoti.displayNoti(remoteMessage);
     });
 

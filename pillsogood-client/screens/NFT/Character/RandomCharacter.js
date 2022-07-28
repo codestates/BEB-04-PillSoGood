@@ -10,9 +10,9 @@ import {
 } from "react-native";
 import Swiper from "react-native-web-swiper";
 import { BASE_COLOR } from "../../../colors";
-import { gql, useQuery, useMutation, useLazyQuery } from "@apollo/client";
+import {  useQuery, useMutation,  } from "@apollo/client";
 import { useSelector } from "react-redux";
-import { LOGIN, USERQUERY, UserMutation, CharQuery, CharSubmit } from "../../../src/query/MutationQuery"
+import {  USERQUERY, UserMutation, CharQuery, CharSubmit } from "../../../src/query/MutationQuery"
 
 // 0번째 이슈 : 이미지 뽑고 나서 단일 이미지만 보여야 하는데 여러 이미지가 같이 보임 ---- 대충 해결? random Num이 9까지 생성되는데 샘플 리스트는 9미만 이엇음
 // 1번째 이슈 : result에 배열을 담아와도 maps를 사용 못함. 직접 변수 list를 선언하여 maps를 돌릴 때는 정상 진행; --- 해결. Loading 순서 바뀜

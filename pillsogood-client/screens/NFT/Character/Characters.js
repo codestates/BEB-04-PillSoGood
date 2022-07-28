@@ -2,138 +2,192 @@ import React from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../../../colors";
 import { useMutation, useQuery, gql } from "@apollo/client";
+import Swiper from "react-native-web-swiper"
+import {
+  ScrollView,
+  RefreshControl,
+  ActivityIndicator,
+  Alert,
+  Dimensions,
+  StyleSheet,
+} from "react-native";
 
-
-// Container가 ScrollView이기 때문에 그냥 View로
-const Container = styled.ScrollView`
-  background-color: ${BASE_COLOR};
-  flex: 1;
-`;
-
-const Header = styled.ScrollView`
-  flex: 1;
-`;
-
-const Mileage = styled.View`
-  flex: 1;
-`;
-
-const Mid = styled.View`
-  flex: 1;
-`;
-
-const Headimg = styled.Image`
-  width: 100px;
-  height: 160px;
-  border-radius: 5px;
-  background-color: rgba(255, 255, 255, 0.5);
-`;
-
-const Bring = styled.TouchableOpacity`
-  margin-top: 30px;
-  width: 40%;
-  padding: 20px 20px;
-  border-width: 1px;
-  border-radius: 30px;
-  border-color: rgba(255, 255, 255, 0.5);
-  align-items: center;
-  background-color: grey;
-`;
-
-const Midimg = styled.Image`
-  width: 200px;
-  height: 320px;
-  border-radius: 5px;
-  background-color: rgba(255, 255, 255, 0.5);
-  justify-content: center;
-  align-items: center;
-`;
-const Footer = styled.View`
-  flex-direction: row;
-`;
-
-const Grow = styled.TouchableOpacity`
-  margin-top: 30px;
-  width: 40%;
-  padding: 20px 20px;
-  border-width: 1px;
-  border-radius: 30px;
-  border-color: rgba(255, 255, 255, 0.5);
-
-  background-color: grey;
-`;
-
-const Mint = styled.TouchableOpacity`
-  margin-top: 30px;
-  width: 40%;
-  padding: 20px 20px;
-  border-width: 1px;
-  border-radius: 30px;
-  border-color: rgba(255, 255, 255, 0.5);
-
-  background-color: grey;
+const View = styled.View`
+flex: 1;
 `;
 
 const Text = styled.Text`
+`;
+
+const Loader = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+
+const Container = styled.ScrollView`
+background-color: ${BASE_COLOR};
+`;
+
+const HeaderView = styled.View`
+flex: 1;
+`;
+
+const Header = styled.Text`
+font-size: 16px;
+font-weight: 600;
+margin-top: 22px;
+margin-bottom: 22px;
+text-align: center;
+`;
+
+const BgView = styled.View`
+background-color: white;
+flex: 1;
+`;
+
+const Wrapper = styled.View`
+  flex-direction: row;
+  height: 100%;
+  width: 90%;
+  margin: 0 auto;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+
+
+const Column = styled.View`
+width: 40%;
+margin-left: 15px;
+`;
+
+
+const NftImage = styled.Image`
+  width: 200px;
+  height: 200px;
+  border-radius: 5px;
+`;
+
+
+const Name = styled.Text`
+`
+
+const TokId = styled.Text`
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: 600;
   color: black;
+`;
+
+const Description = styled.Text`
+margin-top: 15px;
+`;
+
+const DesDetail = styled.Text`
+margin-top: 7px;
+line-height: 20;
+`;
+
+const TextInputView = styled.View`
+margin-top: 30px;
+  align-items: center;
+`;
+
+const TextInputs = styled.TextInput`
+width: 90%;
+margin-top: 10px;
+padding: 10px 20px;
+border-radius: 20px;
+margin-bottom: 10px;
+font-size: 16px;
+color: black;
+background-color: #ffffff7f;
+`;
+
+const ButtonView = styled.View`
+margin-top: 15px;
+`
+
+const Button = styled.TouchableOpacity`
+  margin-top: 30px;
+  width: 40%;
+  padding: 20px 20px;
+  border-width: 1px;
+  border-radius: 30px;
+  border-color: rgba(255, 255, 255, 0.5);
+  align-items: center;
+  margin-left: 120px;
+  background-color: grey;
+`;
+
+const BtnText = styled.Text`
+  color: white;
   font-size: 16px;
   text-align: center;
 `;
 
-const Mo1 = styled.View`
-  margin-right: 20px;
-  align-items: center;
-`;
-
-const View = styled.View`
-  justify-content: center;
-`;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const list = [
   "https://gateway.pinata.cloud/ipfs/QmZ9LAhzGAimekUEGKUqm3XdE5kYhJW24FzNLioD4DnALD/1.jpeg",
   "https://gateway.pinata.cloud/ipfs/QmZ9LAhzGAimekUEGKUqm3XdE5kYhJW24FzNLioD4DnALD/2.jpeg",
   "https://gateway.pinata.cloud/ipfs/QmZ9LAhzGAimekUEGKUqm3XdE5kYhJW24FzNLioD4DnALD/3.jpeg",
-  "https://gateway.pinata.cloud/ipfs/QmZ9LAhzGAimekUEGKUqm3XdE5kYhJW24FzNLioD4DnALD/4.jpeg",
-  "https://gateway.pinata.cloud/ipfs/QmZ9LAhzGAimekUEGKUqm3XdE5kYhJW24FzNLioD4DnALD/5.jpeg",
-  "https://gateway.pinata.cloud/ipfs/QmZ9LAhzGAimekUEGKUqm3XdE5kYhJW24FzNLioD4DnALD/6.jpeg",
-  "https://gateway.pinata.cloud/ipfs/QmZ9LAhzGAimekUEGKUqm3XdE5kYhJW24FzNLioD4DnALD/7.jpeg",
-  "https://i.picsum.photos/id/1/200/300.jpg?hmac=jH5bDkLr6Tgy3oAg5khKCHeunZMHq0ehBZr6vGifPLY",
-  "https://i.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68",
-  "https://picsum.photos/id/100/2500/1656",
-  "https://picsum.photos/id/1001/5616/3744",
+  "https://i.picsum.photos/id/1/200/300.jpg?hmac=jH5bDkLr6Tgy3oAg5khKCHeunZMHq0ehBZr6vGifPLY"
 ];
 
 const Characters = () => {
+  
   return (
-    <Container>
-      <Text>발행된 NFT 리스트</Text>
-      <Header horizontal>
-        {list.map((img, id) => (
-          <Mo1 key={id}>
-            <Headimg source={{ uri: img }} />
-          </Mo1>
-        ))}
-      </Header>
-      <Bring>
-        <Text>옮기기</Text>
-      </Bring>
-      <Mid>
-        <Text>나의 마일리지 : 100 </Text>
-      </Mid>
-      <Midimg
-        source={{
-          uri: "https://i.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68",
-        }}
-      />
-      <Footer>
-        <Grow>
-          <Text>성장하기</Text>
-        </Grow>
-        <Mint>
-          <Text>Nft 발행하기</Text>
-        </Mint>
-      </Footer>
-    </Container>
+    <Container>											
+    <HeaderView><Header>NFT list</Header></HeaderView>			
+    <Swiper
+     loop
+     controlsEnabled={false}
+     containerStyle={{ width: "100%", height: SCREEN_HEIGHT / 3 }}
+     >                
+      {list.map((info, index)=>(
+      <View key={index}>
+        <BgView  style={StyleSheet.absoluteFill}
+        />
+        <Wrapper>
+        <NftImage source={{ uri: info }}/>
+          <Column>
+          <Name> name : Test</Name>
+          <TokId> tokenId : 13</TokId>
+          <Description> description : </Description>
+          <DesDetail>abcdabcdadfadfasdfadfasdfasdfadfasdfdsfdfzcvzxfasdwqewqwezdfsdfsdfsdfsdfsdf </DesDetail>
+          </Column>
+        </Wrapper>
+      </View>))}
+    </Swiper>
+    <TextInputView>
+        <TextInputs
+          placeholder="메타마스크 계정 주소를 입력해주세요"
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="default"
+          // value={}
+          returnKeyType="next"
+          // onChangeText={(text) => setName(text)}
+          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+        />
+        <TextInputs
+          placeholder="tokenId를 입력해주세요"
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="default"
+          // value={}
+          returnKeyType="next"
+          // onChangeText={(text) => setDescription(text)}
+          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+        />
+      </TextInputView>
+      <ButtonView><Button><BtnText>옮기기</BtnText></Button></ButtonView>
+    </Container>  
   );
-};
+  };
 export default Characters;
+
+

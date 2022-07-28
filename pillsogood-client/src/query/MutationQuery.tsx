@@ -64,7 +64,7 @@ export const SIGN_UP = gql`
 
  
   export const CharSubmit = gql`
-  mutation CreateCharacter($jwt: String!, $name: String!, $baseId: String!) {
-   createCharacter(jwt: $jwt, name: $name, baseId: $baseId)
- }
+  mutation CreateCharacter($jwt: String!, $name: String!, $baseId: String!, $description: String!) {
+  createCharacter(jwt: $jwt, name: $name, baseId: $baseId, description: $description)
+}
   ` 

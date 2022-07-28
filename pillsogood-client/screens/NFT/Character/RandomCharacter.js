@@ -127,6 +127,7 @@ const Text1 = styled.Text`
 
 const Text2View = styled.View`
   flex: 1;
+  background-color: #fefbea;
 `;
 
 const Text2 = styled.Text`
@@ -246,17 +247,28 @@ const RandomCharacter = () => {
 
   // nft 발행 함수
   const Submit = () => {
+    setLoading(true)
     charSubmit({
       variables: {
         jwt: jwt,
         name: name,
+        description: description,
         baseId: randomImg[0]
       }
-    }).then(res => console.log("발행 성공 :", res))
-    Alert.alert("캐릭터를 생성했습니다!")
-    setName("")
-    setDescription("")
-  };
+    }).then((res) => {
+      setLoading(false)
+      if(res){
+        console.log("발행 성공 :", res)
+        Alert.alert("캐릭터를 생성했습니다!")
+      }
+      else{
+        console.log("발행 실패 :", res)
+        Alert.alert("캐릭터 생성이 실패했습니다")
+      }
+  })
+  setName("")
+  setDescription("")
+};
 
   // 새로고침 함수
   const onRefresh = () => {
@@ -364,3 +376,4 @@ const RandomCharacter = () => {
 };
 
 export default RandomCharacter;
+

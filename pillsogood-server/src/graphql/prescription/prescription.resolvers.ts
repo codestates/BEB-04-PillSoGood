@@ -8,11 +8,11 @@ const User = require("../../models/user")
 
 type prescription = {
     _id:String,
-        medicine:String,
-        alertTime:String,
-        lastMedicationCount:Number,
-        createdAt:String,
-        userId:string
+    medicine:String,
+    alertTime:String,
+    lastMedicationCount:Number,
+    createdAt:String,
+    userId:String
 }
 
 export default {
@@ -49,11 +49,10 @@ export default {
             newPrescription.userId = userInfo._id
             
             const res = await newPrescription.save()
-            const findUser = await User.findOne({_id:userInfo._id})
+            const findUser = await User.findOne({_id: userInfo._id})
             const previousBalance = findUser.pointBalance
             const currentBalance = Number(previousBalance+10)
-            const newData = { pointBalance: currentBalance }               // 제공할 포인트 점수
-            const res2 = await User.updateOne({_id:userInfo._id}, newData) // 업데이트 하기 
+            const res2 = await User.updateOne({_id:userInfo._id}, { pointBalance: currentBalance }) // 업데이트 하기 
     
             if(!res || !res2) return status.SERVER_ERROR
             return status.SUCCESS

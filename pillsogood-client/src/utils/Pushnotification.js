@@ -2,10 +2,12 @@ import messaging from "@react-native-firebase/messaging";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export async function requestUserPermission() {
-  const authStatus = await messaging().requestPermission({ providesAppNotificationSettings: true });
+  const authStatus = await messaging().requestPermission({
+    providesAppNotificationSettings: true,
+  });
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED || //알림권한 ok
-    authStatus === messaging.AuthorizationStatus.PROVISIONAL; 
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
   if (enabled) {
     console.log("Authorization status:", authStatus);
@@ -32,6 +34,9 @@ export const NotificationListener = () => {
       "Notification caused app to open from background state:",
       remoteMessage.notification
     );
+    const alarm = JSON.parse(remoteMessage?.data?.alarm || "");
+    console.log("THis message belongs to channel with id");
+    navigation.navigate("alarm", { alarm });
   });
   messaging()
     .getInitialNotification()
@@ -41,6 +46,9 @@ export const NotificationListener = () => {
           "Notification caused app to open from quit state:",
           remoteMessage.notification
         );
+        const alarm = JSON.parse(remoteMessage?.data?.alarm || "");
+        console.log("THis message belongs to channel with id");
+        navigation.navigate("alarm", { alarm });
       }
     });
 

@@ -16,6 +16,8 @@ import {
   Alert,
 } from "react-native";
 import DatePicker from "react-native-date-picker";
+import styled from "styled-components/native";
+import { BASE_COLOR } from "../../colors";
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return " ";
 
@@ -71,10 +73,30 @@ String.prototype.zf = function (len) {
 Number.prototype.zf = function (len) {
   return this.toString().zf(len);
 };
-
+const ReminderContainer = styled.View`
+  background-color: ${BASE_COLOR};
+  flex: 1;
+  align-items: center;
+  color: black;
+  padding: 30px 20px;
+`;
+const PillTxtInput = styled.TextInput`
+  font-size: 16;
+`;
+const PillTxt = styled.Text`
+  font-size: 16;
+`;
+const PillBtn = styled.Button``;
 const Reminder = () => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
+  const [medicine, setMedicine] = useState("");
+  const [pillscale, setPillscale] = useState(0);
+  const [pillmatadata, setPillmetadata] = useState({
+    medicine,
+    pillscale,
+    date,
+  });
   console.log(date);
 
   const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
@@ -82,16 +104,14 @@ const Reminder = () => {
   const kr_curr = new Date(utc + KR_TIME_DIFF);
 
   const Container = styled.View`
-  background-color: ${BASE_COLOR}
-  flex: 1;
-  color: black;
-
-`;
+    background-color: ${BASE_COLOR};
+    flex: 1;
+    color: black;
+  `;
 
   const Btn = styled.TouchableOpacity`
-
     width: 100%;
-    padding: 10px 
+    padding: 10px;
     border-width: 1px;
     border-radius: 50px;
     border-color: rgba(255, 255, 255, 0.5);
@@ -104,11 +124,11 @@ const Reminder = () => {
     text-align: center;
   `;
   const HeadTxt = styled.Text`
-  color: #76a991;
-  font-size: 30px;
-  font-weight: bold;
-  margin: 30px 10px; 0px 20px;
-`;
+    color: #76a991;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 30px 10px 0px 20px;
+  `;
   const SubTxt = styled.Text`
     color: white;
     font-size: 19px;
@@ -129,12 +149,12 @@ const Reminder = () => {
     text-align: center;
   `;
   const Titletxt = styled.Text`
-  background-color: ${BASE_COLOR}
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 30px
-`;
+    background-color: ${BASE_COLOR};
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 30px;
+  `;
 
   const Inner = styled.View`
     background-color: white;
@@ -145,58 +165,47 @@ const Reminder = () => {
     padding: 20px;
   `;
   return (
-    <Container>
-      <HeadTxt>약 등록하기</HeadTxt>
-      <SubTxt>복용 알람을 등록하세요</SubTxt>
-
-      <Inner>
-        <View>
-          <Titletxt>약의 이름</Titletxt>
-          <TextInput placeholder="알람 이름을 등록해주세요"></TextInput>
-        </View>
-
-        <View>
-          <Titletxt>메모 작성</Titletxt>
-          <TextInput placeholder="메모를 작성해주세요"></TextInput>
-        </View>
-
-        <View>
-          {/* <Whenbtn title="약 언제 먹을래요?"
-            onPress={() => setOpen(true)} /> */}
-          <Titletxt> 알람을 받고 싶은 시간을 선택해주세요</Titletxt>
-          <View>
-            <DatePicker
-              locale="ko"
-              androidVariant="nativeAndroid"
-              textColor="black"
-              open={open}
-              date={date}
-              onConfirm={(date) => {
-                setOpen(false);
-                setDate(data);
-              }}
-              onCancel={() => {
-                setOpen(false);
-              }}
-            />
-          </View>
-        </View>
-        <View></View>
-
-        <Rewardtxt>알람을 등록하고 리워드를 받으세요!</Rewardtxt>
-        <Btn
-          onPress={() => (
-            <Lottie
-              source={require("../../src/assets/data.json")}
-              autoPlay
-              loop
-            />
-          )}
-        >
-          <BtnText>100코인 획득</BtnText>
-        </Btn>
-      </Inner>
-    </Container>
+    <ReminderContainer>
+      <PillTxt>약 이름을 입력해주세요</PillTxt>
+      <PillTxtInput
+        placeholder="약 이름"
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="default"
+        value={medicine}
+        returnKeyType="next"
+        onChangeText={(text) => setPill(text)}
+        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+      />
+      <PillTxt>하루에 몇번 먹어야 하나요?</PillTxt>
+      <PillTxtInput
+        placeholder="오늘 먹는 약 횟수"
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="number-pad"
+        value={pillscale}
+        returnKeyType="next"
+        onChangeText={(text) => setMedicine(text)}
+        placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+      />
+      <Button title="약 언제 먹을래요?" onPress={() => setOpen(true)} />
+      <DatePicker
+        modal
+        locale="ko"
+        androidVariant="nativeAndroid"
+        textColor="black"
+        open={open}
+        date={date}
+        onConfirm={(date) => {
+          setOpen(false);
+          setDate(data);
+        }}
+        onCancel={() => {
+          setOpen(false);
+        }}
+      />
+      <Button title="알람 입력" onPress={() => setOpen(true)} />
+    </ReminderContainer>
   );
 };
 export default Reminder;

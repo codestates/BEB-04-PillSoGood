@@ -39,7 +39,6 @@ export default {
             newCharacter.userId = userInfo._id
             newCharacter.baseId = args.baseId
             newCharacter.createdAt = moment().format("YYYY-MM-DD HH:mm:ss")
-
             const res = await newCharacter.save()
             if(!res) return status.SERVER_ERROR
             return status.SUCCESS

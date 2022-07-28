@@ -10,7 +10,8 @@ export default gql`
         pointBalance:Int,
         createdAt:String,
         disease: [Int],
-        phoneNumber:String
+        phoneNumber:String,
+        firebaseToken: String
     }
 
     type Token {
@@ -28,7 +29,7 @@ export default gql`
 
     type Mutation {
         join(nickname:String!, email:String!, dateOfBirth:String!, password:String,  phoneNumber:String, disease:[Int]):Int!
-        login(email:String!, password:String!):Token!
+        login(email:String!, password:String!, firebaseToken:String!):Token!
         updateUserInfo(jwt:String!, nickname:String, password:String, phoneNumber:String, email:String, disease:[Int]):Int!
         updateUserPassword(jwt:String!, _id:String!, password:String):Int!
     }

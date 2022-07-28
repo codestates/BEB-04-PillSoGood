@@ -9,7 +9,8 @@ type health = {
     _id:string
     height:number
     weight:number
-    hypertension:number
+    lowHypertension:number
+    highHypertension:number
     bloodSugarLevel:number
     createdAt:string
     userId:string
@@ -30,7 +31,7 @@ export default {
         }
     },
     Mutation : {
-        async createHealthRecord(_:any, args: {jwt:string, height:number, weight:number, hypertension:number, bloodSugarLevel:number}) {
+        async createHealthRecord(_:any, args: {jwt:string, height:number, weight:number, lowHypertension:number, highHypertension:number, bloodSugarLevel:number}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
 
@@ -39,7 +40,8 @@ export default {
             const newHealth = new Health()
             newHealth.height = args.height
             newHealth.weight = args.weight
-            newHealth.hypertension = args.hypertension
+            newHealth.lowHypertension = args.lowHypertension
+            newHealth.highHypertension = args.highHypertension
             newHealth.bloodSugarLevel = args.bloodSugarLevel
             newHealth.userId = userInfo._id
             newHealth.createdAt = moment().format("YYYY-MM-DD HH:mm:ss")
@@ -47,7 +49,7 @@ export default {
             if(!res) return status.SERVER_ERROR
             return status.SUCCESS
         },
-        async updateHealthRecord(_:any, args: {jwt:string, _id:string, height:number, weight:number, hypertension:number, bloodSugarLevel:number}) {
+        async updateHealthRecord(_:any, args: {jwt:string, _id:string, height:number, weight:number, lowHypertension:number, highHypertension:number, bloodSugarLevel:number}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
 
@@ -55,7 +57,7 @@ export default {
 
             const res = await Health.updateOne(
                 {_id:args._id, userId:userInfo._id},
-                {height:args.height, weight:args.weight, hypertension:args.hypertension, bloodSugarLevel:args.bloodSugarLevel, createdAt:new Date()}
+                {height:args.height, weight:args.weight, lowHypertension:args.lowHypertension, highHypertension:args.highHypertension, bloodSugarLevel:args.bloodSugarLevel, createdAt:new Date()}
             )
             if(!res) return status.SERVER_ERROR
             return status.SUCCESS

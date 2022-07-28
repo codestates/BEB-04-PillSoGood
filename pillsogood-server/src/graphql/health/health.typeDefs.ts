@@ -5,7 +5,8 @@ export default gql`
         _id:String,
         height:Int,
         weight:Int,
-        hypertension:Int,
+        lowHypertension:Int,
+        highHypertension:Int,
         bloodSugarLevel:Int,
         createdAt:String
     }
@@ -15,8 +16,8 @@ export default gql`
     }
 
     type Mutation {
-        createHealthRecord(jwt:String!, height:Int!, weight:Int!, hypertension:Int!, bloodSugarLevel:Int!):Int!
-        updateHealthRecord(jwt:String!, _id:String!, weight:Int!, hypertension:Int!, bloodSugarLevel:Int!):Int!
+        createHealthRecord(jwt:String!, height:Int!, weight:Int!, lowHypertension:Int!, highHypertension:Int!, bloodSugarLevel:Int!):Int!
+        updateHealthRecord(jwt:String!, _id:String!, weight:Int!, lowHypertension:Int!, highHypertension:Int!, bloodSugarLevel:Int!):Int!
         deleteHealthRecord(jwt:String!, _id:String!):Int!
     }
 `;

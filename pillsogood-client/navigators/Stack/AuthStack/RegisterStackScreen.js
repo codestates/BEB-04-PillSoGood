@@ -1,15 +1,30 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BASE_COLOR } from "../../../colors";
 import Login from "../../../screens/Auth/Login";
 import Register from "../../../screens/Auth/Register";
 import Home from "../../../screens/Home";
+import { useSelector } from "react-redux";
 import TabNavigation from "./../../Tabs/Tabs";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 const Nav = createNativeStackNavigator();
 
 const RegisterStackScreen = () => {
-  const Token = AsyncStorage.getItem("token"); //로컬에 jwt 토큰 저장
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  let jwtToken = useSelector((state) => state.login.token);
+  // const [openSettingsForNotifications] = useMMKVStorage(
+  //   "openSettingsForNotifications",
+  //   MMKV,
+  //   false
+  // );
+  useEffect(() => {
+    //인증상태감지
+    if (jwtToken) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+    console.log(jwtToken, "token");
+  }, []);
   return (
     <Nav.Navigator
       screenOptions={{
@@ -20,7 +35,7 @@ const RegisterStackScreen = () => {
         headerShown: false,
       }}
     >
-      {Token !== "" ? (
+      {!isLoggedIn ? (
         <>
           <Nav.Screen name="Login" component={Login} />
           <Nav.Screen name="Register" component={Register} />

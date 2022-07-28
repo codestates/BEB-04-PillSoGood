@@ -1,11 +1,12 @@
 import { gql } from "@apollo/client";
 
 export const LOGIN = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+  mutation Login($email: String!, $password: String!, $firebaseToken: String!) {
+    login(email: $email, password: $password, firebaseToken: $firebaseToken) {
       jwt
       email
       nickname
+      _id
     }
   }
 `;

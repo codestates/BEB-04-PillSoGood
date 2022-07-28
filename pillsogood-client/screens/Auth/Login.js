@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../../colors";
 import { useMutation, gql, useQuery } from "@apollo/client";
@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import { loginActions } from "../../src/store/loginSlice";
 import { useNavigation } from "@react-navigation/native";
+import { GetFCMToken } from "../../src/utils/Pushnotification";
 const Container = styled.View`
   background-color: ${BASE_COLOR};
   flex: 1;
@@ -60,6 +61,9 @@ const BtnTxt = styled.Text`
 `;
 
 const Login = ({ navigation: { navigate } }) => {
+  useEffect(() => {
+    GetFCMToken();
+  }, []);
   const navigation = useNavigation();
   let state = useSelector((state) => state.login); //redux store의 state꺼내는법
   const dispatch = useDispatch();
@@ -80,12 +84,15 @@ const Login = ({ navigation: { navigate } }) => {
     console.log(hi);
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     let Token;
+    let fcmToken = await AsyncStorage.getItem("fcmtoken");
+    console.log(email, password, fcmToken, "로그인 데이터");
     const loginVariables = login({
       variables: {
         email: email,
         password: password,
+        firebaseToken: fcmToken,
       },
     });
     if (email === "" || password === "") {
@@ -103,7 +110,7 @@ const Login = ({ navigation: { navigate } }) => {
 
         AsyncStorage.setItem("token", appdata.data.login.jwt); //로컬에 jwt 토큰 저장
         Token = appdata.data.login.jwt;
-        AsyncStorage.setItem("user", appdata.data.login.nickname);
+
         dispatch(loginActions.setNickname(appdata.data.login.nickname));
         console.log(appdata.data.login, "appdata");
         dispatch(loginActions.setToken(Token)); //전역 state에 jwt저장

@@ -1,9 +1,23 @@
 import { getUserInfoByToken } from "../../utils/jwt"
 import { status } from "../../constants/code"
 import { createLog } from "../../utils/log"
+import { NFTStorage, File, Blob } from 'nft.storage'
+import fs from 'fs'
+import dotenv from "dotenv";
 
 const Character = require("../../models/character")
 const moment = require("moment")
+
+dotenv.config();
+
+declare let process : {
+    env : {
+      NFT_STORAGE_API_TOKEN : string;
+    }
+} 
+
+const client = new NFTStorage({ token: process.env.NFT_STORAGE_API_TOKEN })
+
 
 type character = {
     _id: string
@@ -41,8 +55,26 @@ export default {
             newCharacter.baseId = args.baseId
             newCharacter.description = args.description
             newCharacter.createdAt = moment().format("YYYY-MM-DD HH:mm:ss")
-
             const res = await newCharacter.save()
+
+            const download = require('image-downloader');
+            const options = {
+                url: args.baseId,
+                dest: '../../images',               // will be saved to /path/to/dest/image.jpg
+              };
+
+            const imageFileName = await download.image(options)
+              .then(({ filename }:any) => {
+                return filename
+              })
+
+            const metadata = await client.store({
+                name: args.name,
+                description: args.description,
+                image: new File([fs.readFileSync(imageFileName)], "image.jpeg", {type:"image/jpeg"})
+              })
+              
+            console.log(metadata.url)
             if(!res) return status.SERVER_ERROR
             return status.SUCCESS
         },

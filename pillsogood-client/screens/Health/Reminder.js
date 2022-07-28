@@ -5,8 +5,11 @@ import DatePicker from "react-native-date-picker";
 import ImagePickerComponent from "../../src/utils/ImagePickerComponent";
 import callGoogleVisionAsync from "../../src/utils/helperFunctions";
 const moment = require("moment");
-import { Dimensions } from "react-native";
 import { useSelector } from "react-redux";
+import { MEDICINE_ALARM } from "./../../src/query/MutationQuery";
+import { useMutation } from "@apollo/client";
+import { Alert, Dimensions } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return " ";
 
@@ -162,27 +165,46 @@ const SubmitAlarm = styled.View`
 const SubmitTxt = styled.Button``;
 const Reminder = () => {
   let verifying = useSelector((state) => state.verify.verify);
-  const [response, setResponse] = useState(null);
+  let jwtToken = useSelector((state) => state.login.token);
+  const navigation = useNavigation();
+  const [CreatePrescriptionRecord, { data }] = useMutation(MEDICINE_ALARM);
   const [times, setTimes] = useState("");
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [medicine, setMedicine] = useState("");
   const [pillscale, setPillscale] = useState(0);
   const [pillday, setPillday] = useState(0);
-  const [pillmatadata, setPillmetadata] = useState({
-    medicine,
-    pillscale,
-    date,
-  });
+  const lastMedi = pillscale * pillday;
+  const setVerify = verifying.toString();
+  const Submit = () => {
+    console.log(
+      jwtToken,
+      medicine,
+      moment(date).format("HH:mm"),
+      lastMedi,
+      "데이터목록"
+    );
+    if (!setVerify) {
+      Alert.alert("자신이 먹는 약봉투를 찍어주세요!");
+      console.log("검증실패");
+    } else {
+      CreatePrescriptionRecord({
+        variables: {
+          jwt: jwtToken,
+          medicine: medicine,
+          alertTime: moment(date).format("HH:mm"),
+          lastMedicationCount: lastMedi,
+        },
+      });
+      Alert.alert("알람등록성공!");
+      navigation.navigate("Home");
+    }
+  };
 
   console.log(date);
   console.log(verifying, "verifying");
   //////////////////////////////////////////////////////////////
-  const setVerify = verifying.toString();
-  const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
-  const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
-  const kr_curr = new Date(utc + KR_TIME_DIFF);
-  const time = moment(kr_curr).format("MM-DD dddd HH:mm");
+
   return (
     <ReminderContainer>
       <HeadWapper>
@@ -198,7 +220,7 @@ const Reminder = () => {
           keyboardType="default"
           value={medicine}
           returnKeyType="next"
-          onChangeText={(text) => setPill(text)}
+          onChangeText={(text) => setMedicine(text)}
           placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
         />
         <PillTxt>하루에 몇 번 먹어야 하나요?</PillTxt>
@@ -226,6 +248,7 @@ const Reminder = () => {
         <Btn title="약은 언제 드시나요?" onPress={() => setOpen(true)}></Btn>
         <DatePicker
           modal
+          mode="time"
           locale="ko"
           androidVariant="nativeAndroid"
           textColor="black"
@@ -234,22 +257,20 @@ const Reminder = () => {
           onConfirm={(date) => {
             setOpen(false);
             setDate(date);
-            setDate(kr_curr);
-            setTimes(time);
             console.log(date);
           }}
           onCancel={() => {
             setOpen(false);
           }}
         />
-        <DateTxt>설정한 시간:{times}</DateTxt>
+        <DateTxt>설정한 시간: {moment(date).format("HH:mm")}</DateTxt>
         <VerifyContainer>
           <VerifyWrapper>
             <ImagePickerComponent onSubmit={callGoogleVisionAsync} />
             <PillVerifyTxt>검증상태 :{setVerify}</PillVerifyTxt>
           </VerifyWrapper>
           <SubmitAlarm>
-            <SubmitTxt title="알람 등록"></SubmitTxt>
+            <SubmitTxt title="알람 등록" onPress={Submit}></SubmitTxt>
           </SubmitAlarm>
         </VerifyContainer>
       </Inner>

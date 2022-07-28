@@ -29,3 +29,19 @@ export const SIGN_UP = gql`
     )
   }
 `;
+
+export const MEDICINE_ALARM = gql`
+  mutation CreatePrescriptionRecord(
+    $jwt: String!
+    $medicine: String!
+    $alertTime: String!
+    $lastMedicationCount: Int!
+  ) {
+    createPrescriptionRecord(
+      jwt: $jwt
+      medicine: $medicine
+      alertTime: $alertTime
+      lastMedicationCount: $lastMedicationCount
+    )
+  }
+`;

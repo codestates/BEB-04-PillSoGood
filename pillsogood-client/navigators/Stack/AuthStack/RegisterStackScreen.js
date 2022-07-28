@@ -20,7 +20,7 @@ const RegisterStackScreen = () => {
         headerShown: false,
       }}
     >
-      {Token == "" ? (
+      {Token !== "" ? (
         <>
           <Nav.Screen name="Login" component={Login} />
           <Nav.Screen name="Register" component={Register} />

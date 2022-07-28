@@ -7,6 +7,7 @@ import Characters from "../../screens/NFT/Character/Characters";
 import CharacterDeco from "../../screens/NFT/Character/CharacterDeco";
 import GetNFTItem from "./../../screens/NFT/GetNFTItem";
 import MyHealth from "./../../screens/Health/MyHealth";
+import Health from "./../../screens/Health/Health";
 import CustomDrawer from "../../src/components/CustomDrawer";
 const Drawer = createDrawerNavigator();
 
@@ -48,6 +49,11 @@ export default function DrawerTab() {
         name="MyHealth"
         component={MyHealth}
         options={{ drawerLabel: "MyHealth" }}
+      />
+      <Drawer.Screen
+        name="Health"
+        component={Health}
+        options={{ drawerLabel: "Health" }}
       />
     </Drawer.Navigator>
   );

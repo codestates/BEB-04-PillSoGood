@@ -4,8 +4,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { DrawerActions } from "@react-navigation/native";
 import Home from "../../screens/Home";
 import Reminder from "../../screens/Health/Reminder";
-import MyHealth from "../../screens/Health/MyHealth";
-import Health from "../../screens/Health/Health";
+// import MyHealth from "../../screens/Health/MyHealth";
+// import Health from "../../screens/Health/Health";
 import DrawerTab from "./DrawerTab";
 export default function TabNavigation(props) {
   const Tab = createBottomTabNavigator();
@@ -41,7 +41,7 @@ export default function TabNavigation(props) {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Health" component={Health} />
+      <Tab.Screen name="Home" component={Home} />
       <Tab.Screen
         name="DrawerTab"
         component={DrawerTab}

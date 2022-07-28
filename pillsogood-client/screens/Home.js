@@ -177,9 +177,7 @@ const Home = ({ navigation: { navigate } }) => {
         animationType="fade"
         visible={isModalVisible}
         nRequestClose={() => changeModalVisible(false)}
-      >
-        <SimpleModal changeModalVisible={isModalVisible} setData={setData} />
-      </Modals>
+      ></Modals>
     </Container>
   );
 };

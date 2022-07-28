@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { ActivityIndicator, Alert } from "react-native";
 import { BASE_COLOR } from "../../colors";
 import { useMutation } from "@apollo/client";
+import { useSelector } from "react-redux";
 import { HEALTH } from "../../src/query/MutationQuery";
 import { useNavigation } from "@react-navigation/native";
 
@@ -65,7 +66,7 @@ const SubTitle = styled.Text`
   align-items: ;
 `;
 const Health = () => {
-  // const user = useSelector((state) => state.user.value)
+  let jwtToken = useSelector((state) => state.login.token);
 
   const weightInput = useRef();
   const highHypertensionInput = useRef();
@@ -78,7 +79,7 @@ const Health = () => {
   const [lowHypertension, setLowHypertension] = useState(0);
   const [bloodSugerLevel, setBloodSugerLevel] = useState(0);
 
-  const [Health, { data, loading, error }] = useMutation(HEALTH);
+  const [creatHealthRecord, { data, loading, error }] = useMutation(HEALTH);
   const [complete, setComplete] = useState(false);
   const navigation = useNavigation();
 
@@ -111,23 +112,26 @@ const Health = () => {
     try {
       setComplete(false);
       console.log(
-        height,
+        typeof jwtToken,
         typeof height,
-        weight,
-        lowHypertension,
-        highHypertension,
-        bloodSugerLevel,
+        typeof weight,
+        typeof lowHypertension,
+        typeof highHypertension,
+        typeof bloodSugerLevel,
         "검증완!"
       );
-      Health({
+      const res = creatHealthRecord({
         variables: {
-          height: height,
-          weight: weight,
-          high_Hypertension: highHypertension,
-          low_Hypertension: lowHypertension,
-          bloodSugerLevel: bloodSugerLevel,
+          jwt: jwtToken,
+          height: parseInt(height),
+          weight: parseInt(weight),
+          lowHypertension: parseInt(lowHypertension),
+          highHypertension: parseInt(highHypertension),
+          bloodSugerLevel: parseInt(bloodSugerLevel),
         },
       });
+      console.log(typeof height);
+      console.log(res);
       console.log("완료됌?");
       onComplete();
       console.log("완료");

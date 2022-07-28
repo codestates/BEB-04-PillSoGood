@@ -16,16 +16,16 @@ import {
 } from "./src/utils/Pushnotification";
 import displayNoti from "./src/utils/Pushnotification";
 import askPermission from "./src/utils/Permissons";
-import messaging from "@react-native-firebase/messaging";
+// import messaging from "@react-native-firebase/messaging";
 export default function App() {
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      console.log(msg);
-      displayNoti(remoteMessage);
-    });
+  // useEffect(() => {
+  //   const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+  //     console.log(msg);
+  //     displayNoti(remoteMessage);
+  //   });
 
-    return unsubscribe;
-  }, []);
+  // return unsubscribe;
+  // }, []);
   useEffect(() => {
     askPermission();
     requestUserPermission();

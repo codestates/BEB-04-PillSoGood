@@ -20,8 +20,10 @@ const RegisterStackScreen = () => {
     //인증상태감지
     if (jwtToken) {
       setIsLoggedIn(true);
+      console.log("로그인성공");
     } else {
       setIsLoggedIn(false);
+      console.log("로그인실패");
     }
     console.log(jwtToken, "token");
   }, []);

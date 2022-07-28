@@ -17,6 +17,10 @@ import {
 import askPermission from "./src/utils/Permissons";
 import messaging from "@react-native-firebase/messaging";
 import pushNoti from "./src/utils/pushNoti";
+import notifee, {
+  AndroidImportance,
+  AndroidColor,
+} from "@notifee/react-native";
 
 export default function App() {
   useEffect(() => {

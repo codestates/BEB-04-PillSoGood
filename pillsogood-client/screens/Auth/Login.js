@@ -107,7 +107,6 @@ const Login = ({ navigation: { navigate } }) => {
         Alert.alert("로그인완료");
         setEmail("");
         setPassword("");
-
         AsyncStorage.setItem("token", appdata.data.login.jwt); //로컬에 jwt 토큰 저장
         Token = appdata.data.login.jwt;
 

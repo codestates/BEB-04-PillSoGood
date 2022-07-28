@@ -14,14 +14,16 @@ import {
   NotificationListener,
   GetFCMToken,
 } from "./src/utils/Pushnotification";
-import displayNoti from "./src/utils/Pushnotification";
 import askPermission from "./src/utils/Permissons";
 import messaging from "@react-native-firebase/messaging";
+import pushNoti from "./src/utils/pushNoti";
+
 export default function App() {
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      console.log(msg);
-      displayNoti(remoteMessage);
+      console.log(unsubscribe);
+      console.log(remoteMessage);
+      pushNoti.displayNoti(remoteMessage);
     });
 
     return unsubscribe;

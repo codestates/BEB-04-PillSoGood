@@ -1,3 +1,9 @@
+import { AppState } from "react-native";
+import notifee, {
+  AndroidImportance,
+  AndroidColor,
+} from "@notifee/react-native";
+
 const displayNotification = async (message) => {
   const channelAnoucement = await notifee.createChannel({
     id: "default",

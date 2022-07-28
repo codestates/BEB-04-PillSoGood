@@ -11,7 +11,7 @@
     "noEmit": true,
     "strict": true,
     "target": "esnext",
-    "types": ["jest", "styled-components-react-native"]
+    "types": ["styled-components-react-native"]
   },
   "exclude": [
     "node_modules",

@@ -21,7 +21,7 @@ const TextInputs = styled.TextInput`
   margin-bottom: 10px;
   font-size: 16px;
   color: black;
-  background-color: #ffffff7f;
+  background-color: #fffffff;
 `;
 const Btn = styled.TouchableOpacity`
   margin-top: 0px;

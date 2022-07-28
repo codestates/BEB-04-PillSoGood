@@ -27,3 +27,21 @@ export const SIGN_UP = gql`
     )
   }
 `;
+
+export const HEALTH = gql`
+  mutation Health(
+    $height: Int!
+    $weight: Int!
+    $highHypertension: Int!
+    $lowHypertension: Int!
+    $bloodSugerLevel: Int!
+  ) {
+    health(
+      height: $height
+      weight: $weight
+      highHypertension: $highHypertension
+      lowHypertension: $lowHypertension
+      bloodSugerLevel: $bloodSugerLevel
+    )
+  }
+`;

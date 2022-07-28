@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../colors";
+import { SimpleModal } from "../src/components/SimpleModal";
 // import { set } from "immer/dist/internal";
 
 const Container = styled.View`
@@ -81,6 +82,12 @@ const AlarmText = styled.Text`
   font-size: 14px;
   text-align: center;
 `;
+const Modals = styled.Modal`
+  color: white;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+`;
 
 const Home = ({ navigation: { navigate } }) => {
   const DATA = ["고지혈증", "고혈압", "당뇨"];
@@ -121,6 +128,7 @@ const Home = ({ navigation: { navigate } }) => {
           <Cardtxt>{DATA[0]}</Cardtxt>
           <Btn
             onPress={() => {
+              changeModalVisible(true);
               setVisible(!visible);
             }}
           >
@@ -132,6 +140,7 @@ const Home = ({ navigation: { navigate } }) => {
         <Cardtxt>{DATA[1]}</Cardtxt>
         <Btn
           onPress={() => {
+            changeModalVisible(true);
             setVisible(!visible);
           }}
         >
@@ -143,6 +152,7 @@ const Home = ({ navigation: { navigate } }) => {
         <Cardtxt>{DATA[2]}</Cardtxt>
         <Btn
           onPress={() => {
+            changeModalVisible(true);
             setVisible(!visible);
           }}
         >
@@ -150,9 +160,27 @@ const Home = ({ navigation: { navigate } }) => {
         </Btn>
       </Card>
 
-      <AlarmBtn onPress={() => navigate("Reminder")}>
+      {/* <Cardtxt>{chooseData}</Cardtxt> */}
+
+      {/* 모달시작 */}
+
+      <AlarmBtn
+        onPress={() => {
+          navigate("Reminder");
+          // onBackdropPress={() => setModalVisible(false)
+          //콘텐츠 외부 눌러 모달 숨기기
+        }}
+      >
         <AlarmText>알람 등록하기</AlarmText>
       </AlarmBtn>
+      <Modals
+        transparent={true}
+        animationType="fade"
+        visible={isModalVisible}
+        nRequestClose={() => changeModalVisible(false)}
+      >
+        <SimpleModal changeModalVisible={isModalVisible} setData={setData} />
+      </Modals>
     </Container>
   );
 };

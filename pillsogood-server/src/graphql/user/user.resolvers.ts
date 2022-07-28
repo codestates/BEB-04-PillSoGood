@@ -79,7 +79,7 @@ export default {
             return status.SUCCESS
 
         }, 
-        async login(_:any, args: {email:string, password:string}) {
+        async login(_:any, args: {email:string, password:string, firebaseToken:string}) {
             const crypto = require('crypto');
             const encryptedPassword = crypto.createHmac('sha256', process.env.PASSWORD_SECRET).update(args.password).digest('hex');
             
@@ -89,6 +89,11 @@ export default {
             if(!loginUser) return status.WRONG_USER_INFO
 
             createLog("login", loginUser._id)
+
+            await User.updateOne(
+                {_id: loginUser._id},
+                {firebaseToken: args.firebaseToken}    
+            )
 
             const jwt = require('jsonwebtoken')
             const accessToken = jwt.sign(
@@ -129,17 +134,6 @@ export default {
             const crypto = require('crypto');
             const encryptedPassword = crypto.createHmac('sha256', process.env.PASSWORD_SECRET).update(args.password).digest('hex');
             const res = await User.updateOne({_id:args._id}, {password:encryptedPassword})
-            if(!res) return status.SERVER_ERROR
-            return status.SUCCESS
-        },
-        async updateUserBalance(_:any, args:{jwt:string, pointBalance:number}) {
-            const userInfo = getUserInfoByToken(args.jwt)
-            if(!userInfo) return status.TOKEN_EXPIRED
-
-            const res = await User.updateOne(
-                {_id:userInfo._id},
-                {pointBalance: args.pointBalance}
-            )
             if(!res) return status.SERVER_ERROR
             return status.SUCCESS
         }

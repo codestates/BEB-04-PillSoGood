@@ -1,9 +1,15 @@
-// const displayNotification = async (message) => {
-//   const channelAnoucement = await notifee.createChannel({
-//     id: "default",
-//     name: "PillSoGood",
-//     importance: AndroidImportance.HIGH,
-//   });
+import { AppState } from "react-native";
+import notifee, {
+  AndroidImportance,
+  AndroidColor,
+} from "@notifee/react-native";
+
+const displayNotification = async (message) => {
+  const channelAnoucement = await notifee.createChannel({
+    id: "default",
+    name: "PillSoGood",
+    importance: AndroidImportance.HIGH,
+  });
 
 //   await notifee.displayNotification({
 //     title: message.data.title,

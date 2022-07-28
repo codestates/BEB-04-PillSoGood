@@ -68,3 +68,51 @@ export const HEALTH = gql`
     bloodSugarLevel: $bloodSugarLevel)
 }
     `; 
+export const USERQUERY = gql`
+  query GetUserInfo($jwt: String!) {
+    getUserInfo(jwt: $jwt) {
+      email
+      nickname
+      password
+      dateOfBirth
+      pointBalance
+      _id
+      createdAt
+      disease
+      phoneNumber
+    }
+  }
+`;
+
+export const UserMutation = gql`
+  mutation UpdateUserBalance($jwt: String!, $pointBalance: Int) {
+    updateUserBalance(jwt: $jwt, pointBalance: $pointBalance)
+  }
+`;
+
+export const CharQuery = gql`
+  query GetBases($jwt: String!) {
+    getBases(jwt: $jwt) {
+      _id
+      name
+      level
+      imagePath
+    }
+  }
+`;
+
+export const CharSubmit = gql`
+  mutation CreateCharacter(
+    $jwt: String!
+    $name: String!
+    $baseId: String!
+    $description: String!
+  ) {
+    createCharacter(
+      jwt: $jwt
+      name: $name
+      baseId: $baseId
+      description: $description
+    )
+  }
+`;

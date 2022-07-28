@@ -9,6 +9,7 @@ import GetNFTItem from "./../../screens/NFT/GetNFTItem";
 import MyHealth from "./../../screens/Health/MyHealth";
 import Health from "./../../screens/Health/Health";
 import CustomDrawer from "../../src/components/CustomDrawer";
+import Health from "../../screens/Health/Health";
 const Drawer = createDrawerNavigator();
 
 export default function DrawerTab() {

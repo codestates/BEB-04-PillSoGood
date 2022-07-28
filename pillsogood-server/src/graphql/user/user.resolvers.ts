@@ -131,17 +131,6 @@ export default {
             const res = await User.updateOne({_id:args._id}, {password:encryptedPassword})
             if(!res) return status.SERVER_ERROR
             return status.SUCCESS
-        },
-        async updateUserBalance(_:any, args:{jwt:string, pointBalance:number}) {
-            const userInfo = getUserInfoByToken(args.jwt)
-            if(!userInfo) return status.TOKEN_EXPIRED
-
-            const res = await User.updateOne(
-                {_id:userInfo._id},
-                {pointBalance: args.pointBalance}
-            )
-            if(!res) return status.SERVER_ERROR
-            return status.SUCCESS
         }
     }
 }

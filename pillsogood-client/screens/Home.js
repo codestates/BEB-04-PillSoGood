@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../colors";
-import { SimpleModal } from "../src/components/SimpleModal";
 // import { set } from "immer/dist/internal";
 
 const Container = styled.View`

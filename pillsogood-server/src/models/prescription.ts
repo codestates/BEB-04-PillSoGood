@@ -4,8 +4,7 @@ const prescription = new Schema({
     jwt : String,
     medicine : String,
     alertTime : String,
-    hospital : String,
-    lastMedicationCount : String, // String형인지 Number형인지?
+    lastMedicationCount : Number, // String형인지 Number형인지?
     createdAt: String
 })
 

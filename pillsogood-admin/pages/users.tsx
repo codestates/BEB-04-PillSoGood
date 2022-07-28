@@ -1,8 +1,11 @@
 import type { NextPage } from 'next'
 import { gql, useQuery } from "@apollo/client";
 import SessionStorage from "../utils/sessionStorage"
-import { useRouter } from "next/router";
 import Link from "next/link";
+import { PageTitle } from "../components/PageTitle"
+import { StyledTable, StyledTh, StyledTd, StyledTr } from "../components/StyledTable"
+import { StyledLoadingGif } from "../components/StyledCommon"
+import React from "react";
 
 const GET_USERS = gql`
     query GetUsers($jwt: String!, $nickname: String, $email: String) {
@@ -20,62 +23,56 @@ const GET_USERS = gql`
 `
 
 const Users: NextPage = () => {
-    const router = useRouter()
-    const moveToDetail = (data:any) => {
-        router.push({
-            pathname: `/detail/${data._id}`,
-            query: {data:JSON.stringify(data)}
-        }, `/detail/${data._id}`);
-    }
     const { loading, data } = useQuery(
         GET_USERS,
         { variables: { jwt: SessionStorage.getItem("jwt") } }
       );
     if (loading) {
-        return (<div>대기중 ...</div>)
+        <StyledLoadingGif/>
     }
     if (data) {
         return (
             <div>
-                <h1>사용자 목록</h1>
-                <table>
+                <PageTitle title="사용자 목록"/>
+                <StyledTable>
                     <thead>
-                        <tr>
-                            <th>닉네임</th>
-                            <th>이메일</th>
-                            <th>전화 번호</th>
-                            <th>생년월일</th>
-                            <th>리워드</th>
-                            <th>질환</th>
-                            <th>가입 일자</th>
-                        </tr>
+                        <StyledTr>
+                            <StyledTh scope="col">닉네임</StyledTh>
+                            <StyledTh scope="col">이메일</StyledTh>
+                            <StyledTh scope="col">전화 번호</StyledTh>
+                            <StyledTh scope="col">생년월일</StyledTh>
+                            <StyledTh scope="col">리워드</StyledTh>
+                            <StyledTh scope="col">질환</StyledTh>
+                            <StyledTh scope="col">가입 일자</StyledTh>
+                        </StyledTr>
                     </thead>
                     <tbody>
                         {
                             data.getUsers.map((data:any) => {
                                 return (
-                                    <Link key={data._id} href={`/detail/${data._id}`}>
+                                    <Link key={data._id} href={`/users/${data._id}`}>
                                         <tr>
-                                            <td>{data.nickname}</td>
-                                            <td>{data.email}</td>
-                                            <td>{data.phoneNumber}</td>
-                                            <td>{data.dateOfBirth}</td>
-                                            <td>{data.pointBalance}</td>
-                                            <td>{data.disease}</td>
-                                            <td>{data.createdAt}</td>
+                                            <StyledTd>{data.nickname}</StyledTd>
+                                            <StyledTd>{data.email}</StyledTd>
+                                            <StyledTd>{data.phoneNumber}</StyledTd>
+                                            <StyledTd>{data.dateOfBirth}</StyledTd>
+                                            <StyledTd>{data.pointBalance}</StyledTd>
+                                            <StyledTd>{data.disease}</StyledTd>
+                                            <StyledTd>{data.createdAt}</StyledTd>
                                         </tr>
                                     </Link>
                                 )
                             })
                         }
                     </tbody>
-                </table>
+                </StyledTable>
             </div>
         )
+    } else {
+        return (
+            <StyledLoadingGif/>
+        )
     }
-    return (
-        <></>
-    )
 }
 
 export default Users

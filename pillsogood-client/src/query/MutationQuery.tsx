@@ -1,9 +1,12 @@
 import { gql } from "@apollo/client";
 
 export const LOGIN = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+  mutation Login($email: String!, $password: String!, $firebaseToken: String!) {
+    login(email: $email, password: $password, firebaseToken: $firebaseToken) {
       jwt
+      email
+      nickname
+      _id
     }
   }
 `;
@@ -28,20 +31,18 @@ export const SIGN_UP = gql`
   }
 `;
 
-export const HEALTH = gql`
-  mutation Health(
-    $height: Int!
-    $weight: Int!
-    $highHypertension: Int!
-    $lowHypertension: Int!
-    $bloodSugerLevel: Int!
+export const MEDICINE_ALARM = gql`
+  mutation CreatePrescriptionRecord(
+    $jwt: String!
+    $medicine: String!
+    $alertTime: String!
+    $lastMedicationCount: Int!
   ) {
-    health(
-      height: $height
-      weight: $weight
-      highHypertension: $highHypertension
-      lowHypertension: $lowHypertension
-      bloodSugerLevel: $bloodSugerLevel
+    createPrescriptionRecord(
+      jwt: $jwt
+      medicine: $medicine
+      alertTime: $alertTime
+      lastMedicationCount: $lastMedicationCount
     )
   }
 `;

@@ -5,7 +5,7 @@ import { createLog } from "../../utils/log"
 const User = require("../../models/user")
 const moment = require("moment")
 type user = {
-    _id: number
+    _id: string
     email: string
     password: string
     nickname: string
@@ -28,10 +28,10 @@ export default {
         async getUserInfo(_:any, args:{jwt:string, _id:string}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
-
-            if(args._id !== null) {
+            
+            if(args._id !== null && args._id !== undefined) {
                 let user = await User.findOne({
-                    _id:userInfo._id
+                    _id:args._id
                 })
                 return user
             }
@@ -79,7 +79,7 @@ export default {
             return status.SUCCESS
 
         }, 
-        async login(_:any, args: {email:string, password:string}) {
+        async login(_:any, args: {email:string, password:string, firebaseToken:string}) {
             const crypto = require('crypto');
             const encryptedPassword = crypto.createHmac('sha256', process.env.PASSWORD_SECRET).update(args.password).digest('hex');
             
@@ -89,6 +89,11 @@ export default {
             if(!loginUser) return status.WRONG_USER_INFO
 
             createLog("login", loginUser._id)
+
+            await User.updateOne(
+                {_id: loginUser._id},
+                {firebaseToken: args.firebaseToken}    
+            )
 
             const jwt = require('jsonwebtoken')
             const accessToken = jwt.sign(
@@ -101,7 +106,7 @@ export default {
               {expiresIn:'365d'}
             )
 
-            return {"jwt": accessToken}
+            return {"jwt": accessToken, "email": loginUser.email, "nickname": loginUser.nickname, "_id":loginUser._id}
 
         },
         async updateUserInfo(_:any, args:{jwt:string, nickname:string, password:string, phoneNumber:string, email:string, disease:[number]}) {

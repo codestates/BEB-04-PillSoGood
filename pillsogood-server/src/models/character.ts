@@ -5,8 +5,10 @@ const character = new Schema({
     name: String,
     level: Number,
     baseId: String,
+    createdAt: String,
     description: String,
-    createdAt: String
+    hash: String,
+    tokenId: String
 })
 
 module.exports = model('Character', character); 

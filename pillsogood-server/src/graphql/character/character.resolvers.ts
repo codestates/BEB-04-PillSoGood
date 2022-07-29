@@ -1,3 +1,5 @@
+
+
 import { getUserInfoByToken } from "../../utils/jwt"
 import { status } from "../../constants/code"
 import { createLog } from "../../utils/log"
@@ -20,6 +22,7 @@ declare let process : {
 
 const client = new NFTStorage({ token: process.env.NFT_STORAGE_API_TOKEN })
 
+
 type character = {
     _id: string
     userId:string
@@ -28,6 +31,7 @@ type character = {
     description: string
     hash: string
     tokenId: string
+
 }
 
 type user = {
@@ -41,6 +45,7 @@ type user = {
     phoneNumber: string
     disease: [number]
 }
+
 
 export default {
     Character: {
@@ -84,19 +89,42 @@ export default {
                 dest: '../../images',               // will be saved to /path/to/dest/images/ ~.jpeg
                 };
 
+
+
+            // Url에서 이미지 다운로드 위한 세팅
+            const download = require('image-downloader');
+            const options = {
+                url: args.baseId,
+                dest: '../../images',               // will be saved to /path/to/dest/images/ ~.jpeg
+              };
+
+            // url에서 이미지 다운
+            const imageFileName = await download.image(options)
+              .then(({ filename }:any) => {
+                return filename
+              })
+
             // url에서 이미지 다운
             const imageFileName = await download.image(options)
                 .then(({ filename }:any) => {
                 return filename
                 })
 
+
             // nft.Storage 모듈 사용해서 IPFS에 JSON 파일 생성
             const metadata = await client.store({
                 name: args.name,
                 description: args.description,
                 image: new File([fs.readFileSync(imageFileName)], "image.jpeg", {type:"image/png"})
+
+              })
+              
+            console.log('uploaded json url:', metadata.url)
+
+
                 })
                 
+
             const mintNFT = await ERC721Mint(metadata.url)   // ERC721Mint 함수의 인자는 tokenuri가 필요하고 그 인자에 해당하는 args.tokenURI 삽입
             // ERC721Mint는 return 값으로 { hash, tokenId } 가짐. 
             // 즉, mintNFT = [ hash, tokenId ]  --- mintNFT[0] = hash, 
@@ -134,28 +162,50 @@ export default {
             if(!res) return status.SERVER_ERROR
             return status.SUCCESS
         },
+
+        async transferCharacter(_:any, args:{jwt:string, _id:string, tokenId:string, receiveraddress:string  }){
+
         async transferCharacter(_:any, args:{jwt:string, _id:string, tokenId:string, receiverAddress:string  }){
+
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
 
             createLog("transferCharacter", userInfo._id)
             
+
+            const transfer = await ERC721transfer(args.receiveraddress, args.tokenId)    // ERC721transfer 함수의 인자는 receiveraddress, tokenId가 필요함.
+
             const transfer = await ERC721transfer(args.receiverAddress, args.tokenId)    // ERC721transfer 함수의 인자는 receiveraddress, tokenId가 필요함.
+
                                                                                            // ERC721transfer는 return 값으로 { hash } 가짐. 
                                                                                            // 즉, transfer = [ hash ]  --- transfer[0] = hash                                   
             if(transfer !== undefined){
 
                 const transferHash = transfer[0]
+
+
+
                 const res = await Character.updateOne(
                     {_id:args._id, userId:userInfo._id},
                     { hash:transferHash, createdAt:new Date()}          // transfer에서 생성된 transaction Hash값으로 nftHash 업데이트
                 )
                 
+
+                
+                
+
                 if(!res) return status.SERVER_ERROR
                 return { "transferHash" : transferHash}
             }
             else { return status.SERVER_ERROR }
+
+        }
+        
+        
+        
+
             }
+
         ,
         async deleteCharacter(_:any, args:{jwt:string, _id:string}){
             const userInfo = getUserInfoByToken(args.jwt)

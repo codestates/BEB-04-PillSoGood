@@ -32,5 +32,6 @@ export default gql`
         login(email:String!, password:String!, firebaseToken:String!):Token!
         updateUserInfo(jwt:String!, nickname:String, password:String, phoneNumber:String, email:String, disease:[Int]):Int!
         updateUserPassword(jwt:String!, _id:String!, password:String):Int!
+        updateUserBalance(jwt:String!, pointBalance:Int):Int!
     }
 `;

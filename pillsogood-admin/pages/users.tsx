@@ -8,6 +8,7 @@ import { StyledLoadingGif } from "../components/StyledCommon"
 import React from "react";
 import { CSVLink } from "react-csv";
 import moment from "moment"
+import { DISEASE } from '../constants/disease';
 
 const headers = [
     { label: "no.", key: "no"},
@@ -35,6 +36,17 @@ const GET_USERS = gql`
     }
 `
 
+function getDiseaseKorean(disease:[]) {
+    let diseaseKorean = ""
+    for (let i = 0; i < disease.length; i++) {
+        diseaseKorean += DISEASE[i]
+        if(i !== (disease.length - 1)) {
+            diseaseKorean += ", "
+        }
+    }
+    return diseaseKorean;
+}
+
 const Users: NextPage = () => {
     const { loading, data } = useQuery(
         GET_USERS,
@@ -55,7 +67,7 @@ const Users: NextPage = () => {
                 dateOfBirth: user.dateOfBirth, 
                 pointBalance: user.pointBalance, 
                 createdAt: user.createdAt, 
-                disease: user.disease, 
+                disease: getDiseaseKorean(user.disease), 
                 phoneNumber:user.phoneNumber
             }
             excelData.push(userExcelData)
@@ -92,7 +104,7 @@ const Users: NextPage = () => {
                                             <StyledTd>{data.phoneNumber}</StyledTd>
                                             <StyledTd>{data.dateOfBirth}</StyledTd>
                                             <StyledTd>{data.pointBalance}</StyledTd>
-                                            <StyledTd>{data.disease}</StyledTd>
+                                            <StyledTd>{getDiseaseKorean(data.disease)}</StyledTd>
                                             <StyledTd>{data.createdAt}</StyledTd>
                                         </tr>
                                     </Link>

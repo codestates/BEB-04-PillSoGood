@@ -1,9 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
 import type { NextPage } from 'next'
-import { useRouter } from 'next/router';
 import { PageTitle } from "../components/PageTitle"
 import SessionStorage from "../utils/sessionStorage"
-import Link from "next/link";
 import { StyledLoadingGif } from "../components/StyledCommon"
 import { StyledTable, StyledTh, StyledTd, StyledTr, StyledNewButtonDiv, StyledNewButton } from "../components/StyledTable"
 import { CSVLink } from "react-csv";

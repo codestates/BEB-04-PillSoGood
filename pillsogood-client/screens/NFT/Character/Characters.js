@@ -12,7 +12,7 @@ import {
   Dimensions,
   StyleSheet,
 } from "react-native";
-import { NftQuery } from "../../../src/query/MutationQuery";
+import { NftQuery, NftTransfer } from "../../../src/query/MutationQuery";
 
 
 
@@ -91,7 +91,6 @@ margin-top: 15px;
 
 const DesDetail = styled.Text`
 margin-top: 7px;
-line-height: 20;
 `;
 
 const TextInputView = styled.View`
@@ -148,9 +147,8 @@ const Characters = () => {
   const [queryData, setQueryData] = useState("")
   const [metaMaskaddr, setMetaMaskaddr] = useState("")
   const [tokId, setTokId] = useState("")
-
+  const [transferCharacter] = useMutation(NftTransfer)
   const jwt = useSelector((state) => state.login.token )
-  console.log('jwt:', jwt)
   const {loading, data, error} = useQuery(NftQuery, { variables: {jwt: jwt}})
   
   // const obj = Object.entries(data.getCharacters[0])
@@ -175,6 +173,22 @@ const Characters = () => {
   // 옮기기 버튼 누르면 실행될 함수 ( Mutation )
   const Move = () => {
 
+    transferCharacter({
+      variables: {
+        jwt: jwt,
+        tokenId: tokId,
+        receiverAddress: metaMaskaddr
+      }
+    }).then((res)=>{
+      if(res){
+        console.log("옮기기 성공 :", res)
+        Alert.alert(`Nft를 성공적으로 가져왔습니다!. 다음의 링크에서 확인하세요. https://rinkeby.etherscan.io/tx/${res.data.transferCharacter.transferHash}`)
+      }
+      else{
+        console.log("옮기기 실패:", res)
+        Alert.alert("Nft를 가져오지 못했습니다")
+      }
+    })
     setMetaMaskaddr("")
     setTokId("")
   }
@@ -235,7 +249,7 @@ const Characters = () => {
           placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
         />
       </TextInputView>
-      <ButtonView><Button ><BtnText>옮기기</BtnText></Button></ButtonView>
+      <ButtonView><Button onPress={Move} ><BtnText>옮기기</BtnText></Button></ButtonView>
     </Container>  
   );
   };

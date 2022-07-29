@@ -86,4 +86,10 @@ query GetCharacters($jwt: String!) {
 `
 
 
-
+export const NftTransfer =gql`
+mutation TransferCharacter($jwt: String!, $tokenId: String!, $receiverAddress: String!) {
+  transferCharacter(jwt: $jwt, tokenId: $tokenId, receiverAddress: $receiverAddress) {
+    transferHash
+  }
+}
+`

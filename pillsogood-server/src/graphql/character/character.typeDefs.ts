@@ -25,7 +25,7 @@ export default gql`
     type Mutation {
         createCharacter(jwt:String!, name:String!, baseId:String!, description:String!):Int!
         updateCharacter(jwt:String!, _id:String!, name:String!, level:Int!, description:String!):Int!
-        transferCharacter(jwt:String!, _id:String!, tokenId:String!, receiveraddress:String!):Hash!
+        transferCharacter(jwt:String!, tokenId:String!, receiverAddress:String!):Hash!
         deleteCharacter(jwt:String!, _id:String!):Int!
     }
 `

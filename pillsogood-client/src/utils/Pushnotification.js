@@ -8,6 +8,12 @@ import notifee, {
 export async function requestUserPermission() {
   const authStatus = await messaging().requestPermission({
     providesAppNotificationSettings: true,
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: true,
+    provisional: false,
+    sound: true,
   });
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED || //알림권한 ok

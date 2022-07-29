@@ -110,6 +110,7 @@ const Home = ({ navigation: { navigate } }) => {
       if (!jwtToken) {
         Alert.alert("토큰이 없습니다.");
       } else {
+        console.log(MedicineName, MedicineCount, MedicineRecord, "데이터");
         setMedicineName(appdata.data.GetPrescriptionRecords.medicine);
         setMedicineCount(
           appdata.data.GetPrescriptionRecords.lastMedicationCount

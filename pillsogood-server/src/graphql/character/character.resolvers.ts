@@ -52,6 +52,13 @@ export default {
         }
     }, 
     Query: {
+        async getAllCharacters(_:any, args:{jwt:string}) {
+            const userInfo = getUserInfoByToken(args.jwt)
+            if(!userInfo) return status.TOKEN_EXPIRED
+
+            const characters = Character.find()
+            return characters
+        },
         async getCharacters(_:any, args:{jwt:string}){
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED

@@ -28,6 +28,7 @@ export default gql`
 
     type Query {
         getCharacters(jwt:String!):[Character]
+        getAllCharacters(jwt:String!):[Character]
     }
     type Hash {
         transferHash: String

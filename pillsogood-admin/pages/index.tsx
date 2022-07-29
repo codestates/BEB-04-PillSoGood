@@ -43,7 +43,18 @@ const StyledDashboard = styled.div`
 const Home: NextPage = () => {
   Chart.register(CategoryScale, LinearScale, BarElement)
   const [createdAt, setCreatedAt] = useState(moment().format("YYYYMMDD"))
-  const [createdAtChartData, setCreatedAtChartData] = useState(null)
+  const [createdAtChartData, setCreatedAtChartData] = useState({
+    labels:[""],
+    datasets:[
+      {
+        label: 'dataset',
+        data: [0],
+        backgroundColor: CHART_BACKGROUND_COLOR,
+        borderColor: CHART_BORDER_COLOR,
+        borderWidth: 1
+      }
+    ]
+  })
   
   const [getCreatedAtNewData, {loading, error, data}] = useLazyQuery(GET_LOGS_BY_CREATED_AT, {
     variables: {

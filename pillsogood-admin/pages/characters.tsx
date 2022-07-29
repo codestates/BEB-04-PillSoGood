@@ -75,7 +75,7 @@ const Characters: NextPage = () => {
                 <PageTitle title="사용자 캐릭터 목록"/>
                 <StyledNewButtonDiv>
                     <CSVLink data={excelData} headers={headers} filename={ `${moment().format("yyyyMMDD")}_캐릭터목록.csv`}>
-                        <StyledNewButton>엑셀 다운로드</StyledNewButton>
+                        <StyledNewButton>.csv 다운로드</StyledNewButton>
                     </CSVLink>
                 </StyledNewButtonDiv>
                 <StyledTable>

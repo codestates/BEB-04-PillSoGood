@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../colors";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_MEDICINE_ALARM } from "../src/query/MutationQuery";
+import { useSelector } from "react-redux";
 // import { set } from "immer/dist/internal";
+import { Alert } from "react-native";
 
 const Container = styled.View`
   background-color: ${BASE_COLOR};
@@ -83,28 +87,37 @@ const AlarmText = styled.Text`
 `;
 
 const Home = ({ navigation: { navigate } }) => {
-  const DATA = ["고지혈증", "고혈압", "당뇨"];
-  const today = new Date();
+  let jwtToken = useSelector((state) => state.login.token);
+  const [MedicineName, setMedicineName] = useState("");
+  const [MedicineCount, setMedicineCount] = useState(0);
+  const [AlertTime, setAlertTime] = useState("");
+  //Query
+  const [GetPrescriptionRecords, { data, loading, error }] =
+    useQuery(GET_MEDICINE_ALARM);
+  //Mutation
+  const [CreatePrescriptionRecord] = useMutation();
   const [visible, setVisible] = useState(true);
-  const [isModalVisible, setisModalVisible] = useState(false);
-  const [chooseData, setchooseData] = useState();
-  changeModalVisible = (bool) => {
-    setisModalVisible(bool);
-  };
-  const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
-    const date = new Date().getDate(); //Current Date
-    const month = new Date().getMonth() + 1; //Current Month
-    const year = new Date().getFullYear(); //Current Year
-    const hours = new Date().getHours(); //Current Hours
-    const min = new Date().getMinutes(); //Current Minutes
-    setCurrentDate(year + "/" + month + "/" + date + " " + hours + ":" + min);
-  }, []);
-
-  const setData = (data) => {
-    setchooseData(data);
-  };
+    const MedicineRecord = GetPrescriptionRecords({
+      variables: {
+        jwt: jwtToken,
+      },
+    });
+    if (loading) return "알람 목록받아오는중...";
+    if (error) return `데이터받아오기 에러발생! ${error.message}`;
+    MedicineRecord.then((appdata) => {
+      if (!jwtToken) {
+        Alert.alert("토큰이 없습니다.");
+      } else {
+        setMedicineName(appdata.data.GetPrescriptionRecords.medicine);
+        setMedicineCount(
+          appdata.data.GetPrescriptionRecords.lastMedicationCount
+        );
+        setAlertTime(appdata.data.GetPrescriptionRecords.alertTime);
+      }
+    });
+  }, [loading]);
 
   return (
     <Container>
@@ -117,38 +130,18 @@ const Home = ({ navigation: { navigate } }) => {
 
       {visible ? (
         <Card>
-          <Cardtxt>{currentDate}</Cardtxt>
-          <Cardtxt>{DATA[0]}</Cardtxt>
+          <Cardtxt>약 이름:{MedicineName}</Cardtxt>
+          <Cardtxt>남은약 :{MedicineCount}</Cardtxt>
+          <Cardtxt>알림시간: {AlertTime}</Cardtxt>
           <Btn
             onPress={() => {
               setVisible(!visible);
             }}
           >
-            <BtnText>약 먹었어요~</BtnText>
+            <BtnText>꼭 챙겨 먹으셔야해요!</BtnText>
           </Btn>
         </Card>
       ) : null}
-      <Card>
-        <Cardtxt>{DATA[1]}</Cardtxt>
-        <Btn
-          onPress={() => {
-            setVisible(!visible);
-          }}
-        >
-          <BtnText>약 먹었어요~</BtnText>
-        </Btn>
-      </Card>
-
-      <Card>
-        <Cardtxt>{DATA[2]}</Cardtxt>
-        <Btn
-          onPress={() => {
-            setVisible(!visible);
-          }}
-        >
-          <BtnText>약 먹었어요~</BtnText>
-        </Btn>
-      </Card>
 
       <AlarmBtn onPress={() => navigate("Reminder")}>
         <AlarmText>알람 등록하기</AlarmText>

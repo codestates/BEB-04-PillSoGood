@@ -62,7 +62,7 @@ export const USERQUERY = gql`
     }
   }
 `;
-
+//버튼 누르면 이거실행해서 포인트를 쿼리에 담아서
 export const UserMutation = gql`
   mutation UpdateUserBalance($jwt: String!, $pointBalance: Int) {
     updateUserBalance(jwt: $jwt, pointBalance: $pointBalance)
@@ -113,21 +113,15 @@ export const HEALTH_RECORD = gql`
       bloodSugarLevel: $bloodSugarLevel
     )
   }
-  mutation CreateHealthRecord(
-    $jwt: String!
-    $height: Int!
-    $weight: Int!
-    $lowHypertension: Int!
-    $highHypertension: Int!
-    $bloodSugarLevel: Int!
-  ) {
-    createHealthRecord(
-      jwt: $jwt
-      height: $height
-      weight: $weight
-      lowHypertension: $lowHypertension
-      highHypertension: $highHypertension
-      bloodSugarLevel: $bloodSugarLevel
-    )
+`;
+export const GET_MEDICINE_ALARM = gql`
+  query GetPrescriptionRecords($jwt: String!) {
+    getPrescriptionRecords(jwt: $jwt) {
+      _id
+      medicine
+      alertTime
+      lastMedicationCount
+      createdAt
+    }
   }
 `;

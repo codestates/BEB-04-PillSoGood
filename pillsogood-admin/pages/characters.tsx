@@ -8,6 +8,7 @@ import { StyledLoadingGif } from "../components/StyledCommon"
 import { StyledTable, StyledTh, StyledTd, StyledTr, StyledNewButtonDiv, StyledNewButton } from "../components/StyledTable"
 import { CSVLink } from "react-csv";
 import moment from "moment"
+import { useExcelDownloder } from 'react-xls';
 
 const headers = [
     { label: "no.", key: "no"},
@@ -45,6 +46,8 @@ const GET_ALL_CHARACTERS = gql`
 `
 
 const Characters: NextPage = () => {
+    const { ExcelDownloder, Type } = useExcelDownloder();
+
     const { loading, data } = useQuery(
         GET_ALL_CHARACTERS,
         { variables: { jwt: SessionStorage.getItem("jwt") } }
@@ -54,7 +57,8 @@ const Characters: NextPage = () => {
     }
 
     if (data) {
-        var excelData = []
+        var csvData = []
+        var koreanLabelData = []
         for (let i = 0; i< data.getAllCharacters.length; i++) {
             let character = data.getAllCharacters[i]
             let characterData = {
@@ -67,14 +71,32 @@ const Characters: NextPage = () => {
                 nickname: character.userInfo.nickname, 
                 phoneNumber:character.userInfo.phoneNumber
             }
-            excelData.push(characterData)
+            csvData.push(characterData)
+            let labelData = {
+                ".no": i+1,
+                "캐릭터 이름": character.name, 
+                "이미지 Hash": character.baseId, 
+                "캐릭터 설명": character.description, 
+                "캐릭터 Token Id": character.tokenId, 
+                "사용자 email": character.userInfo.email, 
+                "사용자 이름": character.userInfo.nickname, 
+                "사용자 전화번호":character.userInfo.phoneNumber
+            }
+            koreanLabelData.push(labelData)
         }
+
+        const xlsxData = {
+            characters: koreanLabelData
+        };
 
         return (
             <div>
                 <PageTitle title="사용자 캐릭터 목록"/>
                 <StyledNewButtonDiv>
-                    <CSVLink data={excelData} headers={headers} filename={ `${moment().format("yyyyMMDD")}_캐릭터목록.csv`}>
+                    <ExcelDownloder data={xlsxData} filename={`${moment().format("yyyyMMDD")}_캐릭터목록`}>
+                        <StyledNewButton style={{marginRight:10}}>.xlsx 다운로드</StyledNewButton>
+                    </ExcelDownloder>
+                    <CSVLink data={csvData} headers={headers} filename={ `${moment().format("yyyyMMDD")}_캐릭터목록.csv`}>
                         <StyledNewButton>.csv 다운로드</StyledNewButton>
                     </CSVLink>
                 </StyledNewButtonDiv>

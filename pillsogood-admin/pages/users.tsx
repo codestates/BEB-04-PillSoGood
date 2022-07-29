@@ -9,6 +9,7 @@ import React from "react";
 import { CSVLink } from "react-csv";
 import moment from "moment"
 import { DISEASE } from '../constants/disease';
+import { useExcelDownloder } from 'react-xls';
 
 const headers = [
     { label: "no.", key: "no"},
@@ -48,6 +49,8 @@ function getDiseaseKorean(disease:[]) {
 }
 
 const Users: NextPage = () => {
+    const { ExcelDownloder, Type } = useExcelDownloder();
+
     const { loading, data } = useQuery(
         GET_USERS,
         { variables: { jwt: SessionStorage.getItem("jwt") } }
@@ -56,8 +59,9 @@ const Users: NextPage = () => {
         <StyledLoadingGif/>
     }
     if (data) {
-
         var excelData = []
+        var koreanLabelData = []
+
         for (let i = 0; i< data.getUsers.length; i++) {
             let user = data.getUsers[i]
             let userExcelData = {
@@ -71,12 +75,30 @@ const Users: NextPage = () => {
                 phoneNumber:user.phoneNumber
             }
             excelData.push(userExcelData)
+            let labelData = {
+                "no.": i+1,
+                "email": user.email, 
+                "이름": user.nickname, 
+                "생년월일": user.dateOfBirth, 
+                "포인트 잔액": user.pointBalance, 
+                "가입 일자": user.createdAt, 
+                "질환": getDiseaseKorean(user.disease), 
+                "전화 번호":user.phoneNumber
+            }
+            koreanLabelData.push(labelData)
         }
+
+        const xlsxData = {
+            users: koreanLabelData
+        };
 
         return (
             <div>
                 <PageTitle title="사용자 목록"/>
                 <StyledNewButtonDiv>
+                    <ExcelDownloder data={xlsxData} filename={`${moment().format("yyyyMMDD")}_사용자목록`}>
+                        <StyledNewButton style={{marginRight:10}}>.xlsx 다운로드</StyledNewButton>
+                    </ExcelDownloder>
                     <CSVLink data={excelData} headers={headers} filename={ `${moment().format("yyyyMMDD")}_사용자목록.csv`}>
                         <StyledNewButton>.csv 다운로드</StyledNewButton>
                     </CSVLink>

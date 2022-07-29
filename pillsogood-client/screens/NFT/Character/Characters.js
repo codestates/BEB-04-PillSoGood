@@ -150,6 +150,7 @@ const Characters = () => {
   const [tokId, setTokId] = useState("")
 
   const jwt = useSelector((state) => state.login.token )
+  console.log('jwt:', jwt)
   const {loading, data, error} = useQuery(NftQuery, { variables: {jwt: jwt}})
   
   // const obj = Object.entries(data.getCharacters[0])

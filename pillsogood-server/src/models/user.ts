@@ -8,7 +8,8 @@ const user = new Schema({
     pointBalance: Number,
     disease: [Number],
     createdAt: String,
-    phoneNumber: String
+    phoneNumber: String,
+    firebaseToken: String
 })
 
 module.exports = model('User', user); // user스키마를 User라는 이름으로 export

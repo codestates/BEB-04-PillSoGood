@@ -13,10 +13,34 @@ export default gql`
         description:String,
         hash:String,
         tokenId:String
+
     }
 
     type Query {
-    getCharacters(jwt:String!):[Character]
+
+        userInfo: User
+    }
+
+    type User {
+        _id:String,
+        email:String,
+        password:String,
+        nickname:String,
+        dateOfBirth:String,
+        pointBalance:Int,
+        createdAt:String,
+        disease: [Int],
+        phoneNumber:String,
+        firebaseToken: String
+    }
+
+    type Query {
+        getCharacters(jwt:String!):[Character]
+        getAllCharacters(jwt:String!):[Character]
+    }
+    type Hash {
+        transferHash: String
+
     }
 
     type Hash {

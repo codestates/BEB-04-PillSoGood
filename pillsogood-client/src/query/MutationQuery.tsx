@@ -1,9 +1,12 @@
 import { gql } from "@apollo/client";
 
 export const LOGIN = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+  mutation Login($email: String!, $password: String!, $firebaseToken: String!) {
+    login(email: $email, password: $password, firebaseToken: $firebaseToken) {
       jwt
+      email
+      nickname
+      _id
     }
   }
 `;
@@ -27,6 +30,7 @@ export const SIGN_UP = gql`
     )
   }
 `;
+
 
   export const USERQUERY = gql`
   query GetUserInfo($jwt: String!) {
@@ -87,3 +91,98 @@ query GetCharacters($jwt: String!) {
 
 
 
+=======
+export const MEDICINE_ALARM = gql`
+  mutation CreatePrescriptionRecord(
+    $jwt: String!
+    $medicine: String!
+    $alertTime: String!
+    $lastMedicationCount: Int!
+  ) {
+    createPrescriptionRecord(
+      jwt: $jwt
+      medicine: $medicine
+      alertTime: $alertTime
+      lastMedicationCount: $lastMedicationCount
+    )
+  }
+`;
+
+export const USERQUERY = gql`
+  query GetUserInfo($jwt: String!) {
+    getUserInfo(jwt: $jwt) {
+      email
+      nickname
+      password
+      dateOfBirth
+      pointBalance
+      _id
+      createdAt
+      disease
+      phoneNumber
+    }
+  }
+`;
+//버튼 누르면 이거실행해서 포인트를 쿼리에 담아서
+export const UserMutation = gql`
+  mutation UpdateUserBalance($jwt: String!, $pointBalance: Int) {
+    updateUserBalance(jwt: $jwt, pointBalance: $pointBalance)
+  }
+`;
+
+export const CharQuery = gql`
+  query GetBases($jwt: String!) {
+    getBases(jwt: $jwt) {
+      _id
+      name
+      level
+      imagePath
+    }
+  }
+`;
+
+export const CharSubmit = gql`
+  mutation CreateCharacter(
+    $jwt: String!
+    $name: String!
+    $baseId: String!
+    $description: String!
+  ) {
+    createCharacter(
+      jwt: $jwt
+      name: $name
+      baseId: $baseId
+      description: $description
+    )
+  }
+`;
+export const HEALTH_RECORD = gql`
+  mutation CreateHealthRecord(
+    $jwt: String!
+    $height: Int!
+    $weight: Int!
+    $lowHypertension: Int!
+    $highHypertension: Int!
+    $bloodSugarLevel: Int!
+  ) {
+    createHealthRecord(
+      jwt: $jwt
+      height: $height
+      weight: $weight
+      lowHypertension: $lowHypertension
+      highHypertension: $highHypertension
+      bloodSugarLevel: $bloodSugarLevel
+    )
+  }
+`;
+export const GET_MEDICINE_ALARM = gql`
+  query GetPrescriptionRecords($jwt: String!) {
+    getPrescriptionRecords(jwt: $jwt) {
+      _id
+      medicine
+      alertTime
+      lastMedicationCount
+      createdAt
+    }
+  }
+`;

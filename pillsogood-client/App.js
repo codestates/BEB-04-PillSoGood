@@ -15,51 +15,23 @@ import {
   GetFCMToken,
 } from "./src/utils/Pushnotification";
 import askPermission from "./src/utils/Permissons";
-export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // const [openSettingsForNotifications] = useMMKVStorage(
-  //   "openSettingsForNotifications",
-  //   MMKV,
-  //   false
-  // );
-  useEffect(() => {
-    auth().onAuthStateChanged((user) => {
-      //인증상태감지
-      if (user) {
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-      }
-    });
-    console.log(auth().currentUser);
-  }, []);
-  //ForeGround state에서 message 받기
-  // useEffect(() => {
-  //   const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-  //     Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
-  //   });
+import messaging from "@react-native-firebase/messaging";
+import pushNoti from "./src/utils/pushNoti";
+import notifee, {
+  AndroidImportance,
+  AndroidColor,
+} from "@notifee/react-native";
 
-  //   return unsubscribe;
-  // }, []);
-  //background state에서 알람 처리
-  // useEffect(() => {
-  //   if (openSettingsForNotifications) {
-  //     navigate("NotificationsSettingsScreen");
-  //   }
-  // }, [openSettingsForNotifications]);
-  //quit state에서 처리
-  // useEffect(() => {
-  //   messaging()
-  //     .getDidOpenSettingsForNotification()
-  //     .then(async (didOpenSettingsForNotification) => {
-  //       if (didOpenSettingsForNotification) {
-  //         navigate("NotificationsSettingsScreen");
-  //       }
-  //     });
-  // }, []);
+export default function App() {
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      pushNoti.displayNoti(remoteMessage);
+    });
+
+    return unsubscribe;
+  }, []);
   useEffect(() => {
     askPermission();
-    GetFCMToken();
     requestUserPermission();
     // NotificationListener();
     SplashScreen.hide();

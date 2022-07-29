@@ -68,3 +68,19 @@ export const SIGN_UP = gql`
   createCharacter(jwt: $jwt, name: $name, baseId: $baseId, description: $description)
 }
   ` 
+
+
+export const NftQuery = gql`
+query GetCharacters($jwt: String!) {
+  getCharacters(jwt: $jwt) {
+    _id
+    userId
+    name
+    level
+    baseId
+    description
+    hash
+    tokenId
+  }
+}
+`

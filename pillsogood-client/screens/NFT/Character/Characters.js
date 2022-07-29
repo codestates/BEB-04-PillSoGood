@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../../../colors";
 import { useMutation, useQuery, gql } from "@apollo/client";
+import { useSelector } from "react-redux";
 import Swiper from "react-native-web-swiper"
 import {
   ScrollView,
@@ -11,6 +12,9 @@ import {
   Dimensions,
   StyleSheet,
 } from "react-native";
+import { NftQuery } from "../../../src/query/MutationQuery";
+
+
 
 const View = styled.View`
 flex: 1;
@@ -139,25 +143,71 @@ const list = [
 
 const Characters = () => {
   
-  return (
-    <Container>											
-    <HeaderView><Header>NFT list</Header></HeaderView>			
+  
+  const [refreshing, setRefreshing] = useState(false);
+  const [queryData, setQueryData] = useState("")
+  const [metaMaskaddr, setMetaMaskaddr] = useState("")
+  const [tokId, setTokId] = useState("")
+
+  const jwt = useSelector((state) => state.login.token )
+  const {loading, data, error} = useQuery(NftQuery, { variables: {jwt: jwt}})
+  
+  // const obj = Object.entries(data.getCharacters[0])
+  // console.log('obj:', obj[2])
+  // console.log('data', data)
+ 
+//  console.log('detailData:', data.getCharacters)
+  // Nft 정보 가져오기 ( Query )
+
+  useEffect(()=> {
+    
+  }, [data])
+
+  // 새로고침 함수
+  const onRefresh = () => {
+    setRefreshing(true);
+   
+    setRefreshing(false);
+    
+  };
+
+  // 옮기기 버튼 누르면 실행될 함수 ( Mutation )
+  const Move = () => {
+
+    setMetaMaskaddr("")
+    setTokId("")
+  }
+
+  return ( 
+    loading ? (
+      <Loader>
+        <ActivityIndicator />
+      </Loader>
+    ) 
+    :
+    <Container
+     refreshControl={
+      <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+    }>											
+    <HeaderView><Header>My NFT list</Header></HeaderView>			
     <Swiper
      loop
      controlsEnabled={false}
      containerStyle={{ width: "100%", height: SCREEN_HEIGHT / 3 }}
-     >                
-      {list.map((info, index)=>(
+     >  
+     {/* {console.log('Swiper data:', data.getCharacters)}               */}
+      { 
+      data.getCharacters.map((info, index)=>(
       <View key={index}>
         <BgView  style={StyleSheet.absoluteFill}
         />
         <Wrapper>
-        <NftImage source={{ uri: info }}/>
+        <NftImage source={{ uri: info.baseId}}/>
           <Column>
-          <Name> name : Test</Name>
-          <TokId> tokenId : 13</TokId>
+          <Name> name : {info.name}</Name>
+          <TokId> tokenId : {info.tokenId} </TokId>
           <Description> description : </Description>
-          <DesDetail>abcdabcdadfadfasdfadfasdfasdfadfasdfdsfdfzcvzxfasdwqewqwezdfsdfsdfsdfsdfsdf </DesDetail>
+          <DesDetail> {info.description} </DesDetail>
           </Column>
         </Wrapper>
       </View>))}
@@ -168,9 +218,9 @@ const Characters = () => {
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType="default"
-          // value={}
+          value={metaMaskaddr}
           returnKeyType="next"
-          // onChangeText={(text) => setName(text)}
+          onChangeText={(text) => setMetaMaskaddr(text)}
           placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
         />
         <TextInputs
@@ -178,13 +228,13 @@ const Characters = () => {
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType="default"
-          // value={}
+          value={tokId}
           returnKeyType="next"
-          // onChangeText={(text) => setDescription(text)}
+          onChangeText={(text) => setTokId(text)}
           placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
         />
       </TextInputView>
-      <ButtonView><Button><BtnText>옮기기</BtnText></Button></ButtonView>
+      <ButtonView><Button ><BtnText>옮기기</BtnText></Button></ButtonView>
     </Container>  
   );
   };

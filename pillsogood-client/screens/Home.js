@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../colors";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_MEDICINE_ALARM } from "../src/query/MutationQuery";
+import { GET_MEDICINE_ALARM, MEDICINE_ALARM } from "../src/query/MutationQuery";
 import { useSelector } from "react-redux";
 // import { set } from "immer/dist/internal";
-import { Alert } from "react-native";
+import { Alert, Text, View } from "react-native";
 
 const Container = styled.View`
   background-color: ${BASE_COLOR};
@@ -41,43 +41,53 @@ const MainTxt = styled.Text`
   margin-top: -25px;
 `;
 const Card = styled.View`
-  flex: 0.3;
+  flex: 0.25;
   padding: 23px;
   margin: 10px 0px;
   background: papayawhip;
-  border-radius: 30px;
+  border-radius: 20px;
   border-width: 3px;
   border-color: "rgba(255, 255, 255, 0.7)";
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Cardtxt = styled.Text`
   color: black;
-  font-size: 15px;
+  font-size: 17px;
 `;
-
-const Btn = styled.TouchableOpacity`
-  margin-top: 40px;
-  width: 100%;
-  padding: 10px;
-  border-width: 1px;
-  border-radius: 50px;
-  border-color: rgba(255, 255, 255, 0.5);
+const CardElementContainer = styled.View`
+  flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  flex: 1;
+`;
+const Btn = styled.TouchableOpacity`
+  width: 75px;
+  height: 75px;
+  border-width: 1px;
+  border-radius: 20px;
+  border-color: rgba(255, 255, 255, 0.5);
+  justify-content: center;
+  align-items: center;
   background-color: #202d35;
 `;
 const BtnText = styled.Text`
   color: white;
-  font-size: 14px;
-  text-align: center;
+  font-size: 17px;
 `;
 const AlarmBtn = styled.TouchableOpacity`
   width: 100%;
-  padding: 10px;
+  padding: 20px;
   border-radius: 25px;
   border-color: rgba(255, 255, 255, 0.5);
   background-color: #76a991;
   align-items: center;
   justify-content: center;
+  bottom: 10;
+  left: 20;
+  position: absolute;
 `;
 const AlarmText = styled.Text`
   color: white;
@@ -92,34 +102,29 @@ const Home = ({ navigation: { navigate } }) => {
   const [MedicineCount, setMedicineCount] = useState(0);
   const [AlertTime, setAlertTime] = useState("");
   //Query
-  const [GetPrescriptionRecords, { data, loading, error }] =
-    useQuery(GET_MEDICINE_ALARM);
+  const { data, loading, error, refetch } = useQuery(GET_MEDICINE_ALARM, {
+    variables: {
+      jwt: jwtToken,
+    },
+  });
   //Mutation
-  const [CreatePrescriptionRecord] = useMutation();
-  const [visible, setVisible] = useState(true);
+  const [createPrescriptionRecord] = useMutation(MEDICINE_ALARM);
+  //
+  // const [CreatePrescriptionRecord] = useMutation();
 
+  console.log(data);
+  if (loading) return <Text>Loading...</Text>;
+  if (error)
+    return (
+      <>
+        <Text>Error...</Text>
+      </>
+    );
   useEffect(() => {
-    const MedicineRecord = GetPrescriptionRecords({
-      variables: {
-        jwt: jwtToken,
-      },
-    });
-    if (loading) return "알람 목록받아오는중...";
-    if (error) return `데이터받아오기 에러발생! ${error.message}`;
-    MedicineRecord.then((appdata) => {
-      if (!jwtToken) {
-        Alert.alert("토큰이 없습니다.");
-      } else {
-        console.log(MedicineName, MedicineCount, MedicineRecord, "데이터");
-        setMedicineName(appdata.data.GetPrescriptionRecords.medicine);
-        setMedicineCount(
-          appdata.data.GetPrescriptionRecords.lastMedicationCount
-        );
-        setAlertTime(appdata.data.GetPrescriptionRecords.alertTime);
-      }
-    });
-  }, [loading]);
-
+    refetch;
+  }, [data]);
+  const [initialData, setInitialData] = useState(data);
+  console.log(initialData, "initial");
   return (
     <Container>
       <Header>
@@ -129,20 +134,46 @@ const Home = ({ navigation: { navigate } }) => {
 
       <MainTxt> 약 먹을 시간입니다!</MainTxt>
 
-      {visible ? (
-        <Card>
-          <Cardtxt>약 이름:{MedicineName}</Cardtxt>
-          <Cardtxt>남은약 :{MedicineCount}</Cardtxt>
-          <Cardtxt>알림시간: {AlertTime}</Cardtxt>
-          <Btn
-            onPress={() => {
-              setVisible(!visible);
-            }}
-          >
-            <BtnText>꼭 챙겨 먹으셔야해요!</BtnText>
-          </Btn>
-        </Card>
-      ) : null}
+      {initialData.getPrescriptionRecords.map((item, key) => {
+        return (
+          <Card key={key}>
+            <CardElementContainer>
+              <View>
+                <Cardtxt>약 이름:{item.medicine}</Cardtxt>
+                <Cardtxt>남은약 개수: {item.lastMedicationCount}</Cardtxt>
+                <Cardtxt>{item.alertTime}</Cardtxt>
+              </View>
+              <Btn
+                onPress={() => {
+                  //배열에 해당하는 key을 지운다.
+                  // setInitialData(() => {
+                  //   const filterData =
+                  //     initialData.getPrescriptionRecords.filter(
+                  //       (value, index) => {
+                  //         return index !== key;
+                  //       }
+                  //     );
+                  //   return filterData;
+                  // });
+                  setMedicineName(item.medicine);
+                  setMedicineCount(item.lastMedicationCount);
+                  setAlertTime(item.alertTime);
+                  createPrescriptionRecord({
+                    variables: {
+                      jwt: jwtToken,
+                      medicine: MedicineName,
+                      alertTime: AlertTime,
+                      lastMedicationCount: MedicineCount - 1,
+                    },
+                  });
+                }}
+              >
+                <BtnText>확인</BtnText>
+              </Btn>
+            </CardElementContainer>
+          </Card>
+        );
+      })}
 
       <AlarmBtn onPress={() => navigate("Reminder")}>
         <AlarmText>알람 등록하기</AlarmText>
@@ -152,3 +183,16 @@ const Home = ({ navigation: { navigate } }) => {
 };
 
 export default Home;
+
+const a = {
+  getPrescriptionRecords: [
+    {
+      __typename: "Prescription",
+      _id: "62e287a413801f52604275a7",
+      alertTime: "21:55",
+      createdAt: "2022-07-28 21:57:08",
+      lastMedicationCount: 30,
+      medicine: "test",
+    },
+  ],
+};

@@ -51,7 +51,7 @@ async function initApolloServer() {
 
   initFirebaseAdmin();
   // every minute cron
-  schedule.scheduleJob('*/10 * * * * *', ()=>{ 
+  schedule.scheduleJob('* * * * *', ()=>{ 
     sendMedicationAlert();
   });
 }

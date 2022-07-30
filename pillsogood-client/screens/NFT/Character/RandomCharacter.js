@@ -113,10 +113,10 @@ const BtnView = styled.View`
 
 const Text1View = styled.View`
   flex: 1;
-  background-color: #ffffff7f;
+  background-color: #D8F8B7
 `;
 const Text1 = styled.Text`
-  margin-top: 20px;
+  margin-top: 40px;
   margin-bottom: 20px;
   text-align: center;
   font-size: 16px;
@@ -127,11 +127,11 @@ const Text1 = styled.Text`
 
 const Text2View = styled.View`
   flex: 1;
-  background-color: #fefbea;
+  background-color:#E7FBBE
 `;
 
 const Text2 = styled.Text`
-  margin-top: 20px;
+  margin-top: 30px;
   margin-bottom: 30px;
   justify-content: center;
   text-align: center;

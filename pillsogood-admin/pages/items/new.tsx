@@ -86,7 +86,7 @@ const NewItem: NextPage = () => {
                         <StyledItemDiv>
                             <StyledInput type="file" onChange={(e) => {
                                     saveFileImage(e)
-                                    sendFileToIPFS(e.target.files[0])
+                                    if(e.target.files !== null) sendFileToIPFS(e.target.files[0])
                                 }
                             }/>
                         </StyledItemDiv>

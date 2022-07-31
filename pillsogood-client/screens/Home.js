@@ -103,6 +103,7 @@ const Home = ({ navigation: { navigate } }) => {
   let jwtToken = useSelector((state) => state.login.token);
   const [MedicineName, setMedicineName] = useState("");
   const [MedicineCount, setMedicineCount] = useState(0);
+  const [clicked, setClicked] = useState(false);
   //Query
   const { data, loading, error, refetch } = useQuery(GET_MEDICINE_ALARM, {
     variables: {
@@ -112,50 +113,7 @@ const Home = ({ navigation: { navigate } }) => {
   //Mutation
   const [createMedicationRecord] = useMutation(POST_MEDICINE_RECORD);
   //
-  // const [CreatePrescriptionRecord] = useMutation();
-  const renderAlarm = ({ item }) => {
-    <Card>
-      <CardElementContainer>
-        <View>
-          <Cardtxt>약 이름:{item.medicine}</Cardtxt>
-          <Cardtxt>남은약 개수: {item.lastMedicationCount}</Cardtxt>
-          <Cardtxt>{item.alertTime}</Cardtxt>
-        </View>
-        <Btn
-          onPress={() => {
-            //배열에 해당하는 key을 지운다.
-            // setInitialData(() => {
-            //   const filterData =
-            //     initialData.getPrescriptionRecords.filter(
-            //       (value, index) => {
-            //         return index !== key;
-            //       }
-            //     );
-            //   return filterData;
-            // });
 
-            setMedicineName(item.medicine);
-            setMedicineCount(item.lastMedicationCount);
-            setAlertTime(item.alertTime);
-            createMedicationRecord({
-              variables: {
-                jwt: jwtToken,
-                medicine: MedicineName,
-                condition: "건강함",
-              },
-            });
-            refetch({
-              variables: {
-                jwt: jwtToken,
-              },
-            });
-          }}
-        >
-          <BtnText>확인</BtnText>
-        </Btn>
-      </CardElementContainer>
-    </Card>;
-  };
   console.log(data);
   if (loading) return <Text>Loading...</Text>;
   if (error)
@@ -203,16 +161,21 @@ const Home = ({ navigation: { navigate } }) => {
                   //   return filterData;
                   // });
                   // setModalVisible(true);
-                  setMedicineName(item.medicine);
-                  setMedicineCount(item.lastMedicationCount);
-                  setAlertTime(item.alertTime);
-                  createMedicationRecord({
-                    variables: {
-                      jwt: jwtToken,
-                      medicine: MedicineName,
-                      condition: "건강함",
-                    },
-                  });
+                  if (clicked) {
+                    Alert.alert("10Coins 획득!");
+                    setClicked(true);
+                    setMedicineName(item.medicine);
+                    createMedicationRecord({
+                      variables: {
+                        jwt: jwtToken,
+                        medicine: MedicineName,
+                        condition: "건강함",
+                      },
+                    });
+                  } else {
+                    Alert.alert("오늘 이미 약을 드셨습니다.");
+                  }
+
                   refetch;
                 }}
               >
@@ -231,16 +194,3 @@ const Home = ({ navigation: { navigate } }) => {
 };
 
 export default Home;
-
-const a = {
-  getPrescriptionRecords: [
-    {
-      __typename: "Prescription",
-      _id: "62e287a413801f52604275a7",
-      alertTime: "21:55",
-      createdAt: "2022-07-28 21:57:08",
-      lastMedicationCount: 30,
-      medicine: "test",
-    },
-  ],
-};

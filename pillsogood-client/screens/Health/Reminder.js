@@ -10,6 +10,8 @@ import { MEDICINE_ALARM } from "./../../src/query/MutationQuery";
 import { useMutation } from "@apollo/client";
 import { Alert, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
+
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return " ";
 
@@ -102,12 +104,12 @@ const SubTxt = styled.Text`
 `;
 
 const PillTxt = styled.Text`
-  font-size: 16;
+  font-size: 16px;
 `;
 const PillVerifyTxt = styled.Text`
-  font-size: 16;
-  margin-top: -10px;
-  margin-bottom: -40px;
+  font-size: 20px;
+  margin-left: 20px;
+  margin-top: 20px;
 `;
 
 const Btn = styled.Button``;
@@ -147,11 +149,15 @@ const Inner = styled.View`
   padding: 20px;
 `;
 const VerifyWrapper = styled.View`
+  align-items: center;
+  flex-direction: row;
   width: 50%;
+  margin-bottom: 40px;
 `;
 const VerifyContainer = styled.View`
-  flex-direction: row;
   width: 100%;
+  margin-top: -30px;
+  margin-bottom: -30px;
 `;
 
 const SubmitAlarm = styled.View`
@@ -159,7 +165,8 @@ const SubmitAlarm = styled.View`
   flex: 1;
   height: 50%;
   vertical-align: text-top;
-  justify-content: center;
+  justify-content: space-between;
+
   align-items: center;
 `;
 const SubmitTxt = styled.Button``;
@@ -212,6 +219,23 @@ const Reminder = () => {
       </HeadWapper>
       <SubTxt>복용 알람을 등록하세요</SubTxt>
       <Inner>
+        <VerifyContainer>
+          <VerifyWrapper>
+            <ImagePickerComponent onSubmit={callGoogleVisionAsync} />
+            <PillVerifyTxt>
+              검증상태 :{"  "}
+              {setVerify == false ? (
+                <AntDesign
+                  name="checkcircleo"
+                  size={24}
+                  color="black"
+                ></AntDesign>
+              ) : (
+                <AntDesign name="checkcircle" size={24} color="black" />
+              )}
+            </PillVerifyTxt>
+          </VerifyWrapper>
+        </VerifyContainer>
         <Titletxt>약 이름을 입력해주세요</Titletxt>
         <TextInputs
           placeholder="약 이름"
@@ -264,15 +288,9 @@ const Reminder = () => {
           }}
         />
         <DateTxt>설정한 시간: {moment(date).format("HH:mm")}</DateTxt>
-        <VerifyContainer>
-          <VerifyWrapper>
-            <ImagePickerComponent onSubmit={callGoogleVisionAsync} />
-            <PillVerifyTxt>검증상태 :{setVerify}</PillVerifyTxt>
-          </VerifyWrapper>
-          <SubmitAlarm>
-            <SubmitTxt title="알람 등록" onPress={Submit}></SubmitTxt>
-          </SubmitAlarm>
-        </VerifyContainer>
+        <SubmitAlarm>
+          <SubmitTxt title="알람 등록" onPress={Submit}></SubmitTxt>
+        </SubmitAlarm>
       </Inner>
     </ReminderContainer>
   );

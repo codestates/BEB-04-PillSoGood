@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyActions } from "../store/visionVerifySlice";
+import { Alert } from "react-native";
 const ImagePickView = styled.View`
   width: 100%;
   height: 80px;
@@ -33,8 +34,12 @@ function ImagePickerComponent({ onSubmit }) {
     }
     if (text.includes(username)) {
       dispatch(verifyActions.setVerify(true)); //검증성공
+      Alert.alert(
+        "검증성공 약 이름,  하루 복용량 , 일수 , 시간을 입력해주세요! "
+      );
     } else {
       dispatch(verifyActions.setVerify(false)); //검증실패
+      Alert.alert("검증에 실패하였습니다. 꼭 자신의 약봉투를 넣어주세요! ");
     }
   };
   return (

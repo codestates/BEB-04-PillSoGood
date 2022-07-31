@@ -169,7 +169,6 @@ const Home = ({ navigation: { navigate } }) => {
                       variables: {
                         jwt: jwtToken,
                         medicine: MedicineName,
-                        condition: "건강함",
                       },
                     });
                   } else {

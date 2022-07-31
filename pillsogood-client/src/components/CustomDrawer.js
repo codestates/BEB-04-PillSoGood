@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, ImageBackground, Image } from "react-native";
 import {
   DrawerContentScrollView,
@@ -13,16 +13,16 @@ import { USERQUERY } from "../query/MutationQuery";
 const CustomDrawer = (props) => {
   const jwt = useSelector((state) => state.login.token);
 
-  // const { data } = useQuery(USERQUERY, { variables: { jwt: jwt } });
+  const { data } = useQuery(USERQUERY, { variables: { jwt: jwt } });
+  const [balance, setBalance] = useState(0);
+  useEffect(() => {
+    console.log("useEffect data :", data);
+    if (data !== undefined) {
+      setBalance(data.getUserInfo.pointBalance);
+      console.log(balance);
+    }
+  }, [data]);
 
-  // useEffect(() => {
-  //   console.log("useEffect data :", data);
-  //   if (data !== undefined) {
-  //     const balance = data.getUserInfo.pointBalance;
-  //     console.log(balance);
-  //   }
-  // }, [data]);
-  // let balance = data.getUserInfo.pointBalance;
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView
@@ -58,7 +58,7 @@ const CustomDrawer = (props) => {
                 marginRight: 5,
               }}
             >
-              {/* {balance} Coins */}
+              {balance} Coins
             </Text>
             <FontAwesome5 name="coins" size={14} color="#fff" />
           </View>

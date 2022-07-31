@@ -141,3 +141,16 @@ export const GET_MEDICINE_ALARM = gql`
     }
   }
 `;
+export const POST_MEDICINE_RECORD = gql`
+  mutation CreateMedicationRecord(
+    $jwt: String!
+    $medicine: String!
+    $condition: String!
+  ) {
+    createMedicationRecord(
+      jwt: $jwt
+      medicine: $medicine
+      condition: $condition
+    )
+  }
+`;

@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../colors";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_MEDICINE_ALARM, MEDICINE_ALARM } from "../src/query/MutationQuery";
+import {
+  GET_MEDICINE_ALARM,
+  POST_MEDICINE_RECORD,
+} from "../src/query/MutationQuery";
 import { useSelector } from "react-redux";
 // import { set } from "immer/dist/internal";
-import { Alert, Text, View, FlatList } from "react-native";
-
+import { Alert, Text, View, FlatList, Modal } from "react-native";
+import CheckModal from "../src/components/CheckModal";
 const Container = styled.View`
   background-color: ${BASE_COLOR};
   flex: 1;
@@ -100,7 +103,6 @@ const Home = ({ navigation: { navigate } }) => {
   let jwtToken = useSelector((state) => state.login.token);
   const [MedicineName, setMedicineName] = useState("");
   const [MedicineCount, setMedicineCount] = useState(0);
-  const [AlertTime, setAlertTime] = useState("");
   //Query
   const { data, loading, error, refetch } = useQuery(GET_MEDICINE_ALARM, {
     variables: {
@@ -108,7 +110,7 @@ const Home = ({ navigation: { navigate } }) => {
     },
   });
   //Mutation
-  const [createPrescriptionRecord] = useMutation(MEDICINE_ALARM);
+  const [createMedicationRecord] = useMutation(POST_MEDICINE_RECORD);
   //
   // const [CreatePrescriptionRecord] = useMutation();
   const renderAlarm = ({ item }) => {
@@ -131,15 +133,20 @@ const Home = ({ navigation: { navigate } }) => {
             //     );
             //   return filterData;
             // });
+
             setMedicineName(item.medicine);
             setMedicineCount(item.lastMedicationCount);
             setAlertTime(item.alertTime);
-            createPrescriptionRecord({
+            createMedicationRecord({
               variables: {
                 jwt: jwtToken,
                 medicine: MedicineName,
-                alertTime: AlertTime,
-                lastMedicationCount: MedicineCount - 1,
+                condition: "건강함",
+              },
+            });
+            refetch({
+              variables: {
+                jwt: jwtToken,
               },
             });
           }}
@@ -173,7 +180,7 @@ const Home = ({ navigation: { navigate } }) => {
           <MainTxt> 약 먹을 시간입니다!</MainTxt>
         </View>
       </View>
-
+      {/* <CheckModal setModalVisible={setModalVisible} /> */}
       {initialData.getPrescriptionRecords.map((item, key) => {
         return (
           <Card key={key}>
@@ -195,17 +202,18 @@ const Home = ({ navigation: { navigate } }) => {
                   //     );
                   //   return filterData;
                   // });
+                  // setModalVisible(true);
                   setMedicineName(item.medicine);
                   setMedicineCount(item.lastMedicationCount);
                   setAlertTime(item.alertTime);
-                  createPrescriptionRecord({
+                  createMedicationRecord({
                     variables: {
                       jwt: jwtToken,
                       medicine: MedicineName,
-                      alertTime: AlertTime,
-                      lastMedicationCount: MedicineCount - 1,
+                      condition: "건강함",
                     },
                   });
+                  refetch;
                 }}
               >
                 <BtnText>확인</BtnText>

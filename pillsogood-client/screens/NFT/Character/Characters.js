@@ -12,8 +12,8 @@ import {
   Dimensions,
   StyleSheet,
 } from "react-native";
-import { NftQuery } from "../../../src/query/MutationQuery";
-
+import { NftQuery, NftTransfer } from "../../../src/query/MutationQuery";
+import { Linking } from 'react-native';
 
 
 const View = styled.View`
@@ -27,6 +27,7 @@ const Loader = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
+  background-color: ${BASE_COLOR};
 `;
 
 
@@ -36,6 +37,9 @@ background-color: ${BASE_COLOR};
 
 const HeaderView = styled.View`
 flex: 1;
+background-color: #ffffff7f;
+
+
 `;
 
 const Header = styled.Text`
@@ -44,6 +48,7 @@ font-weight: 600;
 margin-top: 22px;
 margin-bottom: 22px;
 text-align: center;
+
 `;
 
 const BgView = styled.View`
@@ -91,7 +96,6 @@ margin-top: 15px;
 
 const DesDetail = styled.Text`
 margin-top: 7px;
-line-height: 20;
 `;
 
 const TextInputView = styled.View`
@@ -111,7 +115,7 @@ background-color: #ffffff7f;
 `;
 
 const ButtonView = styled.View`
-margin-top: 15px;
+margin-top: -15px;
 `
 
 const Button = styled.TouchableOpacity`
@@ -132,6 +136,12 @@ const BtnText = styled.Text`
   text-align: center;
 `;
 
+const HashView = styled.View`
+margin-top: 20px;
+`
+const HashText = styled.Text`
+text-align: center;
+`
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const list = [
@@ -145,14 +155,13 @@ const Characters = () => {
   
   
   const [refreshing, setRefreshing] = useState(false);
-  const [queryData, setQueryData] = useState("")
   const [metaMaskaddr, setMetaMaskaddr] = useState("")
   const [tokId, setTokId] = useState("")
-
+  const [transferCharacter] = useMutation(NftTransfer)
   const jwt = useSelector((state) => state.login.token )
-  console.log('jwt:', jwt)
   const {loading, data, error} = useQuery(NftQuery, { variables: {jwt: jwt}})
-  
+  const [loading1, setLoading1] = useState(false)
+  const [txHash, setTxHash] = useState("")
   // const obj = Object.entries(data.getCharacters[0])
   // console.log('obj:', obj[2])
   // console.log('data', data)
@@ -167,20 +176,38 @@ const Characters = () => {
   // 새로고침 함수
   const onRefresh = () => {
     setRefreshing(true);
-   
+    setTxHash("")
     setRefreshing(false);
     
   };
 
   // 옮기기 버튼 누르면 실행될 함수 ( Mutation )
   const Move = () => {
-
+    setLoading1(true)
+    transferCharacter({
+      variables: {
+        jwt: jwt,
+        tokenId: tokId,
+        receiverAddress: metaMaskaddr
+      }
+    }).then((res)=>{
+      setLoading1(false)
+      if(res){
+        console.log("옮기기 성공 :", res)
+        Alert.alert(`Nft를 성공적으로 가져왔습니다! 아래의 링크에서 확인하세요 `)
+        setTxHash(`https://rinkeby.etherscan.io/tx/${res.data.transferCharacter.transferHash}`)
+      }
+      else{
+        console.log("옮기기 실패:", res)
+        Alert.alert("Nft를 가져오지 못했습니다")
+      }
+    })
     setMetaMaskaddr("")
     setTokId("")
   }
 
   return ( 
-    loading ? (
+    loading || loading1 ? (
       <Loader>
         <ActivityIndicator />
       </Loader>
@@ -235,7 +262,20 @@ const Characters = () => {
           placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
         />
       </TextInputView>
-      <ButtonView><Button ><BtnText>옮기기</BtnText></Button></ButtonView>
+      <ButtonView><Button onPress={Move} ><BtnText>옮기기</BtnText></Button></ButtonView>
+      
+      { txHash ? (
+      <HashView>
+      <HashText style={{color: 'blue'}} onPress={() => Linking.openURL(txHash)}>
+      Click here to see your Transfer
+      </HashText>
+      </HashView>)
+      
+      : null
+      }
+
+      
+  
     </Container>  
   );
   };

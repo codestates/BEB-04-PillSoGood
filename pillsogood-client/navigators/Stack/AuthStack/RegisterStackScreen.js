@@ -6,11 +6,13 @@ import Register from "../../../screens/Auth/Register";
 import Home from "../../../screens/Home";
 import { useSelector } from "react-redux";
 import TabNavigation from "./../../Tabs/Tabs";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Nav = createNativeStackNavigator();
 
 const RegisterStackScreen = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   let jwtToken = useSelector((state) => state.login.token);
+
   // const [openSettingsForNotifications] = useMMKVStorage(
   //   "openSettingsForNotifications",
   //   MMKV,

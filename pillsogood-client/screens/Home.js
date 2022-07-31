@@ -5,7 +5,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import { GET_MEDICINE_ALARM, MEDICINE_ALARM } from "../src/query/MutationQuery";
 import { useSelector } from "react-redux";
 // import { set } from "immer/dist/internal";
-import { Alert, Text, View } from "react-native";
+import { Alert, Text, View, FlatList } from "react-native";
 
 const Container = styled.View`
   background-color: ${BASE_COLOR};
@@ -41,7 +41,7 @@ const MainTxt = styled.Text`
   margin-top: -25px;
 `;
 const Card = styled.View`
-  flex: 0.25;
+  flex: 0.15;
   padding: 23px;
   margin: 10px 0px;
   background: papayawhip;
@@ -111,7 +111,44 @@ const Home = ({ navigation: { navigate } }) => {
   const [createPrescriptionRecord] = useMutation(MEDICINE_ALARM);
   //
   // const [CreatePrescriptionRecord] = useMutation();
-
+  const renderAlarm = ({ item }) => {
+    <Card>
+      <CardElementContainer>
+        <View>
+          <Cardtxt>약 이름:{item.medicine}</Cardtxt>
+          <Cardtxt>남은약 개수: {item.lastMedicationCount}</Cardtxt>
+          <Cardtxt>{item.alertTime}</Cardtxt>
+        </View>
+        <Btn
+          onPress={() => {
+            //배열에 해당하는 key을 지운다.
+            // setInitialData(() => {
+            //   const filterData =
+            //     initialData.getPrescriptionRecords.filter(
+            //       (value, index) => {
+            //         return index !== key;
+            //       }
+            //     );
+            //   return filterData;
+            // });
+            setMedicineName(item.medicine);
+            setMedicineCount(item.lastMedicationCount);
+            setAlertTime(item.alertTime);
+            createPrescriptionRecord({
+              variables: {
+                jwt: jwtToken,
+                medicine: MedicineName,
+                alertTime: AlertTime,
+                lastMedicationCount: MedicineCount - 1,
+              },
+            });
+          }}
+        >
+          <BtnText>확인</BtnText>
+        </Btn>
+      </CardElementContainer>
+    </Card>;
+  };
   console.log(data);
   if (loading) return <Text>Loading...</Text>;
   if (error)
@@ -127,12 +164,15 @@ const Home = ({ navigation: { navigate } }) => {
   console.log(initialData, "initial");
   return (
     <Container>
-      <Header>
-        <HeadTxt>Pill So Good</HeadTxt>
-        <Birds source={require("../src/assets/highland.jpg")} />
-      </Header>
-
-      <MainTxt> 약 먹을 시간입니다!</MainTxt>
+      <View>
+        <Header>
+          <HeadTxt>Pill So Good</HeadTxt>
+          <Birds source={require("../src/assets/highland.jpg")} />
+        </Header>
+        <View>
+          <MainTxt> 약 먹을 시간입니다!</MainTxt>
+        </View>
+      </View>
 
       {initialData.getPrescriptionRecords.map((item, key) => {
         return (

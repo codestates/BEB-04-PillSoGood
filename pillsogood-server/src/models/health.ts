@@ -4,7 +4,8 @@ const health = new Schema({
     userId: String,
     height: Number,
     weight: Number,
-    hypertension: Number,
+    lowHypertension: Number,
+    HighHypertension: Number,
     bloodSugarLevel: Number,
     createdAt: String
 })

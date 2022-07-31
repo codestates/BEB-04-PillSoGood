@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { diseaseSlice } from "./diseaseSlice";
+import { registerSlice } from "./registerSlice";
 import { loginSlice } from "./loginSlice";
+import { verifySlice } from "./visionVerifySlice";
 export const store = configureStore({
   reducer: {
-    disease: diseaseSlice.reducer,
+    register: registerSlice.reducer,
     login: loginSlice.reducer,
+    verify: verifySlice.reducer,
   },
 });
 

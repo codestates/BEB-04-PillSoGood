@@ -79,7 +79,7 @@ export default {
             return status.SUCCESS
 
         }, 
-        async login(_:any, args: {email:string, password:string}) {
+        async login(_:any, args: {email:string, password:string, firebaseToken:string}) {
             const crypto = require('crypto');
             const encryptedPassword = crypto.createHmac('sha256', process.env.PASSWORD_SECRET).update(args.password).digest('hex');
             
@@ -89,6 +89,11 @@ export default {
             if(!loginUser) return status.WRONG_USER_INFO
 
             createLog("login", loginUser._id)
+
+            await User.updateOne(
+                {_id: loginUser._id},
+                {firebaseToken: args.firebaseToken}    
+            )
 
             const jwt = require('jsonwebtoken')
             const accessToken = jwt.sign(

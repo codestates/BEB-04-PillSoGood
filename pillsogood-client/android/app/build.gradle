@@ -293,11 +293,12 @@ dependencies {
      // Import the Firebase BoM
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
-   implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
    // Add the dependency for the Firebase SDK for Google Analytics
   // When using the BoM, don't specify versions in Firebase dependencies
-   implementation 'com.google.firebase:firebase-analytics'
-
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
+   
     def isGifEnabled = (findProperty('expo.gif.enabled') ?: "") == "true";
     def isWebpEnabled = (findProperty('expo.webp.enabled') ?: "") == "true";
     def isWebpAnimatedEnabled = (findProperty('expo.webp.animated') ?: "") == "true";

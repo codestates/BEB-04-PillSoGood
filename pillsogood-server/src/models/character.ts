@@ -11,4 +11,4 @@ const character = new Schema({
     tokenId: String
 })
 
-module.exports = model('Character', character); 
+module.exports = model('Character', character);

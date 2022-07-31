@@ -8,12 +8,11 @@ const User = require("../../models/user")
 
 type prescription = {
     _id:String,
-        medicine:String,
-        alertTime:String,
-        hospital:String,
-        lastMedicationCount:Number,
-        createdAt:String,
-        userId:string
+    medicine:String,
+    alertTime:String,
+    lastMedicationCount:Number,
+    createdAt:String,
+    userId:String
 }
 
 export default {
@@ -35,7 +34,6 @@ export default {
             {jwt:string, 
             medicine:String, 
             alertTime:String, 
-            hospital:String, 
             lastMedicationCount:Number}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
@@ -46,17 +44,15 @@ export default {
 
             newPrescription.medicine = args.medicine
             newPrescription.alertTime = args.alertTime
-            newPrescription.hospital = args.hospital
             newPrescription.lastMedicationCount = args.lastMedicationCount
             newPrescription.createdAt =  moment().format("YYYY-MM-DD HH:mm:ss")
             newPrescription.userId = userInfo._id
             
             const res = await newPrescription.save()
-            const findUser = await User.findOne({_id:userInfo._id})
+            const findUser = await User.findOne({_id: userInfo._id})
             const previousBalance = findUser.pointBalance
             const currentBalance = Number(previousBalance+10)
-            const newData = { pointBalance: currentBalance }               // 제공할 포인트 점수
-            const res2 = await User.updateOne({_id:userInfo._id}, newData) // 업데이트 하기 
+            const res2 = await User.updateOne({_id:userInfo._id}, { pointBalance: currentBalance }) // 업데이트 하기 
     
             if(!res || !res2) return status.SERVER_ERROR
             return status.SUCCESS
@@ -66,7 +62,6 @@ export default {
             _id:string, 
             medicine:String,
             alertTime:String,
-            hospital:String,
             lastMedicationCount:Number}) {
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
@@ -77,7 +72,6 @@ export default {
                 {_id:args._id, userId:userInfo._id},
                 {medicine:args.medicine, 
                  alertTime:args.alertTime, 
-                 hospital:args.hospital, 
                  lastMedicationCount:args.lastMedicationCount,
                  createdAt:new Date()})
             if(!res) return status.SERVER_ERROR

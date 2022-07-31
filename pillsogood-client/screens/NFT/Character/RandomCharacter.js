@@ -113,10 +113,15 @@ const BtnView = styled.View`
 
 const Text1View = styled.View`
   flex: 1;
-  background-color: #FFFFFF
+  margin-left: 20px
+  margin-right: 20px
+  border: 2px solid;
+  border-color: white
+  border-radius: 30px
+  background-color: #ffffff7f;
 `;
 const Text1 = styled.Text`
-  margin-top: 30px;
+  margin-top: 25px;
   margin-bottom: 20px;
   text-align: center;
   font-size: 16px;
@@ -127,7 +132,12 @@ const Text1 = styled.Text`
 
 const Text2View = styled.View`
   flex: 1;
-  background-color:${BASE_COLOR};
+  background-color:#ffffff7f;
+  border: 2px solid;
+  border-color: white
+  margin-left: 5px
+  margin-right: 5px
+  border-radius: 30px
 `;
 
 const Text2 = styled.Text`
@@ -136,6 +146,7 @@ const Text2 = styled.Text`
   justify-content: center;
   text-align: center;
   font-weight: 600;
+  font-size: 14px
   color: #696969;
 `;
 const Bgimg2View = styled.View`

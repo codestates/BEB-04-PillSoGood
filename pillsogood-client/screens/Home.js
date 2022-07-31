@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../colors";
 import { useQuery, useMutation } from "@apollo/client";
@@ -9,7 +10,6 @@ import {
 import { useSelector } from "react-redux";
 // import { set } from "immer/dist/internal";
 import { Alert, Text, View, FlatList, Modal } from "react-native";
-import CheckModal from "../src/components/CheckModal";
 const Container = styled.View`
   background-color: ${BASE_COLOR};
   flex: 1;
@@ -122,9 +122,7 @@ const Home = ({ navigation: { navigate } }) => {
         <Text>Error...</Text>
       </>
     );
-  useEffect(() => {
-    refetch;
-  }, [data]);
+  useEffect(() => {}, [data]);
   const [initialData, setInitialData] = useState(data);
   console.log(initialData, "initial");
   return (
@@ -138,53 +136,53 @@ const Home = ({ navigation: { navigate } }) => {
           <MainTxt> 약 먹을 시간입니다!</MainTxt>
         </View>
       </View>
-      {/* <CheckModal setModalVisible={setModalVisible} /> */}
-      {initialData.getPrescriptionRecords.map((item, key) => {
-        return (
-          <Card key={key}>
-            <CardElementContainer>
-              <View>
-                <Cardtxt>약 이름:{item.medicine}</Cardtxt>
-                <Cardtxt>남은약 개수: {item.lastMedicationCount}</Cardtxt>
-                <Cardtxt>{item.alertTime}</Cardtxt>
-              </View>
-              <Btn
-                onPress={() => {
-                  //배열에 해당하는 key을 지운다.
-                  // setInitialData(() => {
-                  //   const filterData =
-                  //     initialData.getPrescriptionRecords.filter(
-                  //       (value, index) => {
-                  //         return index !== key;
-                  //       }
-                  //     );
-                  //   return filterData;
-                  // });
-                  // setModalVisible(true);
-                  if (clicked) {
-                    Alert.alert("10Coins 획득!");
-                    setClicked(true);
-                    setMedicineName(item.medicine);
-                    createMedicationRecord({
-                      variables: {
-                        jwt: jwtToken,
-                        medicine: MedicineName,
-                        condition: "건강함",
-                      },
-                    });
-                  } else {
-                    Alert.alert("오늘 이미 약을 드셨습니다.");
-                  }
 
-                  refetch;
-                }}
-              >
-                <BtnText>확인</BtnText>
-              </Btn>
-            </CardElementContainer>
-          </Card>
-        );
-      })}
+      {/* <CheckModal setModalVisible={setModalVisible} /> */}
+      {loading
+        ? initialData.getPrescriptionRecords.map((item, key) => {
+            return (
+              <Card key={key}>
+                <CardElementContainer>
+                  <View>
+                    <Cardtxt>약 이름:{item.medicine}</Cardtxt>
+                    <Cardtxt>남은약 개수: {item.lastMedicationCount}</Cardtxt>
+                    <Cardtxt>{item.alertTime}</Cardtxt>
+                  </View>
+                  <Btn
+                    onPress={() => {
+                      //배열에 해당하는 key을 지운다.
+                      // setInitialData(() => {
+                      //   const filterData =
+                      //     initialData.getPrescriptionRecords.filter(
+                      //       (value, index) => {
+                      //         return index !== key;
+                      //       }
+                      //     );
+                      //   return filterData;
+                      // });
+                      // setModalVisible(true);
+
+                      setClicked(true);
+
+                      createMedicationRecord({
+                        variables: {
+                          jwt: jwtToken,
+                          medicine: MedicineName,
+                          condition: "건강함",
+                        },
+                      });
+                      setMedicineCount(item.lastMedicationCount - 1);
+                      refetch();
+                      Alert.alert("10Coins 획득!");
+                    }}
+                  >
+                    <BtnText>확인</BtnText>
+                  </Btn>
+                </CardElementContainer>
+              </Card>
+            );
+          })
+        : null}
 
       <AlarmBtn onPress={() => navigate("Reminder")}>
         <AlarmText>알람 등록하기</AlarmText>

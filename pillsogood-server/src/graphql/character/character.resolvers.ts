@@ -134,20 +134,25 @@ export default {
             if(!res) return status.SERVER_ERROR
             return status.SUCCESS
         },
+
+        async transferCharacter(_:any, args:{jwt:string, tokenId:string, receiverAddress:string  }){
+           
+            console.log("클라이언트 요청 도착")
         async transferCharacter(_:any, args:{jwt:string, _id:string, tokenId:string, receiverAddress:string  }){
             const userInfo = getUserInfoByToken(args.jwt)
             if(!userInfo) return status.TOKEN_EXPIRED
 
             createLog("transferCharacter", userInfo._id)
             
-            const transfer = await ERC721transfer(args.receiverAddress, args.tokenId)    // ERC721transfer 함수의 인자는 receiveraddress, tokenId가 필요함.
+            const transfer = await ERC721transfer(args.receiverAddress, args.tokenId)    // ERC721transfer 함수의 인자는 receiverAddress, tokenId가 필요함.
+
                                                                                            // ERC721transfer는 return 값으로 { hash } 가짐. 
                                                                                            // 즉, transfer = [ hash ]  --- transfer[0] = hash                                   
             if(transfer !== undefined){
 
                 const transferHash = transfer[0]
                 const res = await Character.updateOne(
-                    {_id:args._id, userId:userInfo._id},
+                    {userId:userInfo._id},
                     { hash:transferHash, createdAt:new Date()}          // transfer에서 생성된 transaction Hash값으로 nftHash 업데이트
                 )
                 

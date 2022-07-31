@@ -95,15 +95,6 @@ export const NftQuery = gql`
   }
 `;
 
-
-export const NftTransfer =gql`
-mutation TransferCharacter($jwt: String!, $tokenId: String!, $receiverAddress: String!) {
-  transferCharacter(jwt: $jwt, tokenId: $tokenId, receiverAddress: $receiverAddress) {
-    transferHash
-  }
-}
-`
-
 export const MEDICINE_ALARM = gql`
   mutation CreatePrescriptionRecord(
     $jwt: String!

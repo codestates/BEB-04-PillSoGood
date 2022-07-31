@@ -113,15 +113,10 @@ const BtnView = styled.View`
 
 const Text1View = styled.View`
   flex: 1;
-  margin-left: 20px
-  margin-right: 20px
-  border: 2px solid;
-  border-color: white
-  border-radius: 30px
   background-color: #ffffff7f;
 `;
 const Text1 = styled.Text`
-  margin-top: 25px;
+  margin-top: 20px;
   margin-bottom: 20px;
   text-align: center;
   font-size: 16px;
@@ -132,21 +127,15 @@ const Text1 = styled.Text`
 
 const Text2View = styled.View`
   flex: 1;
-  background-color:#ffffff7f;
-  border: 2px solid;
-  border-color: white
-  margin-left: 5px
-  margin-right: 5px
-  border-radius: 30px
+  background-color: #fefbea;
 `;
 
 const Text2 = styled.Text`
-  margin-top: 30px;
+  margin-top: 20px;
   margin-bottom: 30px;
   justify-content: center;
   text-align: center;
   font-weight: 600;
-  font-size: 14px
   color: #696969;
 `;
 const Bgimg2View = styled.View`
@@ -201,7 +190,7 @@ const RandomCharacter = () => {
   // 뽑을 캐릭터 리스트 가져오는 함수
   const getImage2 = async () => {
     const res = await fetch(
-      "https://gateway.pinata.cloud/ipfs/QmagdL4ByZULhh9MujAm7Fcjk3SmtUKfkFxT1LvahB5CcB"
+      "https://gateway.pinata.cloud/ipfs/QmfExvMdoWcQMNihsexYLfaCaGGQjFw851NiFwn1Hy9LaK"
     );
     const json = await res.json();
     setResult(json);
@@ -241,7 +230,7 @@ const RandomCharacter = () => {
       setTimeout(() => {
         // 3초 뒤 랜덤 뽑기 실행
         // URL에서 받아온 이미지 데이터의 랜덤 인덱스값으로 RandomImg값 변경
-        const randomNumber = Math.floor(Math.random() * 4); // 4 이하의 랜덤 넘버 생성. 인덱스로 들어갈 예정
+        const randomNumber = Math.floor(Math.random() * 10); // 10 이하의 랜덤 넘버 생성. 인덱스로 들어갈 예정
         const pic = result[randomNumber];
         setRandomImg([pic]);
         Alert.alert(" 캐릭터를 뽑았습니다!");

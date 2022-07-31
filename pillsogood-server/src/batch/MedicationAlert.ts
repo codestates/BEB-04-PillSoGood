@@ -13,7 +13,7 @@ export const initFirebaseAdmin = () => {
 export const sendMedicationAlert = async () => {
   const alivePrescription = await Prescription.find({
     lastMedicationCount: { $ne: 0 },
-    //TODO: alertTime:moment().add("3", "m").format("HH:mm")
+    alertTime: moment().format('HH:mm'),
   }).populate('userId')
 
   for (let alertData of alivePrescription) {

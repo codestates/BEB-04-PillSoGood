@@ -21,7 +21,6 @@ const GET_ALL_NFTS = gql`
             dateOfBirth
             pointBalance
             createdAt
-            disease
             phoneNumber
             }
         }

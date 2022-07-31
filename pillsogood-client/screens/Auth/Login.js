@@ -16,6 +16,12 @@ const Container = styled.View`
   color: black;
   padding: 60px 20px;
 `;
+const TitleText = styled.Text`
+  color: #202d35;
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 30px;
+`;
 const TextInputs = styled.TextInput`
   width: 100%;
   margin-top: 10px;
@@ -75,14 +81,6 @@ const Login = ({ navigation: { navigate } }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [login, { data, loading, error }] = useMutation(LOGIN);
-  const handleHi = () => {
-    const hi = gql`
-      query Query {
-        hi
-      }
-    `;
-    console.log(hi);
-  };
 
   const handleClick = async () => {
     let Token;
@@ -124,6 +122,7 @@ const Login = ({ navigation: { navigate } }) => {
 
   return (
     <Container>
+      <TitleText>Login</TitleText>
       <TextInputs
         placeholder="Email"
         autoCapitalize="none"
@@ -152,10 +151,6 @@ const Login = ({ navigation: { navigate } }) => {
       </Wrapper>
       <LoginBtn>
         <BtnText onPress={() => handleClick()}>로그인!</BtnText>
-      </LoginBtn>
-
-      <LoginBtn>
-        <BtnText onPress={() => handleHi()}>하이</BtnText>
       </LoginBtn>
     </Container>
   );

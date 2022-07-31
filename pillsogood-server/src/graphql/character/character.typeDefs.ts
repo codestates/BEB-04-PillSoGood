@@ -55,6 +55,5 @@ export default gql`
       tokenId: String!
       receiverAddress: String!
     ): Hash!
-    deleteCharacter(jwt: String!, _id: String!): Int!
   }
 `

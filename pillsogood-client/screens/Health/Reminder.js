@@ -77,14 +77,14 @@ const ReminderContainer = styled.View`
   padding: 0px 20px;
 `;
 const HeadTxt = styled.Text`
-  color: #202d35;
+  color: white;
   font-size: 20px;
   font-weight: bold;
   margin: 10px 10px 0px 20px;
 `;
 const HeadWapper = styled.View`
   flex: 0.1;
-  background-color: #ffffff7f;
+  background-color: #76a991;
   border-radius: 20px;
   padding: 20px;
   width: ${SCREEN_WIDTH * 0.7};
@@ -147,12 +147,14 @@ const Inner = styled.View`
   border-top-right-radius: 20px;
   width: ${SCREEN_WIDTH * 0.8};
   padding: 20px;
+  background-color: #ffffff7f;
+  margin-top: 10px;
 `;
 const VerifyWrapper = styled.View`
   align-items: center;
   flex-direction: row;
   width: 50%;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
 `;
 const VerifyContainer = styled.View`
   width: 100%;
@@ -169,7 +171,20 @@ const SubmitAlarm = styled.View`
 
   align-items: center;
 `;
-const SubmitTxt = styled.Button``;
+const SubmitTxt = styled.TouchableOpacity`
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+  border-color: rgba(255, 255, 255, 0.5);
+  background-color: #76a991;
+  align-items: center;
+  justify-content: center;
+`;
+const SubmitTXTX = styled.Text`
+  font-size: 18px;
+  color: white;
+`;
 const Reminder = () => {
   let verifying = useSelector((state) => state.verify.verify);
   let jwtToken = useSelector((state) => state.login.token);
@@ -236,61 +251,69 @@ const Reminder = () => {
             </PillVerifyTxt>
           </VerifyWrapper>
         </VerifyContainer>
-        <Titletxt>약 이름을 입력해주세요</Titletxt>
-        <TextInputs
-          placeholder="약 이름"
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="default"
-          value={medicine}
-          returnKeyType="next"
-          onChangeText={(text) => setMedicine(text)}
-          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-        />
-        <PillTxt>하루에 몇 번 먹어야 하나요?</PillTxt>
-        <TextInputs
-          placeholder="하루에 먹는 약 개수"
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="number-pad"
-          value={pillscale}
-          returnKeyType="next"
-          onChangeText={(text) => setPillscale(text)}
-          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-        />
-        <PillTxt>몇 일 동안 약을 드시나요?</PillTxt>
-        <TextInputs
-          placeholder=" 먹는 약 일수"
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="number-pad"
-          value={pillday}
-          returnKeyType="next"
-          onChangeText={(text) => setPillday(text)}
-          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-        />
-        <Btn title="약은 언제 드시나요?" onPress={() => setOpen(true)}></Btn>
-        <DatePicker
-          modal
-          mode="time"
-          locale="ko"
-          androidVariant="nativeAndroid"
-          textColor="black"
-          open={open}
-          date={date}
-          onConfirm={(date) => {
-            setOpen(false);
-            setDate(date);
-            console.log(date);
-          }}
-          onCancel={() => {
-            setOpen(false);
-          }}
-        />
-        <DateTxt>설정한 시간: {moment(date).format("HH:mm")}</DateTxt>
-        <SubmitAlarm>
-          <SubmitTxt title="알람 등록" onPress={Submit}></SubmitTxt>
-        </SubmitAlarm>
+        {setVerify ? (
+          <>
+            <TextInputs
+              placeholder="약 이름"
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="default"
+              value={medicine}
+              returnKeyType="next"
+              onChangeText={(text) => setMedicine(text)}
+              placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+            />
+
+            <TextInputs
+              placeholder="하루에 먹는 약 개수"
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="number-pad"
+              value={pillscale}
+              returnKeyType="next"
+              onChangeText={(text) => setPillscale(text)}
+              placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+            />
+
+            <TextInputs
+              placeholder=" 먹는 약 일수"
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="number-pad"
+              value={pillday}
+              returnKeyType="next"
+              onChangeText={(text) => setPillday(text)}
+              placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+            />
+            <SubmitTxt onPress={() => setOpen(true)}>
+              <SubmitTXTX>약은 언제 드시나요?</SubmitTXTX>
+            </SubmitTxt>
+
+            <DatePicker
+              modal
+              mode="time"
+              locale="ko"
+              androidVariant="nativeAndroid"
+              textColor="black"
+              open={open}
+              date={date}
+              onConfirm={(date) => {
+                setOpen(false);
+                setDate(date);
+                console.log(date);
+              }}
+              onCancel={() => {
+                setOpen(false);
+              }}
+            />
+            <DateTxt>설정한 시간: {moment(date).format("HH:mm")}</DateTxt>
+            <SubmitAlarm>
+              <SubmitTxt onPress={Submit}>
+                <SubmitTXTX>알람 등록</SubmitTXTX>
+              </SubmitTxt>
+            </SubmitAlarm>
+          </>
+        ) : null}
       </Inner>
     </ReminderContainer>
   );

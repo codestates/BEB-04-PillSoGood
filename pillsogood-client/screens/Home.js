@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import styled from "styled-components/native";
 import { BASE_COLOR } from "../colors";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import {
   GET_MEDICINE_ALARM,
   POST_MEDICINE_RECORD,
@@ -10,7 +10,9 @@ import {
 import { useSelector } from "react-redux";
 // import { set } from "immer/dist/internal";
 import { Alert, Text, View, FlatList, Modal } from "react-native";
-const Container = styled.View`
+const moment = require("moment");
+import "moment/locale/ko";
+const Container = styled.SafeAreaView`
   background-color: ${BASE_COLOR};
   flex: 1;
   color: black;
@@ -37,14 +39,13 @@ const HeadTxt = styled.Text`
   text-shadow: 1px 3px 3px white;
 `;
 const MainTxt = styled.Text`
-  color: "rgba(255, 255, 255, 0.7)";
+  color: "#202d35";
   font-size: 15px;
-  font-weight: bold;
-  padding-left: 20px;
-  margin-top: -25px;
+  padding-left: 10px;
+  margin-top: -15px;
 `;
 const Card = styled.View`
-  flex: 0.15;
+  flex: 1;
   padding: 23px;
   margin: 10px 0px;
   background: papayawhip;
@@ -100,31 +101,74 @@ const AlarmText = styled.Text`
 `;
 
 const Home = ({ navigation: { navigate } }) => {
+  const [refreshing, setRefreshing] = useState(false);
   let jwtToken = useSelector((state) => state.login.token);
   const [MedicineName, setMedicineName] = useState("");
   const [MedicineCount, setMedicineCount] = useState(0);
   const [clicked, setClicked] = useState(false);
   //Query
-  const { data, loading, error, refetch } = useQuery(GET_MEDICINE_ALARM, {
-    variables: {
-      jwt: jwtToken,
-    },
-  });
+  const [RefreshDataFetch, { data, loading, error, refetch }] = useLazyQuery(
+    GET_MEDICINE_ALARM,
+    {
+      variables: {
+        jwt: jwtToken,
+      },
+      pollInterval: 500,
+    }
+  );
   //Mutation
-  const [createMedicationRecord] = useMutation(POST_MEDICINE_RECORD);
-  //
 
+  const getRefreshData = async () => {
+    setRefreshing(true);
+    await RefreshDataFetch();
+    setRefreshing(false);
+  };
+
+  const onRefresh = () => {
+    if (!refreshing) {
+      getRefreshData();
+    }
+  };
+  const onEndReached = () => {
+    if (!loading) {
+      refetch;
+    }
+  };
+  const renderData = data?.getPrescriptionRecords;
+  console.log(renderData);
+  useEffect(() => {
+    refetch;
+  }, [data]);
+  const [createMedicationRecord] = useMutation(POST_MEDICINE_RECORD);
+  const renderItem = ({ item }) => (
+    <Card>
+      <CardElementContainer>
+        <View>
+          <Cardtxt>약 이름:{item.medicine}</Cardtxt>
+          <Cardtxt>남은약 개수: {item.lastMedicationCount}</Cardtxt>
+          <Cardtxt>{item.alertTime}</Cardtxt>
+        </View>
+        {console.log(item, "itemssssssss")}
+        <Btn
+          onPress={() => {
+            setClicked(true);
+
+            createMedicationRecord({
+              variables: {
+                jwt: jwtToken,
+                medicine: item.medicine,
+                condition: "건강함",
+              },
+            });
+            Alert.alert("10Coins 획득!");
+          }}
+        >
+          <BtnText>확인</BtnText>
+        </Btn>
+      </CardElementContainer>
+    </Card>
+  );
   console.log(data);
-  if (loading) return <Text>Loading...</Text>;
-  if (error)
-    return (
-      <>
-        <Text>Error...</Text>
-      </>
-    );
-  useEffect(() => {}, [data]);
-  const [initialData, setInitialData] = useState(data);
-  console.log(initialData, "initial");
   return (
     <Container>
       <View>
@@ -133,56 +177,22 @@ const Home = ({ navigation: { navigate } }) => {
           <Birds source={require("../src/assets/highland.jpg")} />
         </Header>
         <View>
-          <MainTxt> 약 먹을 시간입니다!</MainTxt>
+          <MainTxt>
+            현재시간:{moment(new Date()).format(" hh:mm a dddd ")}
+          </MainTxt>
         </View>
       </View>
-
-      {/* <CheckModal setModalVisible={setModalVisible} /> */}
-      {loading
-        ? initialData.getPrescriptionRecords.map((item, key) => {
-            return (
-              <Card key={key}>
-                <CardElementContainer>
-                  <View>
-                    <Cardtxt>약 이름:{item.medicine}</Cardtxt>
-                    <Cardtxt>남은약 개수: {item.lastMedicationCount}</Cardtxt>
-                    <Cardtxt>{item.alertTime}</Cardtxt>
-                  </View>
-                  <Btn
-                    onPress={() => {
-                      //배열에 해당하는 key을 지운다.
-                      // setInitialData(() => {
-                      //   const filterData =
-                      //     initialData.getPrescriptionRecords.filter(
-                      //       (value, index) => {
-                      //         return index !== key;
-                      //       }
-                      //     );
-                      //   return filterData;
-                      // });
-                      // setModalVisible(true);
-
-                      setClicked(true);
-
-                      createMedicationRecord({
-                        variables: {
-                          jwt: jwtToken,
-                          medicine: MedicineName,
-                          condition: "건강함",
-                        },
-                      });
-                      setMedicineCount(item.lastMedicationCount - 1);
-                      refetch();
-                      Alert.alert("10Coins 획득!");
-                    }}
-                  >
-                    <BtnText>확인</BtnText>
-                  </Btn>
-                </CardElementContainer>
-              </Card>
-            );
-          })
-        : null}
+      {console.log(renderData, "dataaaaa")}
+      {
+        <FlatList
+          data={renderData}
+          renderItem={renderItem}
+          keyExtractor={(item) => item._id}
+          onRefresh={onRefresh}
+          refreshing={refreshing}
+          onEndReached={onEndReached}
+        />
+      }
 
       <AlarmBtn onPress={() => navigate("Reminder")}>
         <AlarmText>알람 등록하기</AlarmText>

@@ -14,6 +14,7 @@ const displayNotification = async (message) => {
     android: {
       channelId: channelAnoucement,
       smallIcon: "ic_launcher",
+      asForegroundService: true,
     },
     title: message.notification.title,
     body: message.notification.body,

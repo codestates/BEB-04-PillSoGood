@@ -9,7 +9,23 @@ const ImagePickView = styled.View`
   height: 80px;
   padding-top: 30px;
 `;
-const ImageBtn = styled.Button``;
+const ImageTxtBTN = styled.TouchableOpacity`
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+  border-color: rgba(255, 255, 255, 0.5);
+  background-color: #76a991;
+  align-items: center;
+  justify-content: center;
+`;
+const ImageBtn = styled.Text`
+  color: white;
+  flex: 1;
+  font-weight: 600;
+  font-size: 15px;
+  margin-top: 15px;
+`;
 function ImagePickerComponent({ onSubmit }) {
   let username = useSelector((state) => state.login.nickname);
   const [image, setImage] = useState(null);
@@ -33,6 +49,7 @@ function ImagePickerComponent({ onSubmit }) {
       setText(responseData.text); //change the value of this Hook again.
     }
     if (text.includes(username)) {
+      //이름으로만 검증중, 약봉투의 날짜와 사용자가 예측 불가능한 정보로 검증 추가 필요성 있음
       dispatch(verifyActions.setVerify(true)); //검증성공
       Alert.alert(
         "검증성공 약 이름,  하루 복용량 , 일수 , 시간을 입력해주세요! "
@@ -44,7 +61,9 @@ function ImagePickerComponent({ onSubmit }) {
   };
   return (
     <ImagePickView>
-      <ImageBtn title="약 봉투를 찍어주세요!" onPress={pickImage} />
+      <ImageTxtBTN>
+        <ImageBtn onPress={pickImage}>약 봉투 검증</ImageBtn>
+      </ImageTxtBTN>
     </ImagePickView>
   );
 }

@@ -59,6 +59,7 @@ const Card = styled.View`
 
 const Cardtxt = styled.Text`
   color: black;
+  font-weight: 600;
   font-size: 17px;
 `;
 const CardElementContainer = styled.View`
@@ -144,9 +145,9 @@ const Home = ({ navigation: { navigate } }) => {
     <Card>
       <CardElementContainer>
         <View>
-          <Cardtxt>약 이름:{item.medicine}</Cardtxt>
+          <Cardtxt>약 이름: {item.medicine}</Cardtxt>
           <Cardtxt>남은약 개수: {item.lastMedicationCount}</Cardtxt>
-          <Cardtxt>{item.alertTime}</Cardtxt>
+          <Cardtxt>약 먹는 시간: {item.alertTime}</Cardtxt>
         </View>
         {console.log(item, "itemssssssss")}
         <Btn

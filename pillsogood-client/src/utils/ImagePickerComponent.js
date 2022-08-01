@@ -31,6 +31,7 @@ function ImagePickerComponent({ onSubmit }) {
   const [image, setImage] = useState(null);
   const [text, setText] = useState("Please add an image");
   const dispatch = useDispatch();
+  console.log(text, "text data");
   console.log(text.includes(username), "data");
 
   const pickImage = async () => {

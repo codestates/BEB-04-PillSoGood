@@ -3,8 +3,7 @@ import { useRouter } from 'next/router';
 import SessionStorage from '../utils/sessionStorage';
 
 export { RouteGuard };
-
-function RouteGuard({ children }) {
+function RouteGuard({ children }:{children:any}) {
     const router = useRouter();
     const [authorized, setAuthorized] = useState(false);
 
